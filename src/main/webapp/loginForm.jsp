@@ -5,7 +5,23 @@
 %>
 
 <%
+	// 1. Controller
+	
+	// 세션 검사
+	// 이미 로그인이 되어있다면 cashList.jsp redirect
+	if(session.getAttribute("loginMember") != null) {
+		
+		response.sendRedirect(request.getContextPath() + "/cash/cashList.jsp");
+		return;
+	}
+
+
+	// 오류 msg
 	String loginMsg = request.getParameter("loginMsg");
+	
+	// 회원 가입 성공 msg
+	String insertMsg = request.getParameter("insertMsg");
+	
 %>
 
 <!DOCTYPE html>
@@ -19,9 +35,14 @@
 			<%
 				if(loginMsg != null) {
 			%>
-					
 						alert("<%=loginMsg %>");
-					
+			<%		
+				}
+			%>
+			<%
+				if(insertMsg != null) {
+			%>
+						alert("<%=insertMsg %>");
 			<%		
 				}
 			%>
@@ -58,7 +79,8 @@
 					</div>
 					
 					<div>
-						<button type = "submit">로그인</button>
+						<button type = "submit">로그인 </button>
+						<button type = "button" onClick = "location.href='<%=request.getContextPath() %>/insertMemberForm.jsp'">회원가입</button>
 					</div>
 				</form>
 			</div>
