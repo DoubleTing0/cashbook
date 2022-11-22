@@ -8,11 +8,13 @@ public class Cash {
 	// Map 안쓰면 private Category category;	// INNER JOIN의 결과 -> Cash 타입으로 받아낸다.
 	private int categoryNo;		
 	
+	private String memberId;
 	private String cashDate;
 	private long cashPrice;
 	private String cashMemo;
 	private String updatedate;
 	private String createdate;
+	
 	
 	
 	
@@ -28,6 +30,12 @@ public class Cash {
 	}
 	public void setCategoryNo(int categoryNo) {
 		this.categoryNo = categoryNo;
+	}
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 	public String getCashDate() {
 		return cashDate;
@@ -59,6 +67,12 @@ public class Cash {
 	public void setCreatedate(String createdate) {
 		this.createdate = createdate;
 	}
+	
+	
+	
+	
+	
+	
 	
 	
 	
