@@ -6,6 +6,7 @@ import util.*;
 
 public class MemberDao {
 
+	// loginAction.jsp / 로그인 메서드
 	public Member login(Member paramMember) throws Exception {
 		
 		Member resultMember = null;
@@ -33,7 +34,7 @@ public class MemberDao {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		// Sql
+		// sql
 		//	SELECT member_id memberId
 		//		, member_name memberName
 		//	FROM member
@@ -69,16 +70,57 @@ public class MemberDao {
 	
 	
 	
-	// 회원가입
+	// insertMemberAction.jsp / 회원가입 메서드
 	public int insertMember(Member paramMember) throws Exception {
 		int resultRow = 0;
 		
+
+		//	DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		/*
+		 *	INSERT INTO member (
+		 *		member_id
+		 *		, member_pw
+		 *		, member_name
+		 *		, updatedate
+		 *		, createdate
+		 *	) VALUES (
+		 *		?
+		 *		, PASSWORD(?)
+		 *		, ?
+		 *		, CURDATE()
+		 *		, CURDATE()
+		 *	)
+		 */
+		String sql = "INSERT INTO member (member_id, member_pw, member_name, updatedate, createdate) VALUES (?, PASSWORD(?), ?, CURDATE(), CURDATE())";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		stmt.setString(1, paramMember.getMemberId());
+		stmt.setString(2, paramMember.getMemberPw());
+		stmt.setString(3, paramMember.getMemberName());
+		
+		// 실행 완료된 쿼리 개수 반환
+		resultRow = stmt.executeUpdate();
+		
+		// 디버깅 코드
+		if(resultRow == 1) {
+			System.out.println("회원 가입 성공");
+		}
 		
 		
+		// 종료
+		stmt.close();
+		conn.close();
 		
 		
 		
 		return resultRow;
+		
+		
+		
 	}
 	
 	
