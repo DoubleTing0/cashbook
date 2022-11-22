@@ -9,11 +9,22 @@
 
 
 <%
-	Member sessionMember = new Member();
-	sessionMember =(Member) (session.getAttribute("loginMember"));
-
+	// 1. Controller : session, request
 	
-	//	Controller : session, request
+	// 로그인 세션 검사
+	if(session.getAttribute("loginMember") == null) {
+		
+		// 세션의 loginMember가 null이면 loginForm.jsp redirect
+		response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
+		return;
+		
+	}
+	
+	
+	// session에 저장된 멤버(현재 로그인 사용자)
+	Member loginMember = (Member) (session.getAttribute("loginMember"));
+	
+	
 	//	request 년 + 월
 	
 	int year = 0;
@@ -32,12 +43,12 @@
 		month = Integer.parseInt(request.getParameter("month"));
 	
 		if(month == -1) {
-			month = 11;
+			month = 11;		// 12월
 			year -= 1;
 			
 		}
 		if(month == 12) {
-			month = 0;
+			month = 0;		// 1월
 			year += 1;
 		}
 		
@@ -87,7 +98,7 @@
 	System.out.println(year + "<-- year");
 	System.out.println(month + "<-- month");
 	
-	ArrayList<HashMap<String,Object>> list = cashDao.selectCashListByMonth(year, month + 1);
+	ArrayList<HashMap<String,Object>> list = cashDao.selectCashListByMonth(loginMember.getMemberId(), year, month + 1);
 	
 	
 	
@@ -113,8 +124,13 @@
 	<body>
 		<div>
 		
-			<!-- 로그인 정보(세션 loginMember 변수) 출력 -->
-			 
+			<!-- 로그인 정보 partical jsp 구성 -->
+			<div>
+				<!-- include 주체는 서버라서 경로를 서버기준으로 생각해야한다.
+					 request.getContextPath() 쓰지마라. 
+					 이미 같이 안에 있기 때문에 context path를 가져올 필요가 없다.-->
+				<jsp:include page = "/inc/loginInformation.jsp"></jsp:include>
+			</div>
 			
 			
 			
@@ -122,7 +138,15 @@
 			
 			
 			<div>
-				<%=year %> 년 <%=month+1 %> 월
+				<h1>
+					<a href = "<%=request.getContextPath() %>/cash/cashList.jsp?year=<%=year %>&month=<%=month - 1 %>">
+						이전 달
+					</a>
+					<%=year %> 년 <%=month+1 %> 월
+					<a href = "<%=request.getContextPath() %>/cash/cashList.jsp?year=<%=year %>&month=<%=month + 1%>">
+						다음 달
+					</a>
+				</h1>
 			</div>
 			
 			
@@ -139,19 +163,45 @@
 						<th>토</th>
 					</tr>
 					
+					<tr>
 					<%
 						for(int i=1; i<=totalTd; i+=1) {
-							
-							if(i - beginBlank > 0 && i - beginBlank <= lastDate) {
 					%>
-								<td><%=i - beginBlank %></td>
+							<td>
 					<%
-							} else {
+							int date = i - beginBlank;
+							if(date > 0 && date <= lastDate) {
 					%>
-								<td>&nbsp;</td>
+								<div>
+									<a href="<%=request.getContextPath()%>/cash/cashDateList.jsp?year=<%=year%>&month=<%=month%>&date=<%=date%>">
+										<%=date %>
+									</a>
+								</div>
+								
+								
+								<div>
+									<%
+										for(HashMap<String, Object> m : list) {
+											String cashDate = (String) (m.get("cashDate"));
+											if(Integer.parseInt(cashDate.substring(8)) == date) {
+									%>
+												[<%=(String) (m.get("categoryKind")) %>]
+												<%=(String) (m.get("categoryName")) %>
+												&nbsp;
+												<%=(Long) (m.get("cashPrice")) %>원
+												<br>
+									<%
+											}
+										}
+									
+									%>
+								</div>
 					<%
-							}
-							if(i % 7 == 0 && i != totalTd) {
+							} 
+					%>
+							</td>
+					<%
+								if(i % 7 == 0 && i != totalTd) {
 					%>
 								</tr><tr> <!-- td 7개 만들고 테이블 줄바꿈 -->
 					<%
@@ -160,22 +210,9 @@
 					
 					%>
 			
+					</tr>
 				</table>
 			</div>
-			
-			
-			<div>
-				<%
-					for(HashMap<String, Object> m : list) {
-				%>
-						<%=(Integer) (m.get("cashNo")) %>
-				<%
-					}
-				%>
-			
-			</div>
-			
-			
 			
 			
 			
