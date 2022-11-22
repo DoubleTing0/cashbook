@@ -1,19 +1,20 @@
 package vo;
 
-public class category {
+public class Category {
 
-	private int categoryno;
+	private int categoryNo;
 	private String categoryKind;
 	private String categoryName;
 	private String updatedate;
 	private String createdate;
 	
 	
-	public int getCategoryno() {
-		return categoryno;
+	
+	public int getCategoryNo() {
+		return categoryNo;
 	}
-	public void setCategoryno(int categoryno) {
-		this.categoryno = categoryno;
+	public void setCategoryNo(int categoryNo) {
+		this.categoryNo = categoryNo;
 	}
 	public String getCategoryKind() {
 		return categoryKind;
