@@ -124,9 +124,140 @@ public class MemberDao {
 	}
 	
 	
+	// updateMemberAction.jsp  /  내 정보 수정 메서드
+	public int updateMember(Member paramMember) throws Exception {
+		int resultRow = 0;
+		
+		//	DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 *	UPDATE member 
+		 *	SET member_name = ? 
+		 */
+		String sql = "UPDATE member SET member_name = ? WHERE member_id = ?";
+		
+		// sql 실행할 객체 생성
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		// sql ? 대입
+		stmt.setString(1, paramMember.getMemberName());
+		stmt.setString(2, paramMember.getMemberId());
+		
+		// 쿼리 실행 후 완료된 쿼리 개수 반환
+		resultRow = stmt.executeUpdate();
+			
+		// 디버깅
+		if(resultRow == 1) {
+			System.out.println("내 정보 수정 완료");
+		} else {
+			System.out.println("내 정보 수정 실패");
+			
+		}
+		
+		
+		// 종료
+		stmt.close();
+		conn.close();
+		
+		
+		return resultRow;
+	}
 	
 	
+	// updatePwAcion.jsp  /  비밀번호 변경 메서드
+	public int updatePw(Member paramMember, String paramMemberNewPw) throws Exception {
+		int resultRow = 0;
+		
+		// DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 *	UPDATE member
+		 * 	SET member_pw = PASSWORD(?)
+		 * 	WHERE member_id = ? AND member_pw = PASSWORD(?) 
+		 *  		 
+		 * */
+		// 조건 : 아이디와 비밀번호가 일치하고 / 새로운 비밀번호가 현재비밀번호와 다를 때 
+		String sql = "UPDATE member SET member_pw = PASSWORD(?) WHERE member_id = ? AND member_pw = PASSWORD(?) AND member_pw != PASSWORD(?)";
+		
+		// sql 실행할 객체 생성
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		// sql ? 대입
+		stmt.setString(1, paramMemberNewPw);
+		stmt.setString(2, paramMember.getMemberId());
+		stmt.setString(3, paramMember.getMemberPw());
+		stmt.setString(4, paramMemberNewPw);
+		
+		// 쿼리 실행 후 완료된 쿼리 개수 반환
+		resultRow = stmt.executeUpdate();
+			
+		// 디버깅
+		if(resultRow == 1) {
+			System.out.println("비밀번호 변경 완료");
+		} else {
+			System.out.println("비밀번호 변경 실패");
+			
+		}
+		
+		// 종료
+		stmt.close();
+		conn.close();
+		
+		
+		return resultRow;
+		
+		
+	}
 	
+	// deleteMemberAction.jsp  /  회원 탈퇴 메서드
+	public boolean deleteMember(Member paramMember) throws Exception {
+		int resultRow = 0;
+		// DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 * 	DELETE
+		 * 	FROM member
+		 * 	WHERE member_id = ? AND member_pw = ?
+		 */
+		String sql = "DELETE FROM member WHERE member_id = ? AND member_pw = ?";
+		
+		// sql 실행할 객체 생성
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		// sql ? 대입
+		stmt.setString(1, paramMember.getMemberId());
+		stmt.setString(2, paramMember.getMemberPw());
+		
+		// 쿼리 실행 후 완료된 쿼리 개수 반환
+		resultRow = stmt.executeUpdate();
+		
+		// 종료
+		stmt.close();
+		conn.close();
+		
+		// 디버깅 
+		if(resultRow == 1) {
+			System.out.println("회원 탈퇴 완료");
+			return true;
+		} else {
+			System.out.println("회원 탈퇴 실패");
+			return false;
+			
+		}
+		
+		
+		
+		
+	}
 	
 	
 	
