@@ -15,11 +15,13 @@
 	if(session.getAttribute("loginMember") == null) {
 		
 		// 세션의 loginMember가 null이면 loginForm.jsp redirect
-		response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
+		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
 		return;
 		
 	}
 	
+	// 메세지 출력 변수
+	String msg = request.getParameter("msg");
 	
 	// session에 저장된 멤버(현재 로그인 사용자)
 	Member loginMember = (Member) (session.getAttribute("loginMember"));
@@ -119,6 +121,18 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>cashList</title>
+		
+		<script type = "text/javascript">
+			<%
+				if(msg != null) {
+			%>
+					alert("<%=msg %>");
+			<%
+				}
+			%>
+		</script>
+		
+		
 	</head>
 	
 	<body>
