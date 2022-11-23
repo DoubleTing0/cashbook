@@ -1,8 +1,9 @@
 package dao;
 
-import java.sql.*;	
+import java.sql.*;		
 import java.util.*;
 import util.*;
+import vo.*;
 
 public class CashDao {
 
@@ -18,7 +19,8 @@ public class CashDao {
 		
 	
 		
-		String sql = "SELECT c.cash_price cashPrice"
+		String sql = "SELECT c.cash_no cashNo"
+				+ "			, c.cash_price cashPrice"
 				+ "			, c.cash_Memo cashMemo"
 				+ "			, ct.category_kind categoryKind"
 				+ "			, ct.category_name categoryName"
@@ -42,6 +44,7 @@ public class CashDao {
 		while(rs.next()) {
 			
 			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("cashNo", rs.getInt("cashNo"));
 			m.put("cashPrice", rs.getLong("cashPrice"));
 			m.put("cashMemo", rs.getString("cashMemo"));
 			m.put("categoryKind", rs.getString("categoryKind"));
@@ -109,6 +112,115 @@ public class CashDao {
 		return list;
 		
 	}
+	
+	
+	// insertCashAction.jsp  / cash 추가 메서드
+	public int insertCash(Member paramMember, Cash paramCash) throws Exception {
+		int resultRow = 0;
+		
+		// DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 * 	INSERT INTO cash (
+		 * 		category_no
+		 * 		, member_id
+		 * 		, cash_date 
+		 * 		, cash_price
+		 * 		, cash_Memo
+		 * 		, updatedate
+		 * 		, createdate
+		 * 	) VALUES (
+		 * 		?
+		 * 		, ?
+		 * 		, ?
+		 * 		, ?
+		 * 		, CURDATE()
+		 * 		, CURDATE()
+		 *	)
+		 * 	
+		 */
+		
+		String sql = "INSERT INTO cash (category_no, member_id, cash_date, cash_price, cash_Memo, updatedate, createdate) VALUES (?, ?, ?, ?, ?, CURDATE(), CURDATE())";
+		
+		// sql 실행할 객체 생성
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		// sql ? 대입
+		stmt.setInt(1, paramCash.getCategoryNo());
+		stmt.setString(2, paramMember.getMemberId());
+		stmt.setString(3, paramCash.getCashDate());
+		stmt.setLong(4, paramCash.getCashPrice());
+		stmt.setString(5, paramCash.getCashMemo());
+		
+		// 쿼리 실행 완료 후 쿼리 갯수 반환
+		resultRow = stmt.executeUpdate();
+		
+		if(resultRow == 1) {
+			
+			System.out.println("cash 추가 완료");
+		} else {
+			System.out.println("cash 추가 실패");
+			
+			
+		}
+		
+		stmt.close();
+		conn.close();
+		
+		
+		return resultRow;
+		
+		
+		
+	}
+	
+	// deleteCashAction.jsp / cash 삭제 메서드
+	public int deleteCash(Member paramMember, int paramCashNo) throws Exception {
+		
+		int resultRow = 0;
+		
+		// DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 *	DELETE
+		 *	FROM cash
+		 *	WHERE cash_no = ? AND member_id = ?
+		 */
+		String sql = "DELETE FROM cash WHERE cash_no = ? AND member_id = ?";
+		
+		// sql 실행할 객체 생성
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		// sql ? 대입
+		stmt.setInt(1, paramCashNo);
+		stmt.setString(2, paramMember.getMemberId());
+		
+		// 쿼리 실행 후 완료된 쿼리 개수 반환
+		resultRow = stmt.executeUpdate();
+		
+		if(resultRow == 1) {
+			System.out.println("cash 삭제 완료");
+		} else {
+			
+			System.out.println("cash 삭제 실패");
+		}
+		
+		// 종료
+		stmt.close();
+		conn.close();
+		
+		return resultRow;
+		
+		
+		
+	}
+	
 	
 	
 	
