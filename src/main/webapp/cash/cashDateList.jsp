@@ -20,7 +20,9 @@
 		
 	}
 	
-	
+	// 메세지 출력 변수
+	String msg = request.getParameter("msg");
+
 
 	// session에 저장된 멤버(현재 로그인 사용자)
 	Member loginMember = (Member) (session.getAttribute("loginMember"));
@@ -62,6 +64,17 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>cashDateList</title>
+		
+		<script type = "text/javascript">
+			<%
+				if(msg != null) {
+			%>	
+					alert("<%=msg %>");
+			<%
+				}
+			%>
+		</script>
+		
 	</head>
 	
 	<body>
@@ -92,7 +105,7 @@
 			
 			
 			<!-- cash 입력 폼 -->
-			<form method = "post" action = "<%=request.getContextPath() %>/cash/insertCashAction.jsp">
+			<form method = "post" action = "<%=request.getContextPath() %>/cash/insertCashAction.jsp?year=<%=year %>&month=<%=month %>&date=<%=date %>">
 				<input type = "hidden" name = "memberId" value = "<%=loginMember.getMemberId() %>">
 				<table border = "1">
 					<tr>
@@ -116,7 +129,14 @@
 					<tr>
 						<td>cashDate</td>
 						<td>
-							<input type = "text" name = "cashDate" value = "<%=year %>-<%=month %>-<%=date %>" readonly = "readonly">
+							<input type = "text" name = "cashDate" value = "<%=year %>-<%=month + 1 %>-<%=date %>" readonly = "readonly">
+						</td>
+					</tr>
+						
+					<tr>
+						<td>cashPrice</td>
+						<td>
+							<input type = "number" name = "cashPrice">
 						</td>
 					</tr>
 						
@@ -130,7 +150,7 @@
 				
 				</table>
 			
-				<button type = "button">입력</button>
+				<button type = "submit">입력</button>
 			
 			
 			
@@ -174,7 +194,8 @@
 										<a href = "">수정</a>
 									</td>
 									<td>
-										<a href = "">삭제</a>
+										<a href = "<%=request.getContextPath() %>/cash/deleteCashAction.jsp?
+														year=<%=year %>&month=<%=month %>&date=<%=date %>&cashNo=<%=(Integer) m.get("cashNo")%>">삭제</a>
 									</td>
 								</tr>
 					<%
