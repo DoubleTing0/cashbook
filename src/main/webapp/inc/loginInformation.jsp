@@ -21,7 +21,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>loginInformation.jsp</title>
 	</head>
 	
 	<body>
@@ -31,9 +31,18 @@
 			<span>ID : <%=loginMember.getMemberId() %></span>
 			<span>이름 : <%=loginMember.getMemberName() %></span>
 			
-			<a href = "<%=request.getContextPath() %>/logoutAction.jsp">
+			<a href = "<%=request.getContextPath() %>/member/updateMemberForm.jsp">
+				<span>내 정보 수정</span>
+			</a>
+			
+			<a href = "<%=request.getContextPath() %>/member/updatePwForm.jsp">
+				<span>비밀번호 변경</span>
+			</a>
+			
+			<a href = "<%=request.getContextPath() %>/login/logoutAction.jsp">
 				<span>로그아웃</span>
 			</a>
+			
 		</div> 
 		
 		

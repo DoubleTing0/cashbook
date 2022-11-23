@@ -15,13 +15,16 @@
 	paramMember.setMemberId(request.getParameter("memberId"));
 	paramMember.setMemberPw(request.getParameter("memberPw"));
 	
+	// 메세지 출력을 위한 msg 초기화
+	String msg = null;
+	
 	if(paramMember.getMemberId() == null || paramMember.getMemberPw() == null 
 			|| paramMember.getMemberId().equals("") || paramMember.getMemberPw().equals("")) {
 		
 		// 아이디, 비밀번호 공백이거나 null 일 경우
-		String loginMsg = URLEncoder.encode("아이디와 비밀번호가 올바르지 않습니다.", "UTF-8");
+		msg = URLEncoder.encode("아이디와 비밀번호가 올바르지 않습니다.", "UTF-8");
 		
-		response.sendRedirect(request.getContextPath() + "/loginForm.jsp?loginMsg=" + loginMsg);
+		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp?msg=" + msg);
 		return;
 	}
 	
@@ -36,7 +39,7 @@
 	Member resultMember = memberDao.login(paramMember);
 	
 	
-	String redirectUrl = "loginForm.jsp";
+	String redirectUrl = "/login/loginForm.jsp";
 	if(resultMember != null) {
 		// 로그인 성공시 세션에 resultMember 저장
 		session.setAttribute("loginMember", resultMember);

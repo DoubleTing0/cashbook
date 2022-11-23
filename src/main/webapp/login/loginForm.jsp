@@ -16,11 +16,9 @@
 	}
 
 
-	// 오류 msg
-	String loginMsg = request.getParameter("loginMsg");
+	// 메세지 출력 변수
+	String msg = request.getParameter("msg");
 	
-	// 회원 가입 성공 msg
-	String insertMsg = request.getParameter("insertMsg");
 	
 %>
 
@@ -33,16 +31,9 @@
 		
 		<script type = "text/javascript">
 			<%
-				if(loginMsg != null) {
+				if(msg != null) {
 			%>
-						alert("<%=loginMsg %>");
-			<%		
-				}
-			%>
-			<%
-				if(insertMsg != null) {
-			%>
-						alert("<%=insertMsg %>");
+						alert("<%=msg %>");
 			<%		
 				}
 			%>
@@ -58,7 +49,7 @@
 			<div>&nbsp;</div>
 		
 			<div>
-				<form method = "post" action = "<%=request.getContextPath()%>/loginAction.jsp">
+				<form method = "post" action = "<%=request.getContextPath()%>/login/loginAction.jsp">
 					<div>
 						<table border = "1">
 							<tr>
@@ -80,7 +71,7 @@
 					
 					<div>
 						<button type = "submit">로그인 </button>
-						<button type = "button" onClick = "location.href='<%=request.getContextPath() %>/insertMemberForm.jsp'">회원가입</button>
+						<button type = "button" onClick = "location.href='<%=request.getContextPath() %>/member/insertMemberForm.jsp'">회원가입</button>
 					</div>
 				</form>
 			</div>
