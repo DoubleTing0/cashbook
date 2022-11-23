@@ -24,6 +24,8 @@
 		return;
 	}
 	
+	// 메세지 출력을 위한 msg 초기화
+	String msg = null;
 	
 	// Member 객체 생성
 	Member member = new Member();
@@ -38,8 +40,8 @@
 	if(member.getMemberId() == null || member.getMemberPw() == null || member.getMemberName() == null 
 		|| member.getMemberId().equals("") || member.getMemberPw().equals("") || member.getMemberName().equals("")) {
 		
-		String msg = URLEncoder.encode("모든 항목을 입력해주세요.", "UTF-8");
-		response.sendRedirect(request.getContextPath() + "/insertMemberForm.jsp?msg=" + msg);
+		msg = URLEncoder.encode("모든 항목을 입력해주세요.", "UTF-8");
+		response.sendRedirect(request.getContextPath() + "/member/insertMemberForm.jsp?msg=" + msg);
 		return;
 		
 	}
@@ -57,8 +59,8 @@
 		// 회원 가입 성공 msg
 		// loginForm.jsp redirect
 		
-		String insertMsg = URLEncoder.encode("회원 가입 되었습니다.", "UTF-8");
-		response.sendRedirect(request.getContextPath() + "/loginForm.jsp?insertMsg=" + insertMsg);
+		msg = URLEncoder.encode("회원 가입 되었습니다.", "UTF-8");
+		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp?msg=" + msg);
 		return;
 		
 	}

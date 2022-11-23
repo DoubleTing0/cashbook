@@ -58,7 +58,7 @@
 			</div>
 			
 			<div>
-				<form method = "post" action = "<%=request.getContextPath() %>/insertMemberAction.jsp">
+				<form method = "post" action = "<%=request.getContextPath() %>/member/insertMemberAction.jsp">
 					<div>
 						<table>
 							<tr>
