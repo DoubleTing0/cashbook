@@ -191,7 +191,8 @@
 									<td><%=(Long) (m.get("cashPrice")) %>원</td>
 									<td><%=(String) (m.get("cashMemo")) %></td>
 									<td>
-										<a href = "">수정</a>
+										<a href = "<%=request.getContextPath() %>/cash/updateCashForm.jsp?
+														year=<%=year %>&month=<%=month %>&date=<%=date %>&cashNo=<%=(Integer) m.get("cashNo")%>">수정</a>
 									</td>
 									<td>
 										<a href = "<%=request.getContextPath() %>/cash/deleteCashAction.jsp?
