@@ -1,6 +1,8 @@
 package dao;
 
-import java.sql.*;	
+import java.sql.*;
+import java.util.ArrayList;
+
 import vo.*;
 import util.*;
 
@@ -39,7 +41,7 @@ public class MemberDao {
 		//		, member_name memberName
 		//	FROM member
 		//	WHERE member_id = ? AND member_pw = PASSWORD(?)
-		String sql = "SELECT member_id memberId, member_name memberName FROM member WHERE member_id = ? AND member_pw = PASSWORD(?)";
+		String sql = "SELECT member_id memberId, member_level memberLevel, member_name memberName FROM member WHERE member_id = ? AND member_pw = PASSWORD(?)";
 		
 		// sql 실행할 객체 생성
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -68,13 +70,41 @@ public class MemberDao {
 		return resultMember;
 	}
 	
+	// 회원가입 프로세스 1) id 중복 확인 2) 회원가입
 	
+	// 반환값 t : 이미 존재 , f : 사용가능(중복되지 않음)
+	public boolean selectMemberIdCk(String paramMemberId) throws Exception {
+		boolean result = false;
+		
+		// DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		String sql = "SELECT member_id FROM member WHERE member_id = ?";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		stmt.setString(1, paramMemberId);
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		if(rs.next()) {
+			result = true;
+		}
+		
+		
+		dbUtil.close(rs,  stmt, conn);
+		
+		
+		return result;
+	}
 	
 	// insertMemberAction.jsp / 회원가입 메서드
 	public int insertMember(Member paramMember) throws Exception {
 		int resultRow = 0;
 		
-
+		
+		
 		//	DB 접속을 위한 객체 생성
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -112,8 +142,7 @@ public class MemberDao {
 		
 		
 		// 종료
-		stmt.close();
-		conn.close();
+		dbUtil.close(null, stmt, conn);
 		
 		
 		
@@ -216,8 +245,13 @@ public class MemberDao {
 	}
 	
 	// deleteMemberAction.jsp  /  회원 탈퇴 메서드
+	// true : 회원 탈퇴 완료 / false : 회원 탈퇴 실패
 	public boolean deleteMember(Member paramMember) throws Exception {
+
+		boolean result = false;
 		int resultRow = 0;
+		
+		
 		// DB 접속을 위한 객체 생성
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
@@ -228,7 +262,7 @@ public class MemberDao {
 		 * 	FROM member
 		 * 	WHERE member_id = ? AND member_pw = ?
 		 */
-		String sql = "DELETE FROM member WHERE member_id = ? AND member_pw = ?";
+		String sql = "DELETE FROM member WHERE member_id = ? AND member_pw = PASSWORD(?)";
 		
 		// sql 실행할 객체 생성
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -240,28 +274,67 @@ public class MemberDao {
 		// 쿼리 실행 후 완료된 쿼리 개수 반환
 		resultRow = stmt.executeUpdate();
 		
-		// 종료
-		stmt.close();
-		conn.close();
+		
 		
 		// 디버깅 
 		if(resultRow == 1) {
 			System.out.println("회원 탈퇴 완료");
-			return true;
+			result = true;
+			
 		} else {
 			System.out.println("회원 탈퇴 실패");
-			return false;
-			
 		}
 		
+		// 종료
+		dbUtil.close(null, stmt, conn);
 		
-		
+		return result;
 		
 	}
 	
-	
-	
-	
+	// loginForm.jsp 멤버 목록
+	public ArrayList<Member> selectMemberListByPage(int beginRow, int rowPerPage) throws Exception {
+		ArrayList<Member> list = new ArrayList<Member>();
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		/*
+		 *	SELECT member_id memberId
+		 *		, member_level memberLevel
+		 *		, member_name memberName
+		 *		, createdate 
+		 *	FROM member 
+		 *	ORDER BY createdate DESC 
+		 *	LIMIT ?, ?
+		 */
+		
+		String sql = "SELECT member_id memberId"
+				+ "		, member_level memberLevel"
+				+ "		, member_name memberName"
+				+ "		, createdate"
+				+ "	FROM member"
+				+ "	ORDER BY createdate DESC"
+				+ "	LIMIT ?, ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		stmt.setInt(1, beginRow);
+		stmt.setInt(2, rowPerPage);
+		
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			Member m = new Member();
+			m.setMemberId(rs.getString("memberId"));
+			m.setMemberLevel(rs.getInt("memberLevel"));
+			m.setMemberName(rs.getString("memberName"));
+			m.setCreatedate(rs.getString("createdate"));
+			
+			list.add(m);
+			
+		}
+		
+		return list;
+	}
 	
 	
 }
