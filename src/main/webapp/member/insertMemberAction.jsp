@@ -51,10 +51,18 @@
 	
 	// memberDao 객체 생성
 	MemberDao memberDao = new MemberDao();
-
-	int result = memberDao.insertMember(member);
 	
-	if(result == 1) {
+	if(memberDao.selectMemberIdCk(request.getParameter("memberId"))) {
+		
+		msg = URLEncoder.encode("아이디가 중복 되었습니다.", "UTF-8");
+		response.sendRedirect(request.getContextPath() + "/member/insertMemberForm.jsp?msg=" + msg);
+		return;
+	}
+	
+	
+	int resultRow = memberDao.insertMember(member);
+	
+	if(resultRow == 1) {
 		
 		// 회원 가입 성공 msg
 		// loginForm.jsp redirect

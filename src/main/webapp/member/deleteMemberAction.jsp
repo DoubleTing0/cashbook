@@ -45,25 +45,18 @@
 	
 	// 메서드 실행 및 객체 생성``
 	MemberDao memberDao = new MemberDao();
-	boolean result = false;
-	// 하다가 말음
+	boolean result = memberDao.deleteMember(loginMember);
 	
-	
-	
-	
-	
+	if(result) {
+		
+		msg = URLEncoder.encode("회원 탈퇴 완료되었습니다.", "UTF-8");
+		session.invalidate();
+		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp?msg=" + msg);
+		
+	} else {
+		
+		msg = URLEncoder.encode("비밀번호가 올바르지 않습니다.", "UTF-8");
+		response.sendRedirect(request.getContextPath() + "/member/deleteMemberForm.jsp?msg=" + msg);
+	}
 	
 %>
-
-
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-	</head>
-	
-	<body>
-		
-	</body>
-</html>

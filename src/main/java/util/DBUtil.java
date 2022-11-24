@@ -4,6 +4,7 @@ import java.sql.*;
 
 public class DBUtil {
 	
+	// DB 연결하는 메서드
 	public Connection getConnection() throws Exception {
 		
 		String driver = "org.mariadb.jdbc.Driver";
@@ -21,6 +22,19 @@ public class DBUtil {
 		
 		return conn;
 		
+	}
+	
+	// DB 연결 종료하는 메서드
+	public void close(ResultSet rs, PreparedStatement stmt,Connection conn) throws Exception {
+		if(rs != null) {
+			rs.close();
+		}
+		if(stmt != null) {
+			stmt.close();
+		}
+		if(conn != null) {
+			conn.close();
+		}
 	}
 	
 }

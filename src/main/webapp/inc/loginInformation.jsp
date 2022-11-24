@@ -30,6 +30,15 @@
 		<div>
 			<span>ID : <%=loginMember.getMemberId() %></span>
 			<span>이름 : <%=loginMember.getMemberName() %></span>
+			<%
+				if(loginMember.getMemberLevel() > 0) {
+			%>
+					<a href = "<%=request.getContextPath() %>/admin/adminMain.jsp">
+						<span>관리자 페이지</span>
+					</a>
+			<%
+				}
+			%>
 			
 			<a href = "<%=request.getContextPath() %>/member/updateMemberForm.jsp">
 				<span>내 정보 수정</span>
@@ -39,8 +48,13 @@
 				<span>비밀번호 변경</span>
 			</a>
 			
+			
 			<a href = "<%=request.getContextPath() %>/login/logoutAction.jsp">
 				<span>로그아웃</span>
+			</a>
+			
+			<a href = "<%=request.getContextPath() %>/member/deleteMemberForm.jsp">
+				<span>회원 탈퇴</span>
 			</a>
 			
 		</div> 

@@ -221,7 +221,117 @@ public class CashDao {
 		
 	}
 	
-	
-	
+	// updateCashFrom.jsp / 한개의 cash 정보만 출력
+	public Cash selectCashOne(int paramCashNo) throws Exception {
+		Cash resultCash = null;
+		
+		// DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		//sql
+		/*
+		 *	SELECT ct.category_no categoryNo
+		 *		, ct.category_kind categoryKind
+		 *		, ct.category_name categoryName
+		 *		, c.cash_date cashDate
+		 *		, c.cash_price cashPrice
+		 *		, c.cash_memo cashMemo
+		 *	FROM cash c
+		 *	INNER JOIN category ct
+		 *	ON c.category_id = ct.category_id
+		 *	WHERE c.cash_id = ?
+		 */
+		String sql = "SELECT category_no categoryNo"
+				+ "	, cash_date cashDate"
+				+ "	, cash_price cashPrice"
+				+ "	, cash_memo cashMemo"
+				+ "	FROM cash "
+				+ "	WHERE cash_no = ?";
+		
+		// sql 실행할 객체 생성
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		// sql ? 대입
+		stmt.setInt(1, paramCashNo);
+		
+		// ResultSet 에 저장
+		ResultSet rs = stmt.executeQuery();
+		
+		// Cash 객체에 저장
+		if(rs.next()) {
+			resultCash = new Cash();
+			resultCash.setCategoryNo(rs.getInt("categoryNo"));
+			resultCash.setCashDate(rs.getString("cashDate"));
+			resultCash.setCashPrice(rs.getLong("cashPrice"));
+			resultCash.setCashMemo(rs.getString("cashMemo"));
+			
+			
+			
+		}
+		
+		
+		// 종료
+		rs.close();
+		stmt.close();
+		conn.close();
+		
+		
+		
+		
+		return resultCash;
+	}
+
+	// updateCashAction.jsp  // cash update 메서드 
+	public int updateCash(Cash paramCash) throws Exception {
+		
+		int resultRow = 0;
+		
+		
+		// DB 접속을 위한 객체 생성
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		
+		// sql
+		/*
+		 *	UPDATE cash
+		 *	SET category_no = ?
+		 *		, cash_price = ?
+		 *		, cash_memo = ?
+		 *	WHERE cash_no = ?
+		 */
+		String sql = "UPDATE cash SET category_no = ?, cash_price = ?, cash_memo = ? WHERE cash_no = ?";
+		
+		// sql 실행할 객체 생성
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		// sql ? 대입
+		stmt.setInt(1, paramCash.getCategoryNo());
+		stmt.setLong(2, paramCash.getCashPrice());
+		stmt.setString(3, paramCash.getCashMemo());
+		stmt.setInt(4, paramCash.getCashNo());
+		
+		// 쿼리 실행 후 완료된 쿼리 개수 반환
+		resultRow = stmt.executeUpdate();
+		
+		if(resultRow == 1) {
+			System.out.println("cash 수정 완료");
+		} else {
+			System.out.println("cash 수정 실패");
+			
+		}
+		
+		// 종료
+		stmt.close();
+		conn.close();
+		
+		
+		
+		return resultRow;
+		
+		
+		
+	}
 	
 }
