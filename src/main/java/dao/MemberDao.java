@@ -1,13 +1,58 @@
 package dao;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 
 import vo.*;
 import util.*;
 
 public class MemberDao {
 
+	// 관리자 멤버 강퇴
+	public int deleteMemberByAdmin(Member member) {
+		return 0;
+	}
+		
+	
+	// 관리자 : 레벨수정
+	public int updateMemberLevel(Member member) throws Exception {
+		return 0;
+	}
+	
+	// 관리자 : 멤버 수
+	public int selectMemberCount() throws Exception {
+		int count = 0;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		//sql
+		/*
+		 * SELECT
+		 * COUNT(member_no) count
+		 * FROM member
+		 * 
+		 */
+		String sql = "SELECT COUNT(member_no) count FROM member";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		
+
+		// 연결 종료
+		dbUtil.close(rs, stmt, conn);
+		
+		
+		
+		return count;
+	}
+	
+	
 	// loginAction.jsp / 로그인 메서드
 	public Member login(Member paramMember) throws Exception {
 		
@@ -58,13 +103,15 @@ public class MemberDao {
 		if(rs.next()) {
 			resultMember = new Member();
 			resultMember.setMemberId(rs.getString("memberId"));
+			resultMember.setMemberLevel(rs.getInt("memberLevel"));
 			resultMember.setMemberName(rs.getString("memberName"));
 		}
 		
 		
-		rs.close();
-		stmt.close();
-		conn.close();
+
+		// 연결 종료
+		dbUtil.close(rs, stmt, conn);
+		
 		
 		
 		return resultMember;
@@ -93,7 +140,10 @@ public class MemberDao {
 		}
 		
 		
-		dbUtil.close(rs,  stmt, conn);
+
+		// 연결 종료
+		dbUtil.close(rs, stmt, conn);
+		
 		
 		
 		return result;
@@ -141,8 +191,10 @@ public class MemberDao {
 		}
 		
 		
-		// 종료
+
+		// 연결 종료
 		dbUtil.close(null, stmt, conn);
+		
 		
 		
 		
@@ -187,9 +239,10 @@ public class MemberDao {
 		}
 		
 		
-		// 종료
-		stmt.close();
-		conn.close();
+
+		// 연결 종료
+		dbUtil.close(null, stmt, conn);
+		
 		
 		
 		return resultRow;
@@ -234,15 +287,20 @@ public class MemberDao {
 			
 		}
 		
-		// 종료
-		stmt.close();
-		conn.close();
+
+		// 연결 종료
+		dbUtil.close(null, stmt, conn);
+		
 		
 		
 		return resultRow;
 		
 		
 	}
+	
+	
+	
+	
 	
 	// deleteMemberAction.jsp  /  회원 탈퇴 메서드
 	// true : 회원 탈퇴 완료 / false : 회원 탈퇴 실패
@@ -292,7 +350,7 @@ public class MemberDao {
 		
 	}
 	
-	// loginForm.jsp 멤버 목록
+	// loginForm.jsp , memberList.jsp 멤버 목록
 	public ArrayList<Member> selectMemberListByPage(int beginRow, int rowPerPage) throws Exception {
 		ArrayList<Member> list = new ArrayList<Member>();
 		
@@ -309,9 +367,11 @@ public class MemberDao {
 		 *	LIMIT ?, ?
 		 */
 		
-		String sql = "SELECT member_id memberId"
+		String sql = "SELECT member_no memberNo"
+				+ "		, member_id memberId"
 				+ "		, member_level memberLevel"
 				+ "		, member_name memberName"
+				+ "		, updatedate"
 				+ "		, createdate"
 				+ "	FROM member"
 				+ "	ORDER BY createdate DESC"
@@ -324,14 +384,20 @@ public class MemberDao {
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			Member m = new Member();
+			m.setMemberNo(rs.getInt("memberNo"));
 			m.setMemberId(rs.getString("memberId"));
 			m.setMemberLevel(rs.getInt("memberLevel"));
 			m.setMemberName(rs.getString("memberName"));
+			m.setUpdatedate(rs.getString("updatedate"));
 			m.setCreatedate(rs.getString("createdate"));
 			
 			list.add(m);
 			
 		}
+		
+		
+		// 연결 종료
+		dbUtil.close(rs, stmt, conn);
 		
 		return list;
 	}
