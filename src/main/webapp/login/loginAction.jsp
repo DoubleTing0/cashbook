@@ -45,6 +45,12 @@
 		session.setAttribute("loginMember", resultMember);
 		
 		redirectUrl = "/cash/cashList.jsp";
+		
+		// 관리자 식별
+		if(resultMember.getMemberLevel() == 1) {
+			redirectUrl = "/admin/adminMain.jsp";
+		}
+		
 	}
 	
 	response.sendRedirect(request.getContextPath() + redirectUrl);
