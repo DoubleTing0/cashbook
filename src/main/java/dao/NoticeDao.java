@@ -7,6 +7,49 @@ import util.*;
 
 public class NoticeDao {
 	
+	
+	// 관리자 : 수정을 위해 공지 한개의 정보를 가져오기
+	// updateNoticeForm.jsp
+	public Notice selectNoticeOne(Notice notice) throws Exception {
+		
+		Notice resultNotice = null;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 *	SELECT notice_no noticeNo
+		 *		, notice_memo noticeMemo
+		 *		, createdate
+		 *		, updatedate
+		 *	FROM notice
+		 *	WHERE notice_no = ?
+		 * 
+		 */
+		String sql = "SELECT notice_no noticeNo, notice_memo noticeMemo, createdate, updatedate FROM notice WHERE notice_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		stmt.setInt(1, notice.getNoticeNo());
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		if(rs.next()) {
+			resultNotice = new Notice();
+			
+			resultNotice.setNoticeNo(rs.getInt("noticeNo"));
+			resultNotice.setNoticeMemo(rs.getString("noticeMemo"));
+			resultNotice.setCreatedate(rs.getString("createdate"));
+			resultNotice.setUpdatedate(rs.getString("update"));
+		}
+		
+		dbUtil.close(rs, stmt, conn);
+		
+		
+		return resultNotice;
+		
+	}
+	
 	// 추가 메서드
 	public int insertNotice(Notice notice) throws Exception {
 		

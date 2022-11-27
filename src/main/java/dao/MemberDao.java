@@ -8,15 +8,118 @@ import util.*;
 
 public class MemberDao {
 
+	// 관리자 : 레벨 수정을 위해 한명의 정보를 가져오기
+	// updateLevelForm.jsp
+	public Member selectMemberOne(Member member) throws Exception {
+		
+		Member resultMember = null;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 *	SELECT member_no memberNo
+		 *		, member_id memberId
+		 *		, member_level memberLevel
+		 *		, member_name memberName
+		 *	FROM member
+		 *	WHERE member_id = ?
+		 * 
+		 */
+		String sql = "SELECT member_no memberNo, member_id memberId, member_level memberLevel, member_name memberName FROM member WHERE member_id = ?";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		stmt.setString(1, member.getMemberId());
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		if(rs.next()) {
+			resultMember = new Member();
+			
+			resultMember.setMemberNo(rs.getInt("memberNo"));
+			resultMember.setMemberId(rs.getString("memberId"));
+			resultMember.setMemberLevel(rs.getInt("memberLevel"));
+			resultMember.setMemberName(rs.getString("memberName"));
+		}
+		
+		dbUtil.close(rs, stmt, conn);
+		
+		return resultMember;
+	}
+	
 	// 관리자 멤버 강퇴
-	public int deleteMemberByAdmin(Member member) {
-		return 0;
+	public int deleteMemberByAdmin(Member member) throws Exception {
+		
+		int resultRow = 0;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 * DELETE
+		 * FROM member
+		 * WHERE member_id = ?
+		 * 
+		 */
+		String sql = "DELETE FROM member WHERE member_id = ?";
+		
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		stmt.setString(1, member.getMemberId());
+		
+		resultRow = stmt.executeUpdate();
+		
+		if(resultRow == 1) {
+			System.out.println("강제 탈퇴 완료");
+		} else {
+			System.out.println("강제 탈퇴 실패");
+			
+		}
+		
+		dbUtil.close(null, stmt, conn);
+		
+		return resultRow;
 	}
 		
 	
 	// 관리자 : 레벨수정
 	public int updateMemberLevel(Member member) throws Exception {
-		return 0;
+		
+		int resultRow = 0;
+		
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		// sql
+		/*
+		 * UPDATE member
+		 * SET member_level = ?
+		 * WHERE member_id = ?
+		 * 
+		 */
+		String sql = "UPDATE member SET member_level = ? WHERE member_id = ?";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		stmt.setInt(1, member.getMemberLevel());
+		stmt.setString(2, member.getMemberId());
+		
+		resultRow = stmt.executeUpdate();
+		
+		if(resultRow == 1) {
+			System.out.println("레벨 수정 완료");
+		} else {
+			System.out.println("레벨 수정 실패");
+			
+		}
+		
+		dbUtil.close(null, stmt, conn);
+		
+		return resultRow;
 	}
 	
 	// 관리자 : 멤버 수
@@ -117,8 +220,8 @@ public class MemberDao {
 		return resultMember;
 	}
 	
-	// 회원가입 프로세스 1) id 중복 확인 2) 회원가입
 	
+	// 회원가입 프로세스 1) id 중복 확인 2) 회원가입
 	// 반환값 t : 이미 존재 , f : 사용가능(중복되지 않음)
 	public boolean selectMemberIdCk(String paramMemberId) throws Exception {
 		boolean result = false;

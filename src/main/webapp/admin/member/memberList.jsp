@@ -9,6 +9,10 @@
 
 	// Controller
 	
+	// 오류 메세지 출력 변수 초기화
+	String msg = request.getParameter("msg");	
+	
+
 	Member loginMember = (Member) session.getAttribute("loginMember");
 	
 	// 로그인 안되있거나 관리자가 아닐때 loginForm.jsp redirect
@@ -53,7 +57,19 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>memberList.jsp</title>
+		
+		
+		<script type = "text/javascript">
+			<%
+				if(msg != null) {
+			%>
+						alert("<%=msg %>");
+			<%		
+				}
+			%>
+		</script>
+		
 	</head>
 	
 	<!-- Bootstrap5를 참조한다 시작-->
@@ -68,9 +84,9 @@
 	
 	<body>
 		<ul>
-			<li><a href = "<%=request.getContextPath() %>/admin/noticeList.jsp">공지관리</a></li>
-			<li><a href = "<%=request.getContextPath() %>/admin/categoryList.jsp">카테고리관리</a></li>
-			<li><a href = "<%=request.getContextPath() %>/admin/memberList.jsp">멤버관리(목록 출력, 레벨수정, 강제탈퇴)</a></li>
+			<li><a href = "<%=request.getContextPath() %>/admin/notice/noticeList.jsp">공지관리</a></li>
+			<li><a href = "<%=request.getContextPath() %>/admin/category/categoryList.jsp">카테고리관리</a></li>
+			<li><a href = "<%=request.getContextPath() %>/admin/member/memberList.jsp">멤버관리(목록 출력, 레벨수정, 강제탈퇴)</a></li>
 		</ul>
 		
 		<div>
@@ -107,10 +123,10 @@
 							<td><%=m.getUpdatedate()%></td>
 							<td><%=m.getCreatedate()%></td>
 							<td>
-								<a href = "">레벨수정</a>
+								<a href = "<%=request.getContextPath() %>/admin/member/updateLevelForm.jsp?memberId=<%=m.getMemberId() %>">레벨수정</a>
 							</td>
 							<td>
-								<a href = "">강제탈퇴</a>
+								<a href = "<%=request.getContextPath() %>/admin/member/deleteMemberByAdmin.jsp?memberId=<%=m.getMemberId() %>">강제탈퇴</a>
 							</td>
 				<%
 					}
@@ -131,7 +147,7 @@
 				
 				<!-- 페이지 처음 -->
 				<li class="page-item">
-					<a class="page-link" href="<%=request.getContextPath() %>/admin/memberList.jsp?currentPage=1">
+					<a class="page-link" href="<%=request.getContextPath() %>/admin/member/memberList.jsp?currentPage=1">
 						<span>처음</span>
 					</a>
 				</li>
@@ -142,7 +158,7 @@
 					if(previousPage > 0) {
 				%>
 						<li class="page-item">
-							<a class="page-link" href="<%=request.getContextPath() %>/admin/memberList.jsp?currentPage=<%=previousPage %>">
+							<a class="page-link" href="<%=request.getContextPath() %>/admin/member/memberList.jsp?currentPage=<%=previousPage %>">
 								<span>이전</span>
 							</a>
 						</li>
@@ -174,7 +190,7 @@
 						<%
 							if(i <= lastPage) {
 						%>
-								<a class="page-link" href="<%=request.getContextPath() %>/admin/memberList.jsp?currentPage=<%=i %>">
+								<a class="page-link" href="<%=request.getContextPath() %>/admin/member/memberList.jsp?currentPage=<%=i %>">
 									<span><%=i %></span>
 								</a>
 						<%
@@ -190,7 +206,7 @@
 					if(nextPage <= lastPage) {
 				%>
 						<li class="page-item">
-							<a class="page-link" href="<%=request.getContextPath() %>/admin/memberList.jsp?currentPage=<%=nextPage %>">
+							<a class="page-link" href="<%=request.getContextPath() %>/admin/member/memberList.jsp?currentPage=<%=nextPage %>">
 								<span>다음</span>
 							</a>
 						</li>
@@ -200,7 +216,7 @@
 				
 				<!-- 페이지 마지막 -->
 				<li class="page-item">
-					<a class="page-link" href="<%=request.getContextPath() %>/admin/memberList.jsp?currentPage=<%=lastPage%>">
+					<a class="page-link" href="<%=request.getContextPath() %>/admin/member/memberList.jsp?currentPage=<%=lastPage%>">
 						<span>마지막</span>
 					</a>
 				</li>
