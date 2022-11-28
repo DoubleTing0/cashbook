@@ -14,11 +14,12 @@
 <%
 	// Contorller
 	
+	// 메세지 출력 변수 초기화
 	String msg = null;
 	
+	// 로그인 세션 및 관리자 검증
 	Member loginMember = (Member) session.getAttribute("loginMember");
 	
-	// 로그인 세션 및 관리자 검증
 	if(loginMember == null || loginMember.getMemberLevel() < 1 ) {
 		
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
@@ -33,10 +34,13 @@
 	// null 및 공백 검증
 	if(memberId == null || memberId.equals("")) {
 		
-		msg = URLEncoder.encode("회원을 다시 선택해주세요.", "UTF-8");
+		msg = URLEncoder.encode("다시 선택하세요.", "UTF-8");
 		response.sendRedirect(request.getContextPath() + "/admin/member/memberList.jsp?msg=" + msg);
 		return;
 	}
+	
+	
+	// Model 호출
 	
 	Member member = new Member();
 	member.setMemberId(memberId);

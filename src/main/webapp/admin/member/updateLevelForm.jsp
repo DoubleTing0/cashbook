@@ -12,12 +12,12 @@
 <%
 
 
-	//Controller
+	// Controller
 
 	
-	// 오류 메세지 출력을 위한 변수 초기화
+	// 메세지 출력을 위한 변수 초기화
 	
-	String msg = request.getParameter("msg");
+	String msg = null;
 	
 	Member loginMember = (Member) session.getAttribute("loginMember");
 	
@@ -30,19 +30,20 @@
 	}
 	
 	// request
-	
 	String memberId = request.getParameter("memberId");
 	
+	// null, 공백 검증
 	if(memberId == null || memberId.equals("")) {
 		
-		msg = URLEncoder.encode("회원을 다시 선택해주세요.", "UTF-8");
+		msg = URLEncoder.encode("다시 선택하세요.", "UTF-8");
 		response.sendRedirect(request.getContextPath() + "/admin/member/memberList.jsp");
 		return;
 	}
 	
 	
 	
-	// 메서드 실행을 위한 dao 객체 생성
+	// Model 호출
+	
 	MemberDao memberDao = new MemberDao();
 	
 	Member member = new Member();
@@ -62,18 +63,6 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>updateLevelForm.jsp</title>
-		
-		
-		<script type = "text/javascript">
-			<%
-				if(msg != null) {
-			%>
-						alert("<%=msg %>");
-			<%		
-				}
-			%>
-		</script> 
-		
 		
 	</head>
 	

@@ -23,7 +23,7 @@
 	// 메세지 출력 변수
 	String msg = request.getParameter("msg");
 	
-	
+	// Model 호출
 	
 	// 공지 Page 변수 초기화
 	Page noticePage = new Page();

@@ -8,18 +8,20 @@
 
 	// Controller
 	
-	// 오류 메세지 출력 변수 초기화
+	// 메세지 출력 변수
 	String msg = request.getParameter("msg");	
 	
 
+	// 로그인 안되있거나 관리자가 아닐때 loginForm.jsp redirect
 	Member loginMember = (Member) session.getAttribute("loginMember");
 	
-	// 로그인 안되있거나 관리자가 아닐때 loginForm.jsp redirect
 	if(loginMember == null || loginMember.getMemberLevel() < 1 ) {
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
 	}
 	
-	// 멤버 Page 변수 초기화
+	// Model 호출
+	
+	// 공지 Page 변수 초기화
 	Page noticePage = new Page();
 	
 	int currentPage = 1;
@@ -68,23 +70,36 @@
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
 		
 		<!-- Bootstrap5를 참조한다 끝-->
+		
+		<script type = "text/javascript">
+			<%
+				if(msg != null) {
+			%>
+						alert("<%=msg %>");
+			<%		
+				}
+			%>
+		</script>
 			
 	</head>
 	
 	<body>
-		<ul>
-			<li><a href = "<%=request.getContextPath() %>/admin/notice/noticeList.jsp">공지관리</a></li>
-			<li><a href = "<%=request.getContextPath() %>/admin/category/categoryList.jsp">카테고리관리</a></li>
-			<li><a href = "<%=request.getContextPath() %>/admin/member/memberList.jsp">멤버관리(목록 출력, 레벨수정, 강제탈퇴)</a></li>
-		</ul>
 		
 		<div>
-			<!-- noticeList -->
+			<!-- 관리자 메뉴 -->
+			<div>
+				<jsp:include page = "/inc/adminMenu.jsp"></jsp:include>
+			</div>
+			
 			<div>
 				<h1>공지</h1>
 			</div>
 			
-			<a href = "">공지입력</a>
+			<div>
+				<a href = "<%=request.getContextPath() %>/admin/notice/insertNoticeForm.jsp">공지추가</a>
+			
+			</div>
+			
 			
 			<div>
 				<table border = "1">
@@ -105,7 +120,7 @@
 									<a href = "<%=request.getContextPath() %>/admin/notice/updateNoticeForm.jsp?noticeNo=<%=n.getNoticeNo() %>">수정</a>
 								</td>
 								<td>
-									<a href = "">삭제</a>
+									<a href = "<%=request.getContextPath() %>/admin/notice/deleteNoticeAction.jsp?noticeNo=<%=n.getNoticeNo() %>">삭제</a>
 								</td>
 							</tr>
 					<%
@@ -120,7 +135,7 @@
 		<div>&nbsp;</div>
 		
 		
-		<!-- 멤버 페이징 처리 시작 -->
+		<!-- 공지 페이징 처리 시작 -->
 		<div>
 			<ul class="pagination">
 				
@@ -202,7 +217,7 @@
 			</ul>
 		</div>			
 	
-		<!-- 멤버 페이징 처리 끝 -->	
+		<!-- 공지 페이징 처리 끝 -->	
 		
 		
 	</body>
