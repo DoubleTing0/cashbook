@@ -28,7 +28,7 @@
 			|| request.getParameter("memberPw").equals("") || request.getParameter("memberNewPw").equals("")) {
 		
 		
-		msg = URLEncoder.encode("모든 항목을 입력해주세요.", "UTF-8");
+		msg = URLEncoder.encode("모든 항목을 입력하세요.", "UTF-8");
 		
 		response.sendRedirect(request.getContextPath() + "/member/updatePwForm.jsp?msg=" + msg);
 		return;
@@ -54,7 +54,7 @@
 	if(resultRow == 1) {
 		
 		// 변경 완료 메세지 출력후 loginForm.jsp redirect
-		msg = URLEncoder.encode("비밀번호 변경 완료되었습니다.", "UTF-8");
+		msg = URLEncoder.encode("비밀번호가 변경되었습니다.", "UTF-8");
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp?msg=" + msg);
 		
 		// 세션 초기화

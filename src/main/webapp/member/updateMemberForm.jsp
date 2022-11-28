@@ -21,7 +21,7 @@
 		
 	}
 
-	//request
+	// 메세지
 	String msg = request.getParameter("msg");
 
 	Member loginMember = (Member) session.getAttribute("loginMember");

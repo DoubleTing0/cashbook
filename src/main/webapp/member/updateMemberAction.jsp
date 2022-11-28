@@ -30,7 +30,7 @@
 	// null 및 공백 검사
 	if(loginMember.getMemberName() == null || loginMember.getMemberName().equals("")) {
 		
-		msg = URLEncoder.encode("모든 항목을 입력해주세요.", "UTF-8");
+		msg = URLEncoder.encode("모든 항목을 입력하세요.", "UTF-8");
 		
 		response.sendRedirect(request.getContextPath() + "/member/updateMemberForm.jsp?msg=" + msg);
 		return;

@@ -15,7 +15,7 @@
 		return;
 	}
 
-	// 오류 메세지
+	// 메세지
 	String msg = request.getParameter("msg");
 	
 
@@ -32,7 +32,7 @@
 		
 		<script type = "text/javascript">
 		
-			// 오류 메세지 출력	
+			// 메세지 출력	
 			<%
 				if(msg != null) {
 			%>	

@@ -40,7 +40,7 @@
 	if(member.getMemberId() == null || member.getMemberPw() == null || member.getMemberName() == null 
 		|| member.getMemberId().equals("") || member.getMemberPw().equals("") || member.getMemberName().equals("")) {
 		
-		msg = URLEncoder.encode("모든 항목을 입력해주세요.", "UTF-8");
+		msg = URLEncoder.encode("모든 항목을 입력하세요.", "UTF-8");
 		response.sendRedirect(request.getContextPath() + "/member/insertMemberForm.jsp?msg=" + msg);
 		return;
 		

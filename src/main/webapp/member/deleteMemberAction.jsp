@@ -27,7 +27,7 @@
 	// null, 공백 검사
 	if(request.getParameter("memberPw") == null || request.getParameter("memberPw").equals("")) {
 		
-		msg = URLEncoder.encode("모든 항목을 입력해주세요.", "UTF-8");
+		msg = URLEncoder.encode("모든 항목을 입력하세요.", "UTF-8");
 		
 		response.sendRedirect(request.getContextPath() + "/member/deleteMemberForm.jsp?msg=" + msg);
 		return;
@@ -49,7 +49,7 @@
 	
 	if(result) {
 		
-		msg = URLEncoder.encode("회원 탈퇴 완료되었습니다.", "UTF-8");
+		msg = URLEncoder.encode("회원 탈퇴 되었습니다.", "UTF-8");
 		session.invalidate();
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp?msg=" + msg);
 		
