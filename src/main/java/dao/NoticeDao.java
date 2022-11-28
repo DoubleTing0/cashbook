@@ -40,7 +40,7 @@ public class NoticeDao {
 			resultNotice.setNoticeNo(rs.getInt("noticeNo"));
 			resultNotice.setNoticeMemo(rs.getString("noticeMemo"));
 			resultNotice.setCreatedate(rs.getString("createdate"));
-			resultNotice.setUpdatedate(rs.getString("update"));
+			resultNotice.setUpdatedate(rs.getString("updatedate"));
 		}
 		
 		dbUtil.close(rs, stmt, conn);
@@ -53,18 +53,64 @@ public class NoticeDao {
 	// 추가 메서드
 	public int insertNotice(Notice notice) throws Exception {
 		
+		int resultRow = 0;
+		
+		DBUtil dbUtil = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
 		String sql = "INSERT notice (notice_memo, updatedate, createdate) VALUES (?, NOW(), NOW())";
-		return 0;
+		
+		dbUtil = new DBUtil();
+		conn = dbUtil.getConnection();
+		stmt = conn.prepareStatement(sql);
+		
+		stmt.setString(1, notice.getNoticeMemo());
+		
+		resultRow = stmt.executeUpdate();
+		
+		if(resultRow == 1) {
+			System.out.println("공지 추가 완료");
+		} else {
+			System.out.println("공지 추가 실패");
+		}
+		
+		// 자원 반환
+		dbUtil.close(null, stmt, conn);
+		
+		return resultRow;
 		
 	}
 	
 	// 삭제 메서드
 	public int deleteNotice(Notice notice) throws Exception {
 		
+		int resultRow = 0;
+		
+		DBUtil dbUtil = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
 		String sql = "DELETE FROM notice WHERE notice_no = ?";
 		
+		dbUtil = new DBUtil();
+		conn = dbUtil.getConnection();
+		stmt = conn.prepareStatement(sql);
 		
-		return 0;
+		stmt.setInt(1, notice.getNoticeNo());
+		
+		resultRow = stmt.executeUpdate();
+		
+		if(resultRow == 1) {
+			System.out.println("공지 삭제 완료");
+		} else {
+			System.out.println("공지 삭제 실패");
+		}
+		
+		// 자원 반환
+		dbUtil.close(null, stmt, conn);
+
+		
+		return resultRow;
 	}
 	
 	
@@ -73,14 +119,36 @@ public class NoticeDao {
 	// 수정 메서드
 	public int updateNotice(Notice notice) throws Exception {
 		
-		/*
-		 * 
-		 */
+		int resultRow = 0;
 		
-		String sql = "UPDATE notice SET noice_memo = ? WHERE notice_no = ?";
+		DBUtil dbUtil = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String sql = "UPDATE notice SET notice_memo = ? WHERE notice_no = ?";
+		
+		dbUtil = new DBUtil();
+		conn = dbUtil.getConnection();
+		stmt = conn.prepareStatement(sql);
+		
+		stmt.setString(1, notice.getNoticeMemo());
+		stmt.setInt(2, notice.getNoticeNo());
+		
+		resultRow = stmt.executeUpdate();
+		
+		if(resultRow == 1) {
+			System.out.println("공지 수정 완료");
+		} else {
+			System.out.println("공지 수정 실패");
+		}
+		
+		// 자원 반환
+		dbUtil.close(null, stmt, conn);
+		
+		return resultRow;
 		
 		
-		return 0;
+		
 		
 	}
 	
