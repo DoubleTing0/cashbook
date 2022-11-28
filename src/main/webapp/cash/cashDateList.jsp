@@ -86,7 +86,7 @@
 				<!-- include 주체는 서버라서 경로를 서버기준으로 생각해야한다.
 					 request.getContextPath() 쓰지마라. 
 					 이미 같이 안에 있기 때문에 context path를 가져올 필요가 없다.-->
-				<jsp:include page = "/inc/loginInformation.jsp"></jsp:include>
+				<jsp:include page = "/inc/menu.jsp"></jsp:include>
 			</div>
 		
 		
@@ -160,13 +160,6 @@
 			
 			
 			
-			
-			
-			
-			
-			
-			
-			
 			<!-- cash 목록 출력 -->
 			
 			<div>
@@ -208,10 +201,7 @@
 			</div>
 			
 			
-			
-			
 		</div>
-		
 		
 		
 	</body>
