@@ -39,26 +39,33 @@
 			<%
 				}
 			%>
-			
-			<a href = "<%=request.getContextPath() %>/member/updateMemberForm.jsp">
-				<span>내 정보 수정</span>
-			</a>
-			
-			<a href = "<%=request.getContextPath() %>/member/updatePwForm.jsp">
-				<span>비밀번호 변경</span>
-			</a>
-			
-			
-			<a href = "<%=request.getContextPath() %>/login/logoutAction.jsp">
-				<span>로그아웃</span>
-			</a>
-			
-			<a href = "<%=request.getContextPath() %>/member/deleteMemberForm.jsp">
-				<span>회원 탈퇴</span>
-			</a>
-			
+			<div>
+				<ul>
+					<li>
+						<a href = "<%=request.getContextPath() %>/member/updateMemberForm.jsp">
+							<span>내 정보 수정</span>
+						</a>
+					</li>
+					
+					<li>
+						<a href = "<%=request.getContextPath() %>/member/updatePwForm.jsp">
+							<span>비밀번호 변경</span>
+						</a>
+					</li>
+					
+					<li>
+						<a href = "<%=request.getContextPath() %>/login/logoutAction.jsp">
+							<span>로그아웃</span>
+						</a>
+					</li>
+					
+					<li>
+						<a href = "<%=request.getContextPath() %>/member/deleteMemberForm.jsp">
+							<span>회원 탈퇴</span>
+						</a>
+					</li>
+				</ul>
+			</div>
 		</div> 
-		
-		
 	</body>
 </html>
