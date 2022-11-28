@@ -478,6 +478,7 @@ public class MemberDao {
 				+ "		, createdate"
 				+ "	FROM member"
 				+ "	ORDER BY createdate DESC"
+				+ ", member_no DESC"
 				+ "	LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		
