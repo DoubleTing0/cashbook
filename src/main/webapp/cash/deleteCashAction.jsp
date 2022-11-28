@@ -30,7 +30,6 @@
 	String strCashNo = request.getParameter("cashNo");
 	
 	// null, 공백 검사
-
 	if(strYear == null || strMonth == null || strDate == null || strCashNo == null
 			|| strYear.equals("") || strMonth.equals("") || strDate.equals("") || strCashNo.equals("")) {	
 		msg = URLEncoder.encode("다시 선택하세요.", "UTF-8");
@@ -58,7 +57,7 @@
 	
 	if(resultRow == 1){
 		
-		msg = URLEncoder.encode("삭제 완료", "UTF-8");
+		msg = URLEncoder.encode("항목이 삭제되었습니다.", "UTF-8");
 		response.sendRedirect(request.getContextPath() + "/cash/cashDateList.jsp?&year=" + year + "&month=" + month + "&date=" + date + "&msg=" + msg);
 		return;
 		

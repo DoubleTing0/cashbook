@@ -21,7 +21,7 @@
 	}
 	
 	// 메세지 출력 변수
-	String msg = request.getParameter("msg");
+	String msg = null;
 	
 	// request 
 	String strYear = request.getParameter("year");
@@ -37,6 +37,7 @@
 	if(strYear == null || strMonth == null || strDate == null || strCashNo == null || strCategoryNo == null 
 			|| strCashPrice == null || strCashMemo == null || strYear.equals("") || strMonth.equals("") 
 			|| strDate.equals("") || strCashNo.equals("") || strCategoryNo.equals("") || strCashPrice.equals("") || strCashMemo.equals("")) {	
+		
 		msg = URLEncoder.encode("다시 선택하세요.", "UTF-8");
 		response.sendRedirect(request.getContextPath() + "/cash/cashList.jsp?&msg=" + msg);
 		return;
@@ -64,7 +65,7 @@
 	
 	if(resultRow == 1) {
 		
-		msg = URLEncoder.encode("수정 완료.", "UTF-8");
+		msg = URLEncoder.encode("항목이 수정되었습니다.", "UTF-8");
 		response.sendRedirect(request.getContextPath() + "/cash/cashDateList.jsp?&year=" + year + "&month=" + month + "&date=" + date + "&msg=" + msg);
 		return;
 		
