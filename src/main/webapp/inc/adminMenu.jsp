@@ -19,6 +19,10 @@
 					<a href = "<%=request.getContextPath() %>/admin/member/memberList.jsp">멤버관리</a>
 				</li>
 				<li>
+					<a href = "<%=request.getContextPath() %>/admin/help/helpListAll.jsp">문의사항관리</a>
+				</li>
+			
+				<li>
 					<a href = "<%=request.getContextPath() %>/login/logoutAction.jsp">
 						<span>로그아웃</span>
 					</a>

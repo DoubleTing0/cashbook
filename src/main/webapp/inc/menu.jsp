@@ -60,6 +60,18 @@
 					</li>
 					
 					<li>
+						<a href = "<%=request.getContextPath() %>/cash/cashList.jsp">
+							<span>가계부</span>
+						</a>
+					</li>
+					
+					<li>
+						<a href = "<%=request.getContextPath() %>/help/helpList.jsp">
+							<span>문의사항</span>
+						</a>
+					</li>
+					
+					<li>
 						<a href = "<%=request.getContextPath() %>/member/deleteMemberForm.jsp">
 							<span>회원 탈퇴</span>
 						</a>
