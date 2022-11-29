@@ -58,7 +58,7 @@ public class NoticeDao {
 		DBUtil dbUtil = null;
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		String sql = "INSERT notice (notice_memo, updatedate, createdate) VALUES (?, NOW(), NOW())";
+		String sql = "INSERT INTO notice (notice_memo, updatedate, createdate) VALUES (?, NOW(), NOW())";
 		
 		dbUtil = new DBUtil();
 		conn = dbUtil.getConnection();
