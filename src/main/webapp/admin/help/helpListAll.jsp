@@ -85,7 +85,9 @@
 	
 	<body>
 		<div>
-			<div>문의관리</div>
+			<div>
+				<h1>문의관리</h1>
+			</div>
 			
 			<div>&nbsp;</div>
 			
