@@ -129,7 +129,7 @@ public class CategoryDao {
 		if(resultRow == 1) {
 			System.out.println("카테고리 추가 완료");
 		} else {
-			System.out.println("카테고리 추가 완료");
+			System.out.println("카테고리 추가 실패");
 		}
 		
 		
