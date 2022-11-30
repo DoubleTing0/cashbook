@@ -78,296 +78,222 @@
 	
 %>
 
+
 <!DOCTYPE html>
 <html>
+
 	<head>
-		<meta charset="UTF-8">
-		<title>loginForm</title>
-		
-		<!-- Bootstrap5를 참조한다 시작-->
-		
-		<!-- Latest compiled and minified CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
-		
-		<!-- Latest compiled JavaScript -->
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-		
-		<!-- Bootstrap5를 참조한다 끝-->
-		
-		
-		
-		<script type = "text/javascript">
-			<%
-				if(msg != null) {
-			%>
-						alert("<%=msg %>");
-			<%		
-				}
-			%>
-		</script>
-	</head>
+	    <meta charset="utf-8">
+	    <title>로그인</title>
+	    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+	    <meta content="" name="keywords">
+	    <meta content="" name="description">
 	
+	    <!-- Favicon -->
+	    <link href="img/favicon.ico" rel="icon">
+	
+	    <!-- Google Web Fonts -->
+	    <link rel="preconnect" href="https://fonts.googleapis.com">
+	    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+	    
+	    <!-- Icon Font Stylesheet -->
+	    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+	    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+	
+	    <!-- Libraries Stylesheet -->
+	    <link href="<%=request.getContextPath() %>/resources/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+	    <link href="<%=request.getContextPath() %>/resources/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+	
+	    <!-- Customized Bootstrap Stylesheet -->
+	    <link href="<%=request.getContextPath() %>/resources/css/bootstrap.min.css" rel="stylesheet">
+	
+	    <!-- Template Stylesheet -->
+	    <link href="<%=request.getContextPath() %>/resources/css/style.css" rel="stylesheet">
+	</head>
+
 	<body>
-		<div>
-			<div>
-				<h1>로그인</h1>
-			</div>
-		
-			<div>&nbsp;</div>
-			
-			<div>
-				<form method = "post" action = "<%=request.getContextPath()%>/login/loginAction.jsp">
-					<div>
-						<table border = "1">
-							<tr>
-								<th>아이디</th>
-								<td>
-									<input type = "text" name = "memberId">
-								</td>
-							</tr>
-							
-							<tr>
-								<th>비밀번호</th>
-								<td>
-									<input type = "password" name = "memberPw">
-								</td>
-							</tr>
+	    <div class="container-fluid position-relative d-flex p-0">
+	        <!-- Spinner Start -->
+	        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+	            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+	                <span class="sr-only">Loading...</span>
+	            </div>
+	        </div>
+	        <!-- Spinner End -->
+	
+	
+	        <!-- Sign In Start -->
+	        <div class="container-fluid">
+	            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+	                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-5">
+	                    <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+	                        <div class="d-flex align-items-center justify-content-between mb-3">
+	                        	<h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>가계부</h3>
+	                            <h3>로그인</h3>
+	                        </div>
+	                        <div>
+	                        	<form method = "post" action = "<%=request.getContextPath()%>/login/loginAction.jsp">
+			                        <div class="form-floating mb-3">
+			                            <input type="text" class="form-control" name = "memberId" id="floatingInput" placeholder="ID">
+			                            <label for="floatingInput">ID</label>
+			                        </div>
+			                        <div class="form-floating mb-4">
+			                            <input type="password" class="form-control" name = "memberPw" id="floatingPassword" placeholder="Password">
+			                            <label for="floatingPassword">Password</label>
+			                        </div>
+			                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">로그인</button>
+	                        	</form>
+	                        </div>
+	                        <p class="text-center mb-0">회원이 아니신가요?&emsp;&emsp;<a href="<%=request.getContextPath() %>/member/insertMemberForm.jsp">회원 가입</a></p>
+	                    </div>
+	                    
 						
-						</table>
-					</div>
-					
-					<div>
-						<button type = "submit">로그인 </button>
-						<button type = "button" onClick = "location.href='<%=request.getContextPath() %>/member/insertMemberForm.jsp'">회원가입</button>
-					</div>
-				</form>
-			</div>
-			
-			<div>&nbsp;</div>
-		
-			<!-- 공지 5개 목록 -->
-			<div>
-				<table border = "1">
-					<tr>
-					
-						<th>공지내용</th>
-						<th>날짜</th>
-					</tr>
-				
-					<%
-						for(Notice n : noticeList) {
-					%>
-							<tr>
-								<td><%=n.getNoticeMemo() %></td>
-								<td><%=n.getCreatedate() %></td>
-							</tr>
-					<%
-						}
-					%>
-				</table>
-			</div>
-			
-			<div>&nbsp;</div>
-			
-			<!-- 공지 페이징 처리 시작 -->
-			<div>
-				<ul class="pagination">
-					
-					<!-- 페이지 처음 -->
-					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=1&memberCurrentPage=<%=memberCurrentPage %>">
-							<span>처음</span>
-						</a>
-					</li>
-					
-					<!-- 페이지 이전(-10의 1페이지) -->
-					<%
 						
-						if(noticePreviousPage > 0) {
-					%>
-							<li class="page-item">
-								<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticePreviousPage %>&memberCurrentPage=<%=memberCurrentPage %>">
-									<span>이전</span>
-								</a>
-							</li>
-					<%
-						}
-					%>		
-				
-				  
-				  	<!-- 페이지 1 ~ 10 -->
-					<%
-				  		for(int i : noticePageList) {
-				  	%>
-							<!-- 현재페이지만 구분하기 위한 active 속성 조건문-->
-							<li 
-								<%
-									if(noticeCurrentPage == i) {
-								%>
-										class = "page-item active"
-								<%
-									} else {
-								%>
-										class = "page-item"
-								<%						
-									}
-								%>
-							> <!-- <li> 닫음 오타아님. -->
-							
-							<!-- 마지막 페이지까지만 출력하기 위한 조건문 -->					
-							<%
-								if(i <= noticeLastPage) {
-							%>
-									<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=i %>&memberCurrentPage=<%=memberCurrentPage %>">
-										<span><%=i %></span>
-									</a>
-							<%
-								}
-							%>
-							</li>
-					<%  		
-					}
-					%>
-				  
-				  	<!-- 페이지 다음(+10의 1페이지) -->
-					<%
-						if(noticeNextPage <= noticeLastPage) {
-					%>
-							<li class="page-item">
-								<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeNextPage %>&memberCurrentPage=<%=memberCurrentPage %>">
-									<span>다음</span>
-								</a>
-							</li>
-					<%
-						}
-					%>
-					
-					<!-- 페이지 마지막 -->
-					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeLastPage%>&memberCurrentPage=<%=memberCurrentPage %>">
-							<span>마지막</span>
-						</a>
-					</li>
-				</ul>
-			</div>			
-		
-			<!-- 공지 페이징 처리 끝 -->			
-			
-			<div>&nbsp;</div>
-			
-			<!-- 멤버 목록 출력 -->
-			
-			<div>
-				<table border = "1">
-					<tr>
-						<th>memberId</th>
-						<th>memberLevel</th>
-						<th>memberName</th>
-						<th>createdate</th>
-					</tr>
-				
-					<%
-						for(Member m : memberList) {
-					%>
-							<tr>
-								<td><%=m.getMemberId() %></td>
-								<td><%=m.getMemberLevel() %></td>
-								<td><%=m.getMemberName() %></td>
-								<td><%=m.getCreatedate() %></td>
-							</tr>
-					<%
-						}
-					%>
-				</table>
-			</div>
-			
-			<div>&nbsp;</div>
-		
-			<!-- 멤버 페이징 처리 시작 -->
-			<div>
-				<ul class="pagination">
-					
-					<!-- 페이지 처음 -->
-					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?memberCurrentPage=1&noticeCurrentPage=<%=noticeCurrentPage %>">
-							<span>처음</span>
-						</a>
-					</li>
-					
-					<!-- 페이지 이전(-10의 1페이지) -->
-					<%
 						
-						if(memberPreviousPage > 0) {
-					%>
-							<li class="page-item">
-								<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?memberCurrentPage=<%=memberPreviousPage %>&noticeCurrentPage=<%=noticeCurrentPage %>">
-									<span>이전</span>
-								</a>
-							</li>
-					<%
-						}
-					%>		
-				
-				  
-				  	<!-- 페이지 1 ~ 10 -->
-					<%
-				  		for(int i : memberPageList) {
-				  	%>
-							<!-- 현재페이지만 구분하기 위한 active 속성 조건문-->
-							<li 
-								<%
-									if(memberCurrentPage == i) {
-								%>
-										class = "page-item active"
-								<%
-									} else {
-								%>
-										class = "page-item"
-								<%						
-									}
-								%>
-							> <!-- <li> 닫음 오타아님. -->
+						<!-- 공지 5개 목록 -->
+						<div class = "row justify-content-center">
+							<div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
 							
-							<!-- 마지막 페이지까지만 출력하기 위한 조건문 -->					
-							<%
-								if(i <= memberLastPage) {
-							%>
-									<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?memberCurrentPage=<%=i %>&noticeCurrentPage=<%=noticeCurrentPage %>">
-										<span><%=i %></span>
-									</a>
-							<%
-								}
-							%>
-							</li>
-					<%  		
-					}
-					%>
-				  
-				  	<!-- 페이지 다음(+10의 1페이지) -->
-					<%
-						if(memberNextPage <= memberLastPage) {
-					%>
-							<li class="page-item">
-								<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?memberCurrentPage=<%=memberNextPage %>&noticeCurrentPage=<%=noticeCurrentPage %>">
-									<span>다음</span>
-								</a>
-							</li>
-					<%
-						}
-					%>
-					
-					<!-- 페이지 마지막 -->
-					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?memberCurrentPage=<%=memberLastPage%>&noticeCurrentPage=<%=noticeCurrentPage %>">
-							<span>마지막</span>
-						</a>
-					</li>
-				</ul>
-			</div>			
-		
-			<!-- 멤버 페이징 처리 끝 -->	
-			
-		
-		</div>
+								<div class="d-flex align-items-center justify-content-center mb-4">
+			                        <h1 class="text-primary mb-0">
+				                        <span>공지 사항</span>
+			                        </h1>
+			                    </div>
+							
+							
+								<table class="table align-middle table-bordered table-hover text-center mb-0">
+									<tr>
+										<th>
+											<h5 class = "text-danger mb-0">공지내용</h5>
+										</th>
+										<th>
+											<h5 class = "text-danger mb-0"">날짜</h5>
+										</th>
+									</tr>
+								
+									<%
+										for(Notice n : noticeList) {
+									%>
+											<tr>
+												<td><%=n.getNoticeMemo() %></td>
+												<td><%=n.getCreatedate() %></td>
+											</tr>
+									<%
+										}
+									%>
+								</table>
+								
+								<div>&nbsp;</div>
+			                    
+			                    <!-- 공지 페이징 처리 시작 -->
+								<div>
+									<ul class="pagination justify-content-center">
+										
+										<!-- 페이지 처음 -->
+										<li class="page-item">
+											<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=1&memberCurrentPage=<%=memberCurrentPage %>">
+												<span>처음</span>
+											</a>
+										</li>
+										
+										<!-- 페이지 이전(-10의 1페이지) -->
+										<%
+											
+											if(noticePreviousPage > 0) {
+										%>
+												<li class="page-item">
+													<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticePreviousPage %>&memberCurrentPage=<%=memberCurrentPage %>">
+														<span>이전</span>
+													</a>
+												</li>
+										<%
+											}
+										%>		
+									
+									  
+									  	<!-- 페이지 1 ~ 10 -->
+										<%
+									  		for(int i : noticePageList) {
+									  	%>
+												<!-- 현재페이지만 구분하기 위한 active 속성 조건문-->
+												<li 
+													<%
+														if(noticeCurrentPage == i) {
+													%>
+															class = "page-item active"
+													<%
+														} else {
+													%>
+															class = "page-item"
+													<%						
+														}
+													%>
+												> <!-- <li> 닫음 오타아님. -->
+												
+												<!-- 마지막 페이지까지만 출력하기 위한 조건문 -->					
+												<%
+													if(i <= noticeLastPage) {
+												%>
+														<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=i %>&memberCurrentPage=<%=memberCurrentPage %>">
+															<span><%=i %></span>
+														</a>
+												<%
+													}
+												%>
+												</li>
+										<%  		
+										}
+										%>
+									  
+									  	<!-- 페이지 다음(+10의 1페이지) -->
+										<%
+											if(noticeNextPage <= noticeLastPage) {
+										%>
+												<li class="page-item">
+													<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeNextPage %>&memberCurrentPage=<%=memberCurrentPage %>">
+														<span>다음</span>
+													</a>
+												</li>
+										<%
+											}
+										%>
+										
+										<!-- 페이지 마지막 -->
+										<li class="page-item">
+											<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeLastPage%>&memberCurrentPage=<%=memberCurrentPage %>">
+												<span>마지막</span>
+											</a>
+										</li>
+									</ul>
+								</div>			
+							
+								<!-- 공지 페이징 처리 끝 -->
+							</div>
+		                </div>
+		            </div>
+				</div>
+	        </div>
+	        <!-- Sign In End -->
+	        
+	        
+	        
+	        
+	    </div>
+	
+	    <!-- JavaScript Libraries -->
+	    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	    <script src="<%=request.getContextPath() %>/resources/lib/chart/chart.min.js"></script>
+	    <script src="<%=request.getContextPath() %>/resources/lib/easing/easing.min.js"></script>
+	    <script src="<%=request.getContextPath() %>/resources/lib/waypoints/waypoints.min.js"></script>
+	    <script src="<%=request.getContextPath() %>/resources/lib/owlcarousel/owl.carousel.min.js"></script>
+	    <script src="<%=request.getContextPath() %>/resources/lib/tempusdominus/js/moment.min.js"></script>
+	    <script src="<%=request.getContextPath() %>/resources/lib/tempusdominus/js/moment-timezone.min.js"></script>
+	    <script src="<%=request.getContextPath() %>/resources/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+	
+	    <!-- Template Javascript -->
+	    <script src="<%=request.getContextPath() %>/resources/js/main.js"></script>
 	</body>
+
 </html>

@@ -114,6 +114,9 @@ public class CommentDao {
 			System.out.println("답변 수정 실패");
 		}
 		
+		// DB 자원 반납
+		dbUtil.close(null, stmt, conn);
+		
 		return resultRow;
 	}
 	
@@ -141,6 +144,9 @@ public class CommentDao {
 		} else {
 			System.out.println("답변 삭제 실패");
 		}
+		
+		// DB 자원 반납
+		dbUtil.close(null, stmt, conn);
 		
 		return resultRow;
 	}

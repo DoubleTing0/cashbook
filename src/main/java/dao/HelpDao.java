@@ -237,6 +237,9 @@ public class HelpDao {
 			System.out.println("문의 수정 실패");
 		}
 		
+		// DB 자원 반납
+		dbUtil.close(null, stmt, conn);
+		
 		return resultRow;
 	}
 	
@@ -265,6 +268,9 @@ public class HelpDao {
 		} else {
 			System.out.println("문의 삭제 실패");
 		}
+		
+		// DB 자원 반납
+		dbUtil.close(null, stmt, conn);
 		
 		return resultRow;
 		
