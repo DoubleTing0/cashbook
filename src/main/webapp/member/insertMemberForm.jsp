@@ -83,9 +83,11 @@
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <a href="index.html" class="">
-                                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>가계부</h3>
-                            </a>
+                            <h3 class="text-primary">
+                            	<a href="<%=request.getContextPath() %>/cash/cashList.jsp">
+                                	<i class="fa fa-user-edit me-2"></i>가계부
+                            	</a>
+                           	</h3>
                             <h3>회원가입</h3>
                         </div>
                         <div>

@@ -15,6 +15,10 @@
 	//session에 저장된 멤버(현재 로그인 사용자)
 	Member loginMember = (Member) (session.getAttribute("loginMember"));
 
+	// page active 속성을 위한 page 구분
+	String pageName = (String) session.getAttribute("pageName");
+	
+	
 %>
 
 <!-- Sidebar Start -->
@@ -34,7 +38,23 @@
 	            </div>
 	        </div>
 	        <div class="navbar-nav w-100">
-	            <a href="<%=request.getContextPath() %>/cash/cashList.jsp" class="nav-item nav-link active"><i class="fa fa-calendar-week me-2"></i>가계부</a>
+	        
+	        	<!-- 가계부 메뉴 -->
+	        	<%
+	        		if(pageName.equals("cashList")) {
+	        			// 세션을 통해 현재 페이지에 active 속성 부여
+	        	%>
+			            <a href="<%=request.getContextPath() %>/cash/cashList.jsp" class="nav-item nav-link active"><i class="fa fa-calendar-week me-2"></i>가계부</a>
+			    <%
+			    	} else {
+			    %>
+			            <a href="<%=request.getContextPath() %>/cash/cashList.jsp" class="nav-item nav-link"><i class="fa fa-calendar-week me-2"></i>가계부</a>
+			    <%
+			    	}
+	        	%> 
+	            
+	            
+	            <!-- 관리자 메뉴 -->
 	            <%
 	            	if(loginMember.getMemberLevel() == 1) {
 	            		// 관리자라면 관리자페이지 메뉴 보이도록
@@ -43,7 +63,27 @@
 	           	<%	            		
 	            	}
 	            %>
-	            <a href="<%=request.getContextPath() %>/help/helpList.jsp" class="nav-item nav-link"><i class="fa fa-question me-2"></i>문의사항</a>
+	            
+	            
+	            <!-- 문의사항 메뉴 -->
+	            <%
+	        		if(pageName.equals("helpList")) {
+	        			// 세션을 통해 현재 페이지에 active 속성 부여
+	        	%>
+			            <a href="<%=request.getContextPath() %>/help/helpList.jsp" class="nav-item nav-link active"><i class="fa fa-question me-2"></i>문의사항</a>
+			    <%
+			    	} else {
+			    %>
+			            <a href="<%=request.getContextPath() %>/help/helpList.jsp" class="nav-item nav-link"><i class="fa fa-question me-2"></i>문의사항</a>
+			    <%
+			    	}
+	        	%> 
+	            
+	            
+	            
+	            
+	            
+	            
 	        </div>
 	    </nav>
 	</div>

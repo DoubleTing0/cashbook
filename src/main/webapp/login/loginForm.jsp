@@ -19,6 +19,9 @@
 		return;
 	}
 
+	// 페이지 세션 설정
+	session.setAttribute("pageName", "cashList");
+
 
 	// 메세지 출력 변수
 	String msg = request.getParameter("msg");
@@ -167,9 +170,9 @@
 							<div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
 							
 								<div class="d-flex align-items-center justify-content-center mb-4">
-			                        <h1 class="text-primary mb-0">
+			                        <h2 class="text-white mb-0">
 				                        <span>공지 사항</span>
-			                        </h1>
+			                        </h2>
 			                    </div>
 							
 							

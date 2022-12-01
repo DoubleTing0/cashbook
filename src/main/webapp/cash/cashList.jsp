@@ -20,6 +20,9 @@
 		
 	}
 	
+	//페이지 세션 설정
+	session.setAttribute("pageName", "cashList");
+
 	// 메세지 출력 변수
 	String msg = request.getParameter("msg");
 	
@@ -202,11 +205,11 @@
 	                            <thead class = "text-center">
 	                                <tr>
 										<th class = "text-primary">일</th>
-										<th>월</th>
-										<th>화</th>
-										<th>수</th>
-										<th>목</th>
-										<th>금</th>
+										<th class = "text-white-50">월</th>
+										<th class = "text-white-50">화</th>
+										<th class = "text-white-50">수</th>
+										<th class = "text-white-50">목</th>
+										<th class = "text-white-50">금</th>
 										<th class = "text-info">토</th>
 									</tr>
 	                            </thead>
@@ -260,7 +263,7 @@
 										
 													
 													
-													<div class = "text-end">
+													<div class = "text-end text-success">
 														<%
 															for(HashMap<String, Object> m : list) {
 																String cashDate = (String) (m.get("cashDate"));
