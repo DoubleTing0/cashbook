@@ -31,6 +31,15 @@
 	String strCategoryNo = request.getParameter("categoryNo");
 	String strCashPrice = request.getParameter("cashPrice");
 	String strCashMemo = request.getParameter("cashMemo");
+
+	// 디버깅
+	System.out.println(strYear + " <-- strYear");
+	System.out.println(strMonth + " <-- strMonth");
+	System.out.println(strDate + " <-- strDate");
+	System.out.println(strCashNo + " <-- strCashNo");
+	System.out.println(strCategoryNo + " <-- strCategoryNo");
+	System.out.println(strCashPrice + " <-- strCashPrice");
+	System.out.println(strCashMemo + " <-- strCashMemo");
 	
 	// null, 공백 검사
 

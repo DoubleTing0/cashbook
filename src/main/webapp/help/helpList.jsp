@@ -121,6 +121,11 @@
 	                        	<span>문의사항</span>
 	                        </h1>
 	                    </div>
+	                    <div class="m-n2 text-end">
+	                    	<button type="button" class="btn btn-primary rounded-pill m-2 mb-4"
+	                    			onclick="location.href='<%=request.getContextPath() %>/help/insertHelpForm.jsp' ">문의 하기</button>
+	                    </div>
+	                    
 	                    <div class="table-responsive">
 	                        <table class="table text-center align-middle table-bordered table-hover mb-0">
 	                            <thead class = "text-danger">
