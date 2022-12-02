@@ -8,106 +8,113 @@ import vo.*;
 public class CashDao {
 
 	// cashDateList.jsp / 선택한 날 cash목록 출력 메서드
-	public ArrayList<HashMap<String, Object>> selectCashListByDate(String memberId, int year, int month, int date) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectCashListByDate(String memberId, int year, int month, int date) {
 		
-		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		
-		DBUtil dbUtil = new DBUtil();
-		
-		Connection conn = dbUtil.getConnection();
-		
-		
-	
-		
-		String sql = "SELECT c.cash_no cashNo"
-				+ "			, c.cash_price cashPrice"
-				+ "			, c.cash_Memo cashMemo"
-				+ "			, ct.category_kind categoryKind"
-				+ "			, ct.category_name categoryName"
-				+ "		FROM cash c INNER JOIN category ct"
-				+ "		ON c.category_no = ct.category_no"
-				+ "		WHERE c.member_id = ?"
-				+ "		AND YEAR(c.cash_date) = ?"
-				+ "		AND MONTH(c.cash_date) = ?"
-				+ "		AND DAY(c.cash_date) = ?"			
-				+ "		ORDER BY cash_date ASC, ct.category_kind ASC";
-		
-		
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, memberId);
-		stmt.setInt(2,  year);
-		stmt.setInt(3,  month);
-		stmt.setInt(4,  date);
-		
-		
-		ResultSet rs = stmt.executeQuery();
-		while(rs.next()) {
+		ArrayList<HashMap<String, Object>> list = null; 
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		DBUtil dbUtil = null;
+		try {
 			
-			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("cashNo", rs.getInt("cashNo"));
-			m.put("cashPrice", rs.getLong("cashPrice"));
-			m.put("cashMemo", rs.getString("cashMemo"));
-			m.put("categoryKind", rs.getString("categoryKind"));
-			m.put("categoryName", rs.getString("categoryName"));
-			list.add(m);
+			list = new ArrayList<HashMap<String, Object>>();
 			
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			
+			String sql = "SELECT c.cash_no cashNo"
+					+ "			, c.cash_price cashPrice"
+					+ "			, c.cash_Memo cashMemo"
+					+ "			, ct.category_kind categoryKind"
+					+ "			, ct.category_name categoryName"
+					+ "		FROM cash c INNER JOIN category ct"
+					+ "		ON c.category_no = ct.category_no"
+					+ "		WHERE c.member_id = ?"
+					+ "		AND YEAR(c.cash_date) = ?"
+					+ "		AND MONTH(c.cash_date) = ?"
+					+ "		AND DAY(c.cash_date) = ?"			
+					+ "		ORDER BY cash_date ASC, ct.category_kind ASC";
+			
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, memberId);
+			stmt.setInt(2,  year);
+			stmt.setInt(3,  month);
+			stmt.setInt(4,  date);
+			
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				
+				HashMap<String, Object> m = new HashMap<String, Object>();
+				m.put("cashNo", rs.getInt("cashNo"));
+				m.put("cashPrice", rs.getLong("cashPrice"));
+				m.put("cashMemo", rs.getString("cashMemo"));
+				m.put("categoryKind", rs.getString("categoryKind"));
+				m.put("categoryName", rs.getString("categoryName"));
+				list.add(m);
+				
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbUtil.close(rs, stmt, conn);
 		}
 		
-		rs.close();
-		stmt.close();
-		conn.close();
-		
 		return list;
-		
-		
 		
 	}
 	
 	
 	// cashList.jsp / 선택한 달 cash 목록 출력
-	public ArrayList<HashMap<String, Object>> selectCashListByMonth(String memberId, int year, int month) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectCashListByMonth(String memberId, int year, int month) {
 		
-		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		ArrayList<HashMap<String, Object>> list = null; 
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		DBUtil dbUtil = null;
 		
-		DBUtil dbUtil = new DBUtil();
-		
-		Connection conn = dbUtil.getConnection();
-		
-		
-	
-		
-		String sql = "SELECT c.cash_date cashDate"
-				+ "			, c.cash_price cashPrice"
-				+ "			, ct.category_kind categoryKind"
-				+ "			, ct.category_name categoryName"
-				+ "		FROM cash c INNER JOIN category ct"
-				+ "		ON c.category_no = ct.category_no"
-				+ "		WHERE c.member_id = ? AND YEAR(c.cash_date) = ? AND MONTH(c.cash_date) = ?"
-				+ "		ORDER BY cash_date ASC, ct.category_kind ASC";
-		
-		
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, memberId);
-		stmt.setInt(2,  year);
-		stmt.setInt(3,  month);
-		
-		
-		ResultSet rs = stmt.executeQuery();
-		while(rs.next()) {
+		try {
 			
-			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("cashDate", rs.getString("cashDate"));
-			m.put("cashPrice", rs.getLong("cashPrice"));
-			m.put("categoryKind", rs.getString("categoryKind"));
-			m.put("categoryName", rs.getString("categoryName"));
-			list.add(m);
+			dbUtil = new DBUtil();
+			
+			list = new ArrayList<HashMap<String, Object>>();
+			
+			conn = dbUtil.getConnection();
 			
 			
+			String sql = "SELECT c.cash_date cashDate"
+					+ "			, c.cash_price cashPrice"
+					+ "			, ct.category_kind categoryKind"
+					+ "			, ct.category_name categoryName"
+					+ "		FROM cash c INNER JOIN category ct"
+					+ "		ON c.category_no = ct.category_no"
+					+ "		WHERE c.member_id = ? AND YEAR(c.cash_date) = ? AND MONTH(c.cash_date) = ?"
+					+ "		ORDER BY cash_date ASC, ct.category_kind ASC";
+			
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, memberId);
+			stmt.setInt(2,  year);
+			stmt.setInt(3,  month);
+			
+			
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				
+				HashMap<String, Object> m = new HashMap<String, Object>();
+				m.put("cashDate", rs.getString("cashDate"));
+				m.put("cashPrice", rs.getLong("cashPrice"));
+				m.put("categoryKind", rs.getString("categoryKind"));
+				m.put("categoryName", rs.getString("categoryName"));
+				list.add(m);
+				
+				
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbUtil.close(rs, stmt, conn);
 		}
-		
-		rs.close();
-		stmt.close();
-		conn.close();
 		
 		return list;
 		
@@ -115,222 +122,234 @@ public class CashDao {
 	
 	
 	// insertCashAction.jsp  / cash 추가 메서드
-	public int insertCash(Member paramMember, Cash paramCash) throws Exception {
+	public int insertCash(Member paramMember, Cash paramCash) {
+		
 		int resultRow = 0;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		DBUtil dbUtil = null;
 		
-		// DB 접속을 위한 객체 생성
-		DBUtil dbUtil = new DBUtil();
-		Connection conn = dbUtil.getConnection();
-		
-		// sql
-		/*
-		 * 	INSERT INTO cash (
-		 * 		category_no
-		 * 		, member_id
-		 * 		, cash_date 
-		 * 		, cash_price
-		 * 		, cash_Memo
-		 * 		, updatedate
-		 * 		, createdate
-		 * 	) VALUES (
-		 * 		?
-		 * 		, ?
-		 * 		, ?
-		 * 		, ?
-		 * 		, CURDATE()
-		 * 		, CURDATE()
-		 *	)
-		 * 	
-		 */
-		
-		String sql = "INSERT INTO cash (category_no, member_id, cash_date, cash_price, cash_Memo, updatedate, createdate) VALUES (?, ?, ?, ?, ?, CURDATE(), CURDATE())";
-		
-		// sql 실행할 객체 생성
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		
-		// sql ? 대입
-		stmt.setInt(1, paramCash.getCategoryNo());
-		stmt.setString(2, paramMember.getMemberId());
-		stmt.setString(3, paramCash.getCashDate());
-		stmt.setLong(4, paramCash.getCashPrice());
-		stmt.setString(5, paramCash.getCashMemo());
-		
-		// 쿼리 실행 완료 후 쿼리 갯수 반환
-		resultRow = stmt.executeUpdate();
-		
-		if(resultRow == 1) {
+		try {
 			
-			System.out.println("cash 추가 완료");
-		} else {
-			System.out.println("cash 추가 실패");
+			// DB 접속
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
 			
+			// sql
+			/*
+			 * 	INSERT INTO cash (
+			 * 		category_no
+			 * 		, member_id
+			 * 		, cash_date 
+			 * 		, cash_price
+			 * 		, cash_Memo
+			 * 		, updatedate
+			 * 		, createdate
+			 * 	) VALUES (
+			 * 		?
+			 * 		, ?
+			 * 		, ?
+			 * 		, ?
+			 * 		, CURDATE()
+			 * 		, CURDATE()
+			 *	)
+			 * 	
+			 */
 			
+			String sql = "INSERT INTO cash (category_no, member_id, cash_date, cash_price, cash_Memo, updatedate, createdate) VALUES (?, ?, ?, ?, ?, CURDATE(), CURDATE())";
+			
+			// 쿼리 실행
+			stmt = conn.prepareStatement(sql);
+			
+			// sql ? 대입
+			stmt.setInt(1, paramCash.getCategoryNo());
+			stmt.setString(2, paramMember.getMemberId());
+			stmt.setString(3, paramCash.getCashDate());
+			stmt.setLong(4, paramCash.getCashPrice());
+			stmt.setString(5, paramCash.getCashMemo());
+			
+			// 쿼리 실행 완료 후 쿼리 갯수 반환
+			resultRow = stmt.executeUpdate();
+			
+			if(resultRow == 1) {
+				System.out.println("cash 추가 완료");
+			} else {
+				System.out.println("cash 추가 실패");
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbUtil.close(null, stmt, conn);
 		}
 		
-		stmt.close();
-		conn.close();
-		
-		
 		return resultRow;
-		
-		
 		
 	}
 	
 	// deleteCashAction.jsp / cash 삭제 메서드
-	public int deleteCash(Member paramMember, int paramCashNo) throws Exception {
+	public int deleteCash(Member paramMember, int paramCashNo) {
 		
 		int resultRow = 0;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		DBUtil dbUtil = null;
 		
-		// DB 접속을 위한 객체 생성
-		DBUtil dbUtil = new DBUtil();
-		Connection conn = dbUtil.getConnection();
-		
-		// sql
-		/*
-		 *	DELETE
-		 *	FROM cash
-		 *	WHERE cash_no = ? AND member_id = ?
-		 */
-		String sql = "DELETE FROM cash WHERE cash_no = ? AND member_id = ?";
-		
-		// sql 실행할 객체 생성
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		
-		// sql ? 대입
-		stmt.setInt(1, paramCashNo);
-		stmt.setString(2, paramMember.getMemberId());
-		
-		// 쿼리 실행 후 완료된 쿼리 개수 반환
-		resultRow = stmt.executeUpdate();
-		
-		if(resultRow == 1) {
-			System.out.println("cash 삭제 완료");
-		} else {
+		try {
 			
-			System.out.println("cash 삭제 실패");
+			// DB 접속
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			
+			// sql
+			/*
+			 *	DELETE
+			 *	FROM cash
+			 *	WHERE cash_no = ? AND member_id = ?
+			 */
+			String sql = "DELETE FROM cash WHERE cash_no = ? AND member_id = ?";
+			
+			// 쿼리 실행
+			stmt = conn.prepareStatement(sql);
+			
+			// sql ? 대입
+			stmt.setInt(1, paramCashNo);
+			stmt.setString(2, paramMember.getMemberId());
+			
+			// 쿼리 실행 후 완료된 쿼리 개수 반환
+			resultRow = stmt.executeUpdate();
+			
+			if(resultRow == 1) {
+				System.out.println("cash 삭제 완료");
+			} else {
+				System.out.println("cash 삭제 실패");
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbUtil.close(null, stmt, conn);
 		}
 		
-		// 종료
-		stmt.close();
-		conn.close();
 		
 		return resultRow;
-		
 		
 		
 	}
 	
 	// updateCashFrom.jsp / 한개의 cash 정보만 출력
-	public Cash selectCashOne(int paramCashNo) throws Exception {
+	public Cash selectCashOne(int paramCashNo) {
+		
 		Cash resultCash = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		DBUtil dbUtil = null;
 		
-		// DB 접속을 위한 객체 생성
-		DBUtil dbUtil = new DBUtil();
-		Connection conn = dbUtil.getConnection();
-		
-		//sql
-		/*
-		 *	SELECT ct.category_no categoryNo
-		 *		, ct.category_kind categoryKind
-		 *		, ct.category_name categoryName
-		 *		, c.cash_date cashDate
-		 *		, c.cash_price cashPrice
-		 *		, c.cash_memo cashMemo
-		 *	FROM cash c
-		 *	INNER JOIN category ct
-		 *	ON c.category_id = ct.category_id
-		 *	WHERE c.cash_id = ?
-		 */
-		String sql = "SELECT category_no categoryNo"
-				+ "	, cash_date cashDate"
-				+ "	, cash_price cashPrice"
-				+ "	, cash_memo cashMemo"
-				+ "	FROM cash "
-				+ "	WHERE cash_no = ?";
-		
-		// sql 실행할 객체 생성
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		
-		// sql ? 대입
-		stmt.setInt(1, paramCashNo);
-		
-		// ResultSet 에 저장
-		ResultSet rs = stmt.executeQuery();
-		
-		// Cash 객체에 저장
-		if(rs.next()) {
-			resultCash = new Cash();
-			resultCash.setCategoryNo(rs.getInt("categoryNo"));
-			resultCash.setCashDate(rs.getString("cashDate"));
-			resultCash.setCashPrice(rs.getLong("cashPrice"));
-			resultCash.setCashMemo(rs.getString("cashMemo"));
+		try {
 			
+			// DB 접속
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
 			
+			//sql
+			/*
+			 *	SELECT ct.category_no categoryNo
+			 *		, ct.category_kind categoryKind
+			 *		, ct.category_name categoryName
+			 *		, c.cash_date cashDate
+			 *		, c.cash_price cashPrice
+			 *		, c.cash_memo cashMemo
+			 *	FROM cash c
+			 *	INNER JOIN category ct
+			 *	ON c.category_id = ct.category_id
+			 *	WHERE c.cash_id = ?
+			 */
+			String sql = "SELECT category_no categoryNo"
+					+ "	, cash_date cashDate"
+					+ "	, cash_price cashPrice"
+					+ "	, cash_memo cashMemo"
+					+ "	FROM cash "
+					+ "	WHERE cash_no = ?";
 			
+			// 쿼리 실행
+			stmt = conn.prepareStatement(sql);
+			
+			// sql ? 대입
+			stmt.setInt(1, paramCashNo);
+			
+			// ResultSet 에 저장
+			rs = stmt.executeQuery();
+			
+			// Cash 객체에 저장
+			if(rs.next()) {
+				resultCash = new Cash();
+				resultCash.setCategoryNo(rs.getInt("categoryNo"));
+				resultCash.setCashDate(rs.getString("cashDate"));
+				resultCash.setCashPrice(rs.getLong("cashPrice"));
+				resultCash.setCashMemo(rs.getString("cashMemo"));
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbUtil.close(rs, stmt, conn);
 		}
-		
-		
-		// 종료
-		rs.close();
-		stmt.close();
-		conn.close();
-		
-		
-		
 		
 		return resultCash;
 	}
 
 	// updateCashAction.jsp  // cash update 메서드 
-	public int updateCash(Cash paramCash) throws Exception {
+	public int updateCash(Cash paramCash) {
 		
 		int resultRow = 0;
 		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		DBUtil dbUtil = null;
 		
-		// DB 접속을 위한 객체 생성
-		DBUtil dbUtil = new DBUtil();
-		Connection conn = dbUtil.getConnection();
-		
-		
-		// sql
-		/*
-		 *	UPDATE cash
-		 *	SET category_no = ?
-		 *		, cash_price = ?
-		 *		, cash_memo = ?
-		 *	WHERE cash_no = ?
-		 */
-		String sql = "UPDATE cash SET category_no = ?, cash_price = ?, cash_memo = ? WHERE cash_no = ?";
-		
-		// sql 실행할 객체 생성
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		
-		// sql ? 대입
-		stmt.setInt(1, paramCash.getCategoryNo());
-		stmt.setLong(2, paramCash.getCashPrice());
-		stmt.setString(3, paramCash.getCashMemo());
-		stmt.setInt(4, paramCash.getCashNo());
-		
-		// 쿼리 실행 후 완료된 쿼리 개수 반환
-		resultRow = stmt.executeUpdate();
-		
-		if(resultRow == 1) {
-			System.out.println("cash 수정 완료");
-		} else {
-			System.out.println("cash 수정 실패");
+		try {
 			
+			// DB 접속
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			
+			
+			// sql
+			/*
+			 *	UPDATE cash
+			 *	SET category_no = ?
+			 *		, cash_price = ?
+			 *		, cash_memo = ?
+			 *	WHERE cash_no = ?
+			 */
+			String sql = "UPDATE cash SET category_no = ?, cash_price = ?, cash_memo = ? WHERE cash_no = ?";
+			
+			// 쿼리 실행
+			stmt = conn.prepareStatement(sql);
+			
+			// sql ? 대입
+			stmt.setInt(1, paramCash.getCategoryNo());
+			stmt.setLong(2, paramCash.getCashPrice());
+			stmt.setString(3, paramCash.getCashMemo());
+			stmt.setInt(4, paramCash.getCashNo());
+			
+			// 쿼리 실행 후 완료된 쿼리 개수 반환
+			resultRow = stmt.executeUpdate();
+			
+			if(resultRow == 1) {
+				System.out.println("cash 수정 완료");
+			} else {
+				System.out.println("cash 수정 실패");
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbUtil.close(null, stmt, conn);
 		}
 		
-		// 종료
-		stmt.close();
-		conn.close();
-		
-		
-		
 		return resultRow;
-		
-		
 		
 	}
 	
