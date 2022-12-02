@@ -15,7 +15,7 @@
 	if(session.getAttribute("loginMember") == null) {
 		
 		// 세션의 loginMember가 null이면 loginForm.jsp redirect
-		response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
+		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
 		return;
 		
 	}
