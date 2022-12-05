@@ -23,6 +23,7 @@
 	
 	if(loginMember == null || loginMember.getMemberLevel() < 1 ) {
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
+		return;
 	}
 
 	

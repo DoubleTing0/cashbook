@@ -9,7 +9,14 @@
 
 	if(loginMember == null || loginMember.getMemberLevel() < 1 ) {
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
+		return;
 	}
+	
+	// page active 속성을 위한 page 구분
+	String pageName = (String) session.getAttribute("pageName");
+	
+	
+	
 
 %>
 
@@ -31,11 +38,78 @@
 	        </div>
 	        <div class="navbar-nav w-100">
 	        	<a href="<%=request.getContextPath() %>/cash/cashList.jsp" class="nav-item nav-link"><i class="fa fa-calendar-week me-2"></i>가계부</a>
-	            <a href="<%=request.getContextPath() %>/admin/adminMain.jsp" class="nav-item nav-link active"><i class="fa fa-key me-2"></i>관리자페이지</a>
-	            <a href="<%=request.getContextPath() %>/admin/notice/noticeList.jsp" class="nav-item nav-link"><i class="fa fa-exclamation me-2"></i>공지관리</a>
-	            <a href="<%=request.getContextPath() %>/admin/category/categoryList.jsp" class="nav-item nav-link"><i class="fa fa-bookmark me-2"></i>카테고리관리</a>
-	            <a href="<%=request.getContextPath() %>/admin/member/memberList.jsp" class="nav-item nav-link"><i class="fa fa-user me-2"></i>멤버관리</a>
-	            <a href="<%=request.getContextPath() %>/admin/help/helpListAll.jsp" class="nav-item nav-link"><i class="fa fa-question me-2"></i>문의사항관리</a>
+					
+				<!-- 관리자 메뉴 -->
+	        	<%
+	        		if(pageName.equals("adminMain")) {
+	        			// 세션을 통해 현재 페이지에 active 속성 부여
+	        	%>
+			            <a href="<%=request.getContextPath() %>/admin/adminMain.jsp" class="nav-item nav-link active"><i class="fa fa-key me-2"></i>관리자페이지</a>
+			    <%
+			    	} else {
+			    %>
+			            <a href="<%=request.getContextPath() %>/admin/adminMain.jsp" class="nav-item nav-link"><i class="fa fa-key me-2"></i>관리자페이지</a>
+			    <%
+			    	}
+	        	%>
+	        	 
+				<!-- 공지관리 메뉴 -->
+	        	<%
+	        		if(pageName.equals("adminNoticeList")) {
+	        			// 세션을 통해 현재 페이지에 active 속성 부여
+	        	%>
+			            <a href="<%=request.getContextPath() %>/admin/notice/noticeList.jsp" class="nav-item nav-link active"><i class="fa fa-exclamation me-2"></i>공지관리</a>
+			    <%
+			    	} else {
+			    %>
+			            <a href="<%=request.getContextPath() %>/admin/notice/noticeList.jsp" class="nav-item nav-link"><i class="fa fa-exclamation me-2"></i>공지관리</a>
+			    <%
+			    	}
+	        	%>
+	        	 
+				<!-- 카테고리관리 메뉴 -->
+	        	<%
+	        		if(pageName.equals("adminCategoryList")) {
+	        			// 세션을 통해 현재 페이지에 active 속성 부여
+	        	%>
+			            <a href="<%=request.getContextPath() %>/admin/category/categoryList.jsp" class="nav-item nav-link active"><i class="fa fa-bookmark me-2"></i>카테고리관리</a>
+			    <%
+			    	} else {
+			    %>
+			            <a href="<%=request.getContextPath() %>/admin/category/categoryList.jsp" class="nav-item nav-link"><i class="fa fa-bookmark me-2"></i>카테고리관리</a>
+			    <%
+			    	}
+	        	%> 
+				
+				<!-- 회원관리 메뉴 -->
+	        	<%
+	        		if(pageName.equals("adminMemberList")) {
+	        			// 세션을 통해 현재 페이지에 active 속성 부여
+	        	%>
+			            <a href="<%=request.getContextPath() %>/admin/member/memberList.jsp" class="nav-item nav-link active"><i class="fa fa-user me-2"></i>회원관리</a>
+			    <%
+			    	} else {
+			    %>
+			            <a href="<%=request.getContextPath() %>/admin/member/memberList.jsp" class="nav-item nav-link"><i class="fa fa-user me-2"></i>회원관리</a>
+			    <%
+			    	}
+	        	%> 
+				
+				<!-- 문의사항관리 메뉴 -->
+	        	<%
+	        		if(pageName.equals("adminHelpList")) {
+	        			// 세션을 통해 현재 페이지에 active 속성 부여
+	        	%>
+			            <a href="<%=request.getContextPath() %>/admin/help/helpListAll.jsp" class="nav-item nav-link active"><i class="fa fa-question me-2"></i>문의사항관리</a>
+			    <%
+			    	} else {
+			    %>
+			            <a href="<%=request.getContextPath() %>/admin/help/helpListAll.jsp" class="nav-item nav-link"><i class="fa fa-question me-2"></i>문의사항관리</a>
+			    <%
+			    	}
+	        	%> 
+				
+				
 	        </div>
 	    </nav>
 	</div>

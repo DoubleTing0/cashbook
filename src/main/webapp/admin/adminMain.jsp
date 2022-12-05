@@ -18,6 +18,9 @@
 		return;
 	}
 	
+	//페이지 세션 설정
+	session.setAttribute("pageName", "adminMain");
+	
 	// Model 호출
 	
 	// 최근 공지 5개, 최근 멤버 5명	
