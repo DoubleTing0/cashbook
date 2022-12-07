@@ -40,6 +40,7 @@
 	
 	Member loginMember = (Member) session.getAttribute("loginMember");
 	
+	// 세션에는 비밀번호 없어서 request
 	loginMember.setMemberPw(request.getParameter("memberPw"));
 	
 	

@@ -48,7 +48,7 @@
 
 	<head>
 	    <meta charset="utf-8">
-	    <title>문의사항</title>
+	    <title>문의 사항</title>
 	    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 	
 	    <!-- Favicon -->
@@ -97,28 +97,28 @@
 	
 	
 	        <!-- Sidebar Start -->
-				<div>
-					<jsp:include page = "/inc/menu.jsp"></jsp:include>
-				</div>
+			<div>
+				<jsp:include page = "/inc/menu.jsp"></jsp:include>
+			</div>
 	        <!-- Sidebar End -->
 	
 	
 	        <!-- Content Start -->
 	        <div class="content">
 	            <!-- Navbar Start -->
-	         		<div>
-						<jsp:include page = "/inc/navBar.jsp"></jsp:include>
-					</div>
+         		<div>
+					<jsp:include page = "/inc/navBar.jsp"></jsp:include>
+				</div>
 	            <!-- Navbar End -->
 	
 	
 	
-	            <!-- 문의사항 Start -->
+	            <!-- 문의 사항 Start -->
 	            <div class="container-fluid pt-4 px-4">
 	                <div class="bg-secondary text-center rounded p-4">
 	                    <div class="d-flex align-items-center justify-content-center mb-4">
 	                    	<h1 class="text-primary mb-0">
-	                        	<span>문의사항</span>
+	                        	<span>문의 사항</span>
 	                        </h1>
 	                    </div>
 	                    <div class="m-n2 text-end">
@@ -139,7 +139,6 @@
 									</tr>
 	                            </thead>
 	                            <tbody>
-	                                <tr>
 										<%
 											for(HashMap<String, Object> hm : list) {
 										%>
@@ -203,7 +202,7 @@
 	                    </div>
 	                </div>
 	            </div>
-	            <!-- 문의사항 End -->
+	            <!-- 문의 사항 End -->
 	
 	
 	        </div>

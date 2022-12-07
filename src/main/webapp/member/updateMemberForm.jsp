@@ -100,10 +100,10 @@
                             <h3>내 정보 수정</h3>
                         </div>
                         <div>
-                        	<form action = "<%=request.getContextPath() %>/member/updateMemberAction.jsp">
+                        	<form action = "<%=request.getContextPath() %>/member/updateMemberAction.jsp" method = "post">
 		                        <div class="form-floating mb-3">
-		                            <input type="text" class="form-control" name = "memberName" value = "<%=loginMember.getMemberName() %>" id="floatingText" placeholder="이름">
-		                            <label for="floatingText">이름</label>
+		                            <input type="text" class="form-control" name = "memberName" value = "<%=loginMember.getMemberName() %>" id="floatingName" placeholder="이름">
+		                            <label for="floatingName">이름</label>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">수정</button>
                         	</form>

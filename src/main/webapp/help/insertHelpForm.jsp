@@ -24,7 +24,7 @@
 
 	<head>
 	    <meta charset="utf-8">
-	    <title>문의하기</title>
+	    <title>문의 하기</title>
 	    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 	
 	    <!-- Favicon -->
@@ -74,7 +74,7 @@
         <!-- Spinner End -->
 
 
-        <!-- 문의하기 Start -->
+        <!-- 문의 하기 Start -->
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
@@ -85,14 +85,14 @@
                                 	<i class="fa fa-user-edit me-2"></i>가계부
                             	</a>
                            	</h3>
-                            <h3>문의하기</h3>
+                            <h3>문의 하기</h3>
                         </div>
                         <div>
                         	<form action = "<%=request.getContextPath() %>/help/insertHelpAction.jsp" method = "post">
 		                        <div class="form-floating mb-3">
 		                            <textarea class="form-control" name = "helpMemo" placeholder="문의"
-	                                    id="floatingTextarea" style="height: 150px;"></textarea>
-	                                <label for="floatingTextarea">문의</label>
+	                                    id="floatingHelpMemo" style="height: 150px;"></textarea>
+	                                <label for="floatingHelpMemo">문의</label>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">등록</button>
                         	</form>
@@ -101,7 +101,7 @@
                 </div>
             </div>
         </div>
-        <!-- 문의하기 End -->
+        <!-- 문의 하기 End -->
     </div>
 
     <!-- JavaScript Libraries -->

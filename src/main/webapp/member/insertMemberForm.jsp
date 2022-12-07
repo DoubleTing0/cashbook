@@ -15,7 +15,7 @@
 		return;
 	}
 
-	// 메세지
+	// 메세지 출력 변수
 	String msg = request.getParameter("msg");
 	
 
@@ -27,7 +27,7 @@
 
 	<head>
 	    <meta charset="utf-8">
-	    <title>회원가입</title>
+	    <title>회원 가입</title>
 	    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 	
 	    <!-- Favicon -->
@@ -77,7 +77,7 @@
         <!-- Spinner End -->
 
 
-        <!-- Sign Up Start -->
+        <!-- 회원 가입 Start -->
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
@@ -91,29 +91,38 @@
                             <h3>회원가입</h3>
                         </div>
                         <div>
-                        	<form action = "<%=request.getContextPath() %>/member/insertMemberAction.jsp">
+                        	<form action = "<%=request.getContextPath() %>/member/insertMemberAction.jsp" method = "post">
                         	
 		                        <div class="form-floating mb-3">
-		                            <input type="text" class="form-control" name = "memberId" id="floatingInput" placeholder="ID">
-		                            <label for="floatingInput">ID</label>
+		                            <input type="text" class="form-control" name = "memberId" id="floatingId" placeholder="ID">
+		                            <label for="floatingId">ID</label>
 		                        </div>
 		                        <div class="form-floating mb-4">
 		                            <input type="password" class="form-control" name = "memberPw" id="floatingPassword" placeholder="Password">
 		                            <label for="floatingPassword">Password</label>
 		                        </div>
 		                        <div class="form-floating mb-3">
-		                            <input type="text" class="form-control" name = "memberName" id="floatingText" placeholder="이름">
-		                            <label for="floatingText">이름</label>
+		                            <input type="text" class="form-control" name = "memberName" id="floatingName" placeholder="이름">
+		                            <label for="floatingName">이름</label>
 		                        </div>
-		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">가입</button>
-		                        <p class="text-center mb-0">이미 회원이신가요? &emsp;&emsp;<a href="<%=request.getContextPath()%>/login/loginForm.jsp">로그인</a></p>
+		                        <div>
+			                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">가입</button>
+		                        </div>
                         	</form>
+		                </div>
+		                <div>
+		                	<p class="text-center mb-0">
+		                		<span>이미 회원이신가요? &emsp;&emsp;</span>
+		                		<a href="<%=request.getContextPath()%>/login/loginForm.jsp">
+		                			<span>로그인</span>
+		                		</a>
+		                	</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Sign Up End -->
+        <!-- 회원 가입 End -->
     </div>
 
     <!-- JavaScript Libraries -->

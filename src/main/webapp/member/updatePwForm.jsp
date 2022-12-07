@@ -93,14 +93,14 @@
                             <h3>비밀번호 변경</h3>
                         </div>
                         <div>
-                        	<form action = "<%=request.getContextPath() %>/member/updatePwAction.jsp">
+                        	<form action = "<%=request.getContextPath() %>/member/updatePwAction.jsp" method = "post">
 		                        <div class="form-floating mb-3">
-		                            <input type="password" class="form-control" name = "memberPw" id="floatingText" placeholder="현재 비밀번호">
-		                            <label for="floatingText">현재 비밀번호</label>
+		                            <input type="password" class="form-control" name = "memberPw" id="floatingCurrentPw" placeholder="현재 비밀번호">
+		                            <label for="floatingCurrentPw">현재 비밀번호</label>
 		                        </div>
 		                        <div class="form-floating mb-3">
-		                            <input type="password" class="form-control" name = "memberNewPw" id="floatingText" placeholder="새로운 비밀번호">
-		                            <label for="floatingText">새로운 비밀번호</label>
+		                            <input type="password" class="form-control" name = "memberNewPw" id="floatingUpdatePw" placeholder="새로운 비밀번호">
+		                            <label for="floatingUpdatePw">새로운 비밀번호</label>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">변경</button>
                         	</form>

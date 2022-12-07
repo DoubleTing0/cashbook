@@ -89,10 +89,10 @@
                             <h3>회원 탈퇴</h3>
                         </div>
                         <div>
-                        	<form action = "<%=request.getContextPath() %>/member/deleteMemberAction.jsp">
+                        	<form action = "<%=request.getContextPath() %>/member/deleteMemberAction.jsp" method = "post">
 		                        <div class="form-floating mb-3">
-		                            <input type="password" class="form-control" name = "memberPw" id="floatingText" placeholder="비밀번호">
-		                            <label for="floatingText">비밀번호</label>
+		                            <input type="password" class="form-control" name = "memberPw" id="floatingPassword" placeholder="비밀번호">
+		                            <label for="floatingPassword">비밀번호</label>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">탈퇴</button>
                         	</form>

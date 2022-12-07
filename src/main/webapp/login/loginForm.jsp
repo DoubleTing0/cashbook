@@ -52,33 +52,6 @@
 	// 공지 목록 출력 메서드
 	ArrayList<Notice> noticeList = noticeDao.selectNoticeListByPage(noticeBeginRow, noticeRowPerPage);
 	
-	
-	
-	// 멤버 Page 변수 초기화
-	Page memberPage = new Page();
-	
-	int memberCurrentPage = 1;
-	if(request.getParameter("memberCurrentPage") != null) {
-		memberCurrentPage = Integer.parseInt(request.getParameter("memberCurrentPage"));
-	}
-	
-	int memberPageLength = 10;
-	int memberRowPerPage = 5;
-	
-	ArrayList<Integer> memberPageList = memberPage.getPageList(memberCurrentPage, memberPageLength); 
-	int memberBeginRow = memberPage.getBeginRow(memberCurrentPage, memberRowPerPage);
-	int memberPreviousPage = memberPage.getPreviousPage(memberCurrentPage, memberPageLength);
-	int memberNextPage = memberPage.getNextPage(memberCurrentPage, memberPageLength);
-	
-	MemberDao memberDao = new MemberDao();
-	int memberCount = memberDao.selectMemberCount();
-	
-	int memberLastPage = memberPage.getLastPage(memberCount, memberRowPerPage); 
-	
-	// 멤버 목록 출력 메서드
-	ArrayList<Member> memberList = memberDao.selectMemberListByPage(memberBeginRow, memberRowPerPage);
-	
-	
 %>
 
 
@@ -137,7 +110,7 @@
 	        <!-- Spinner End -->
 	
 	
-	        <!-- Sign In Start -->
+	        <!-- 로그인 Start -->
 	        <div class="container-fluid">
 	            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
 	                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-5">
@@ -147,19 +120,28 @@
 	                            <h3>로그인</h3>
 	                        </div>
 	                        <div>
-	                        	<form method = "post" action = "<%=request.getContextPath()%>/login/loginAction.jsp">
+	                        	<form action = "<%=request.getContextPath()%>/login/loginAction.jsp" method = "post">
 			                        <div class="form-floating mb-3">
-			                            <input type="text" class="form-control" name = "memberId" id="floatingInput" placeholder="ID">
-			                            <label for="floatingInput">ID</label>
+			                            <input type="text" class="form-control" name = "memberId" id="floatingId" placeholder="ID">
+			                            <label for="floatingId">ID</label>
 			                        </div>
 			                        <div class="form-floating mb-4">
 			                            <input type="password" class="form-control" name = "memberPw" id="floatingPassword" placeholder="Password">
 			                            <label for="floatingPassword">Password</label>
 			                        </div>
-			                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">로그인</button>
+			                        <div>
+				                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">로그인</button>
+			                        </div>
 	                        	</form>
 	                        </div>
-	                        <p class="text-center mb-0">회원이 아니신가요?&emsp;&emsp;<a href="<%=request.getContextPath() %>/member/insertMemberForm.jsp">회원 가입</a></p>
+	                        <div>
+		                        <p class="text-center mb-0">
+		                        	<span>회원이 아니신가요?&emsp;&emsp;</span>
+		                        	<a href="<%=request.getContextPath() %>/member/insertMemberForm.jsp">
+		                        		<span>회원 가입</span>
+		                        	</a>
+		                        </p>
+	                        </div>
 	                    </div>
 	                    
 						
@@ -206,7 +188,7 @@
 										
 										<!-- 페이지 처음 -->
 										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=1&memberCurrentPage=<%=memberCurrentPage %>">
+											<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=1">
 												<span>처음</span>
 											</a>
 										</li>
@@ -217,7 +199,7 @@
 											if(noticePreviousPage > 0) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticePreviousPage %>&memberCurrentPage=<%=memberCurrentPage %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticePreviousPage %>">
 														<span>이전</span>
 													</a>
 												</li>
@@ -249,7 +231,7 @@
 												<%
 													if(i <= noticeLastPage) {
 												%>
-														<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=i %>&memberCurrentPage=<%=memberCurrentPage %>">
+														<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=i %>">
 															<span><%=i %></span>
 														</a>
 												<%
@@ -265,7 +247,7 @@
 											if(noticeNextPage <= noticeLastPage) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeNextPage %>&memberCurrentPage=<%=memberCurrentPage %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeNextPage %>">
 														<span>다음</span>
 													</a>
 												</li>
@@ -275,7 +257,7 @@
 										
 										<!-- 페이지 마지막 -->
 										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeLastPage%>&memberCurrentPage=<%=memberCurrentPage %>">
+											<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeLastPage%>">
 												<span>마지막</span>
 											</a>
 										</li>
@@ -283,12 +265,13 @@
 								</div>			
 							
 								<!-- 공지 페이징 처리 끝 -->
+								
 							</div>
 		                </div>
 		            </div>
 				</div>
 	        </div>
-	        <!-- Sign In End -->
+	        <!-- 로그인 End -->
 	        
 	        
 	        
