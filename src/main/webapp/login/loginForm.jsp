@@ -9,7 +9,7 @@
 %>
 
 <%
-	// 1. Controller
+	// 1. Controller 
 	
 	// 세션 검사
 	// 이미 로그인이 되어있다면 cashList.jsp redirect
