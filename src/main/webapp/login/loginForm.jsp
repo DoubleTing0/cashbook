@@ -28,30 +28,6 @@
 	
 	// Model 호출
 	
-	// 공지 Page 변수 초기화
-	Page noticePage = new Page();
-	
-	int noticeCurrentPage = 1;
-	if(request.getParameter("noticeCurrentPage") != null) {
-		noticeCurrentPage = Integer.parseInt(request.getParameter("noticeCurrentPage"));
-	}
-	
-	int noticePageLength = 10;
-	int noticeRowPerPage = 5;
-	
-	ArrayList<Integer> noticePageList = noticePage.getPageList(noticeCurrentPage, noticePageLength); 
-	int noticeBeginRow = noticePage.getBeginRow(noticeCurrentPage, noticeRowPerPage);
-	int noticePreviousPage = noticePage.getPreviousPage(noticeCurrentPage, noticePageLength);
-	int noticeNextPage = noticePage.getNextPage(noticeCurrentPage, noticePageLength);
-	
-	NoticeDao noticeDao = new NoticeDao();
-	int noticeCount = noticeDao.selectNoticeCount();
-	
-	int noticeLastPage = noticePage.getLastPage(noticeCount, noticeRowPerPage); 
-	
-	// 공지 목록 출력 메서드
-	ArrayList<Notice> noticeList = noticeDao.selectNoticeListByPage(noticeBeginRow, noticeRowPerPage);
-	
 %>
 
 
@@ -116,7 +92,10 @@
 	                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-5">
 	                    <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
 	                        <div class="d-flex align-items-center justify-content-between mb-3">
-	                        	<h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>가계부</h3>
+	                        	<h3 class="text-primary">
+	                        		<a href = "<%=request.getContextPath() %>/index.jsp">
+		                        		<i class="fa fa-user-edit me-2"></i>가계부</h3>
+	                        		</a>
 	                            <h3>로그인</h3>
 	                        </div>
 	                        <div>
@@ -143,140 +122,15 @@
 		                        </p>
 	                        </div>
 	                    </div>
-	                    
-						
-						
-						
-						<!-- 공지 5개 목록 -->
-						<div class = "row justify-content-center">
-							<div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
-							
-								<div class="d-flex align-items-center justify-content-center mb-4">
-			                        <h2 class="text-white mb-0">
-				                        <span>공지 사항</span>
-			                        </h2>
-			                    </div>
-							
-							
-								<table class="table align-middle table-bordered table-hover text-center mb-0">
-									<tr>
-										<th>
-											<h5 class = "text-danger mb-0">공지내용</h5>
-										</th>
-										<th>
-											<h5 class = "text-danger mb-0"">날짜</h5>
-										</th>
-									</tr>
-								
-									<%
-										for(Notice n : noticeList) {
-									%>
-											<tr>
-												<td><%=n.getNoticeMemo() %></td>
-												<td><%=n.getCreatedate() %></td>
-											</tr>
-									<%
-										}
-									%>
-								</table>
-								
-								<div>&nbsp;</div>
-			                    
-			                    <!-- 공지 페이징 처리 시작 -->
-								<div>
-									<ul class="pagination justify-content-center">
-										
-										<!-- 페이지 처음 -->
-										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=1">
-												<span>처음</span>
-											</a>
-										</li>
-										
-										<!-- 페이지 이전(-10의 1페이지) -->
-										<%
-											
-											if(noticePreviousPage > 0) {
-										%>
-												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticePreviousPage %>">
-														<span>이전</span>
-													</a>
-												</li>
-										<%
-											}
-										%>		
-									
-									  
-									  	<!-- 페이지 1 ~ 10 -->
-										<%
-									  		for(int i : noticePageList) {
-									  	%>
-												<!-- 현재페이지만 구분하기 위한 active 속성 조건문-->
-												<li 
-													<%
-														if(noticeCurrentPage == i) {
-													%>
-															class = "page-item active"
-													<%
-														} else {
-													%>
-															class = "page-item"
-													<%						
-														}
-													%>
-												> <!-- <li> 닫음 오타아님. -->
-												
-												<!-- 마지막 페이지까지만 출력하기 위한 조건문 -->					
-												<%
-													if(i <= noticeLastPage) {
-												%>
-														<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=i %>">
-															<span><%=i %></span>
-														</a>
-												<%
-													}
-												%>
-												</li>
-										<%  		
-										}
-										%>
-									  
-									  	<!-- 페이지 다음(+10의 1페이지) -->
-										<%
-											if(noticeNextPage <= noticeLastPage) {
-										%>
-												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeNextPage %>">
-														<span>다음</span>
-													</a>
-												</li>
-										<%
-											}
-										%>
-										
-										<!-- 페이지 마지막 -->
-										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/login/loginForm.jsp?noticeCurrentPage=<%=noticeLastPage%>">
-												<span>마지막</span>
-											</a>
-										</li>
-									</ul>
-								</div>			
-							
-								<!-- 공지 페이징 처리 끝 -->
-								
-							</div>
-		                </div>
-		            </div>
-				</div>
-	        </div>
-	        <!-- 로그인 End -->
+	                </div>
+	            </div>
+			</div>
+        </div>
+        <!-- 로그인 End -->
 	        
 	        
 	        
 	        
-	    </div>
 	
 	    <!-- JavaScript Libraries -->
 	    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

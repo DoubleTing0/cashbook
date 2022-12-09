@@ -116,9 +116,9 @@
 	
 	
 	        <!-- Sidebar Start -->
-				<div>
-					<jsp:include page = "/inc/adminMenu.jsp"></jsp:include>
-				</div>
+			<div>
+				<jsp:include page = "/inc/adminMenu.jsp"></jsp:include>
+			</div>
 	        <!-- Sidebar End -->
 	
 	
@@ -137,8 +137,8 @@
 	                    <div class="col-sm-12 col-xl-12">
 	                        <div class="bg-secondary text-center rounded p-4">
 	                            <div class="d-flex align-items-center justify-content-center mb-4">
-			                        <h1 class="text-primary mb-0">
-				                        <span>회원 목록</span>
+			                        <h1 class="text-white mb-0">
+				                        <span>회원 관리</span>
 			                        </h1>
 			                    </div>
 			                    

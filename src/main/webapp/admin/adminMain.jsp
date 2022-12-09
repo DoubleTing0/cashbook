@@ -77,6 +77,31 @@
 	// 멤버 목록 출력 메서드
 	ArrayList<Member> memberList = memberDao.selectMemberListByPage(memberBeginRow, memberRowPerPage);
 	
+	// 카테고리 Page 변수 초기화
+	Page categoryPage = new Page();
+	
+	int categoryCurrentPage = 1;
+	if(request.getParameter("categoryCurrentPage") != null) {
+		categoryCurrentPage = Integer.parseInt(request.getParameter("categoryCurrentPage"));
+	}
+	
+	int categoryPageLength = 10;
+	int categoryRowPerPage = 5;
+	
+	ArrayList<Integer> categoryPageList = categoryPage.getPageList(categoryCurrentPage, categoryPageLength); 
+	int categoryBeginRow = categoryPage.getBeginRow(categoryCurrentPage, categoryRowPerPage);
+	int categoryPreviousPage = categoryPage.getPreviousPage(categoryCurrentPage, categoryPageLength);
+	int categoryNextPage = categoryPage.getNextPage(categoryCurrentPage, categoryPageLength);
+	
+	CategoryDao categoryDao = new CategoryDao();
+	
+	int categoryCount = categoryDao.selectCategoryCount();
+	int categoryLastPage = categoryPage.getLastPage(categoryCount, categoryRowPerPage); 
+	
+	
+	// 카테고리 목록 출력 메서드
+	ArrayList<Category> categoryList = categoryDao.selectCategoryListByAdmin(categoryBeginRow, categoryRowPerPage);
+	
 	
 	// 문의 Page 변수 초기화
 	Page helpPage = new Page();
@@ -160,9 +185,9 @@
 	
 	
 	        <!-- Sidebar Start -->
-				<div>
-					<jsp:include page = "/inc/adminMenu.jsp"></jsp:include>
-				</div>
+			<div>
+				<jsp:include page = "/inc/adminMenu.jsp"></jsp:include>
+			</div>
 	        <!-- Sidebar End -->
 	
 	
@@ -192,7 +217,7 @@
 												<h5 class = "text-danger mb-0">공지내용</h5>
 											</th>
 											<th>
-												<h5 class = "text-danger mb-0"">날짜</h5>
+												<h5 class = "text-danger mb-0">날짜</h5>
 											</th>
 										</tr>
 									
@@ -219,7 +244,7 @@
 										
 										<!-- 페이지 처음 -->
 										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=1&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=1&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 												<span>처음</span>
 											</a>
 										</li>
@@ -230,7 +255,7 @@
 											if(noticePreviousPage > 0) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=<%=noticePreviousPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=<%=noticePreviousPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 														<span>이전</span>
 													</a>
 												</li>
@@ -262,7 +287,7 @@
 												<%
 													if(i <= noticeLastPage) {
 												%>
-														<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=<%=i %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+														<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=<%=i %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 															<span><%=i %></span>
 														</a>
 												<%
@@ -278,7 +303,7 @@
 											if(noticeNextPage <= noticeLastPage) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=<%=noticeNextPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=<%=noticeNextPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 														<span>다음</span>
 													</a>
 												</li>
@@ -288,7 +313,7 @@
 										
 										<!-- 페이지 마지막 -->
 										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=<%=noticeLastPage%>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?noticeCurrentPage=<%=noticeLastPage%>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 												<span>마지막</span>
 											</a>
 										</li>
@@ -316,13 +341,13 @@
 													<h5 class = "text-danger mb-0">회원ID</h5>
 												</th>
 												<th>
-													<h5 class = "text-danger mb-0"">회원레벨</h5>
+													<h5 class = "text-danger mb-0">회원레벨</h5>
 												</th>
 												<th>
-													<h5 class = "text-danger mb-0"">회원이름</h5>
+													<h5 class = "text-danger mb-0">회원이름</h5>
 												</th>
 												<th>
-													<h5 class = "text-danger mb-0"">가입일</h5>
+													<h5 class = "text-danger mb-0">가입일</h5>
 												</th>
 											</tr>
 			                            </thead>
@@ -348,13 +373,13 @@
 				                    
 								<div>&nbsp;</div>
 								
-								<!-- 멤버 페이징 처리 시작 -->
+								<!-- 회원 페이징 처리 시작 -->
 								<div>
 									<ul class="pagination justify-content-center">
 										
 										<!-- 페이지 처음 -->
 										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=1&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=1&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 												<span>처음</span>
 											</a>
 										</li>
@@ -365,7 +390,7 @@
 											if(memberPreviousPage > 0) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=<%=memberPreviousPage %>&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=<%=memberPreviousPage %>&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 														<span>이전</span>
 													</a>
 												</li>
@@ -397,7 +422,7 @@
 												<%
 													if(i <= memberLastPage) {
 												%>
-														<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=<%=i %>&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+														<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=<%=i %>&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 															<span><%=i %></span>
 														</a>
 												<%
@@ -413,7 +438,7 @@
 											if(memberNextPage <= memberLastPage) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=<%=memberNextPage %>&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=<%=memberNextPage %>&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 														<span>다음</span>
 													</a>
 												</li>
@@ -423,14 +448,14 @@
 										
 										<!-- 페이지 마지막 -->
 										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=<%=memberLastPage%>&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?memberCurrentPage=<%=memberLastPage%>&noticeCurrentPage=<%=noticeCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>&categoryCurrentPage=<%=categoryCurrentPage %>">
 												<span>마지막</span>
 											</a>
 										</li>
 									</ul>
 								</div>			
 							
-								<!-- 멤버 페이징 처리 끝 -->
+								<!-- 회원 페이징 처리 끝 -->
 			                    
 	                        </div>
 	                    </div>
@@ -438,10 +463,140 @@
 	                    <div class="col-sm-12 col-xl-6">
 	                    	<div class="bg-secondary text-center rounded p-4">
 			                    <div class="d-flex align-items-center justify-content-between mb-4">
-	                                <h3 class="mb-0">문의</h3>
-	                                <a href="<%=request.getContextPath() %>/admin/help/helpListAll.jsp" class = "mt-3">더보기</a>
+	                                <h3 class="mb-0">카테고리</h3>
+	                                <a href="<%=request.getContextPath() %>/admin/category/categoryList.jsp" class = "mt-3">더보기</a>
 	                            </div>
 	                            
+	                            <!-- 카테고리 목록 시작 -->
+								<div>
+									<table class="table align-middle table-bordered table-hover text-center mb-0">
+										<tr>
+											<th>
+												<h5 class = "text-danger mb-0">수입/지출</h5>
+											</th>
+											<th>
+												<h5 class = "text-danger mb-0">이름</h5>
+											</th>
+											<th>
+												<h5 class = "text-danger mb-0">날짜</h5>
+											</th>
+										</tr>
+									
+										<%
+											for(Category c : categoryList) {
+										%>
+												<tr>
+													<td><%=c.getCategoryKind() %></td>
+													<td><%=c.getCategoryName() %></td>
+													<td><%=c.getUpdatedate() %></td>
+												</tr>
+										<%
+											}
+										%>
+									</table>
+								</div>
+								<!-- 카테고리 목록 끝 -->
+	                            
+	                            <div>&nbsp;</div>
+									
+								<!-- 카테고리 페이징 처리 시작 -->
+								<div>
+									<ul class="pagination justify-content-center">
+										
+										<!-- 페이지 처음 -->
+										<li class="page-item">
+											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?&categoryCurrentPage=1&noticeCurrentPage=<%=noticeCurrentPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+												<span>처음</span>
+											</a>
+										</li>
+										
+										<!-- 페이지 이전(-10의 1페이지) -->
+										<%
+											
+											if(noticePreviousPage > 0) {
+										%>
+												<li class="page-item">
+													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?categoryCurrentPage=<%=categoryPreviousPage %>&noticeCurrentPage=<%=noticeCurrentPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+														<span>이전</span>
+													</a>
+												</li>
+										<%
+											}
+										%>		
+									
+									  
+									  	<!-- 페이지 1 ~ 10 -->
+										<%
+									  		for(int i : categoryPageList) {
+									  	%>
+												<!-- 현재페이지만 구분하기 위한 active 속성 조건문-->
+												<li 
+													<%
+														if(categoryCurrentPage == i) {
+													%>
+															class = "page-item active"
+													<%
+														} else {
+													%>
+															class = "page-item"
+													<%						
+														}
+													%>
+												> <!-- <li> 닫음 오타아님. -->
+												
+												<!-- 마지막 페이지까지만 출력하기 위한 조건문 -->					
+												<%
+													if(i <= categoryLastPage) {
+												%>
+														<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?categoryCurrentPage=<%=i %>&noticeCurrentPage=<%=noticeCurrentPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+															<span><%=i %></span>
+														</a>
+												<%
+													}
+												%>
+												</li>
+										<%  		
+										}
+										%>
+									  
+									  	<!-- 페이지 다음(+10의 1페이지) -->
+										<%
+											if(categoryNextPage <= categoryLastPage) {
+										%>
+												<li class="page-item">
+													<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?categoryCurrentPage=<%=categoryNextPage %>&noticeCurrentPage=<%=noticeCurrentPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+														<span>다음</span>
+													</a>
+												</li>
+										<%
+											}
+										%>
+										
+										<!-- 페이지 마지막 -->
+										<li class="page-item">
+											<a class="page-link" href="<%=request.getContextPath() %>/admin/adminMain.jsp?categoryCurrentPage=<%=categoryLastPage %>&noticeCurrentPage=<%=noticeCurrentPage %>&memberCurrentPage=<%=memberCurrentPage %>&helpCurrentPage=<%=helpCurrentPage %>">
+												<span>마지막</span>
+											</a>
+										</li>
+									</ul>
+								</div>			
+							
+								<!-- 카테고리 페이징 처리 끝 -->
+	                            
+	                            
+							</div>
+						</div>
+						
+						
+						
+						
+						
+						<div class="col-sm-12 col-xl-6">
+							<div class="bg-secondary text-center rounded p-4">
+								<div class="d-flex align-items-center justify-content-between mb-4">
+									<h3 class="mb-0">문의사항</h3>
+									<a href="<%=request.getContextPath() %>/admin/help/helpListAll.jsp" class = "mt-3">더보기</a>
+								</div>
 	                            <!-- 문의사항 목록 시작 -->
 								<div>
 									<table class="table align-middle table-bordered table-hover text-center mb-0">

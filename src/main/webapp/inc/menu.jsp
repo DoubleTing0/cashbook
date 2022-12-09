@@ -7,7 +7,7 @@
 	if(session.getAttribute("loginMember") == null) {
 		
 		// 세션의 loginMember가 null이면 loginForm.jsp redirect
-		response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
+		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
 		return;
 		
 	}	
@@ -24,11 +24,11 @@
 <!-- Sidebar Start -->
 <div class="sidebar pe-4 pb-3">
     <nav class="navbar bg-secondary navbar-dark">
-		<h3 class="text-primary">
-	        <a href="<%=request.getContextPath() %>/cash/cashList.jsp" class="navbar-brand mx-4 mb-3">
+        <a href="<%=request.getContextPath() %>/cash/cashList.jsp" class="navbar-brand mx-4 mb-3">
+			<h3 class="text-primary">
         	    <i class="fa fa-user-edit me-2"></i>가계부
-       		</a>
-		</h3>
+			</h3>
+    	</a>
         <div class="d-flex align-items-center ms-4 mb-4">
             <div class="position-relative">
                 <img class="rounded-circle" src="<%=request.getContextPath() %>/resources/img/user.jpg" alt="" style="width: 40px; height: 40px;">

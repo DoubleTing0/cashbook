@@ -148,6 +148,21 @@
 	
 	    <!-- Template Stylesheet -->
 	    <link href="<%=request.getContextPath() %>/resources/css/style.css" rel="stylesheet">
+	    
+	     
+	    <!-- 메세지 출력 스크립트 -->
+	    
+		<script type = "text/javascript">
+			<%
+				if(msg != null) {
+			%>
+						alert("<%=msg %>");
+			<%		
+				}
+			%>
+		</script>
+	    
+	    
 	</head>
 
 	<body>
@@ -171,14 +186,14 @@
 	        <!-- Content Start -->
 	        <div class="content">
 	            <!-- Navbar Start -->
-	         		<div>
-						<jsp:include page = "/inc/navBar.jsp"></jsp:include>
-					</div>
+         		<div>
+					<jsp:include page = "/inc/navBar.jsp"></jsp:include>
+				</div>
 	            <!-- Navbar End -->
 	
 	
 	
-	            <!-- Recent Sales Start -->
+	            <!-- cashList Start -->
 	            <div class="container-fluid pt-4 px-4">
 	                <div class="bg-secondary text-center rounded p-4">
 	                    <div class="d-flex align-items-center justify-content-center mb-4">
@@ -216,6 +231,7 @@
 	                            <tbody>
 	                                <tr>
 										<%
+											// 토요일, 일요일 색 구별을 위해 / 요일을 구분하기위해
 											Calendar temp = Calendar.getInstance();
 											temp.set(Calendar.YEAR, year);
 											temp.set(Calendar.MONTH, month);
@@ -301,7 +317,7 @@
 	                    </div>
 	                </div>
 	            </div>
-	            <!-- Recent Sales End -->
+	            <!-- cashList End -->
 	
 	
 	        </div>

@@ -7,6 +7,40 @@ import vo.*;
 
 public class CategoryDao {
 	
+	// adminMain.jsp  // selectCategoryCount
+	public int selectCategoryCount() {
+		
+		int count = 0;
+		
+		DBUtil dbUtil = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			
+			String sql = "SELECT COUNT(category_no) count FROM category";
+			
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				count = rs.getInt("count");
+			}
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원 반납
+			dbUtil.close(rs, stmt, conn);
+		}
+		
+		return count;
+	}
+	
 	
 	// 수정 : 수정폼(select)과 수정액션(update)으로 구성
 	// admin -> updateCategoryAction.jsp
@@ -167,7 +201,7 @@ public class CategoryDao {
 	
 	
 	// admin -> 카테고리관리 -> 카테고리목록
-	public ArrayList<Category> selectCategoryListByAdmin() {
+	public ArrayList<Category> selectCategoryListByAdmin(int beginRow, int rowPerPage) {
 		
 		ArrayList<Category> list = null;
 		Connection conn = null;
@@ -187,9 +221,13 @@ public class CategoryDao {
 					+ ", category_name categoryName"
 					+ ", updatedate"
 					+ ", createdate"
-					+ " FROM category";
+					+ " FROM category"
+					+ " LIMIT ?, ?";
 			
 			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, beginRow);
+			stmt.setInt(2, rowPerPage);
+			
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {

@@ -12,16 +12,13 @@
 	String msg = request.getParameter("msg");	
 	
 
-	// 로그인 안되있거나 관리자가 아닐때 loginForm.jsp redirect
-	Member loginMember = (Member) session.getAttribute("loginMember");
-	
-	if(loginMember == null || loginMember.getMemberLevel() < 1 ) {
-		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
+	// 세션 검사
+	// 이미 로그인이 되어있다면 cashList.jsp redirect
+	if(session.getAttribute("loginMember") != null) {
+		
+		response.sendRedirect(request.getContextPath() + "/cash/cashList.jsp");
 		return;
 	}
-	
-	//페이지 세션 설정
-	session.setAttribute("pageName", "adminNoticeList");
 	
 	// Model 호출
 	
@@ -34,7 +31,7 @@
 	}
 	
 	int pageLength = 10;
-	int rowPerPage = 10;
+	int rowPerPage = 5;
 	
 	ArrayList<Integer> pageList = noticePage.getPageList(currentPage, pageLength); 
 	int beginRow = noticePage.getBeginRow(currentPage, rowPerPage);
@@ -66,7 +63,7 @@
 
 	<head>
 	    <meta charset="utf-8">
-	    <title>공지사항관리</title>
+	    <title>Index</title>
 	    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 	
 	    <!-- Favicon -->
@@ -116,7 +113,7 @@
 	
 	        <!-- Sidebar Start -->
 			<div>
-				<jsp:include page = "/inc/adminMenu.jsp"></jsp:include>
+				<jsp:include page = "/inc/indexMenu.jsp"></jsp:include>
 			</div>
 	        <!-- Sidebar End -->
 	
@@ -125,7 +122,7 @@
 	        <div class="content">
 	            <!-- Navbar Start -->
          		<div>
-					<jsp:include page = "/inc/navBar.jsp"></jsp:include>
+					<jsp:include page = "/inc/indexNavBar.jsp"></jsp:include>
 				</div>
 	            <!-- Navbar End -->
 	
@@ -136,13 +133,9 @@
 	                    <div class="col-sm-12 col-xl-12">
 	                        <div class="bg-secondary text-center rounded p-4">
 	                            <div class="d-flex align-items-center justify-content-center mb-4">
-			                        <h1 class="text-white mb-0">
-				                        <span>공지사항 관리</span>
+			                        <h1 class="text-primary mb-0">
+				                        <span>공지 사항</span>
 			                        </h1>
-			                    </div>
-			                    <div class="m-n2 text-end">
-			                    	<button type="button" class="btn btn-primary rounded-pill m-2 mb-4"
-			                    			onclick="location.href='<%=request.getContextPath() %>/admin/notice/insertNoticeForm.jsp' ">공지 추가</button>
 			                    </div>
 			                    
 	                            <!-- 공지 목록 시작 -->
@@ -155,12 +148,6 @@
 											<th>
 												<h5 class = "text-danger mb-0">날짜</h5>
 											</th>
-											<th>
-												<h5 class = "text-danger mb-0">수정</h5>
-											</th>
-											<th>
-												<h5 class = "text-danger mb-0">삭제</h5>
-											</th>
 										</tr>
 									
 										<%
@@ -169,12 +156,6 @@
 												<tr>
 													<td><%=n.getNoticeMemo() %></td>
 													<td><%=n.getCreatedate() %></td>
-													<td>
-														<a href = "<%=request.getContextPath() %>/admin/notice/updateNoticeForm.jsp?noticeNo=<%=n.getNoticeNo() %>">수정</a>
-													</td>
-													<td>
-														<a href = "<%=request.getContextPath() %>/admin/notice/deleteNoticeAction.jsp?noticeNo=<%=n.getNoticeNo() %>">삭제</a>
-													</td>
 												</tr>
 										<%
 											}
@@ -192,7 +173,7 @@
 										
 										<!-- 페이지 처음 -->
 										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/admin/notice/noticeList.jsp?currentPage=1">
+											<a class="page-link" href="<%=request.getContextPath() %>/index.jsp?currentPage=1">
 												<span>처음</span>
 											</a>
 										</li>
@@ -203,7 +184,7 @@
 											if(previousPage > 0) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/admin/notice/noticeList.jsp?currentPage=<%=previousPage %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/index.jsp?currentPage=<%=previousPage %>">
 														<span>이전</span>
 													</a>
 												</li>
@@ -235,7 +216,7 @@
 												<%
 													if(i <= lastPage) {
 												%>
-														<a class="page-link" href="<%=request.getContextPath() %>/admin/notice/noticeList.jsp?currentPage=<%=i %>">
+														<a class="page-link" href="<%=request.getContextPath() %>/index.jsp?currentPage=<%=i %>">
 															<span><%=i %></span>
 														</a>
 												<%
@@ -251,7 +232,7 @@
 											if(nextPage <= lastPage) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/admin/notice/noticeList.jsp?currentPage=<%=nextPage %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/index.jsp?currentPage=<%=nextPage %>">
 														<span>다음</span>
 													</a>
 												</li>
@@ -261,7 +242,7 @@
 										
 										<!-- 페이지 마지막 -->
 										<li class="page-item">
-											<a class="page-link" href="<%=request.getContextPath() %>/admin/notice/noticeList.jsp?currentPage=<%=lastPage%>">
+											<a class="page-link" href="<%=request.getContextPath() %>/index.jsp?currentPage=<%=lastPage%>">
 												<span>마지막</span>
 											</a>
 										</li>

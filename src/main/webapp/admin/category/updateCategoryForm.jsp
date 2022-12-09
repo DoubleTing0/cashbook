@@ -19,6 +19,7 @@
 
 	if(loginMember == null || loginMember.getMemberLevel() < 1 ) {
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
+		return;
 	}
 
 		
@@ -128,7 +129,7 @@
 											<%
 												}
 											%>
-                                            > <!-- 오타 아님 -->
+                                            > <!-- <input ~ > 닫은 것. 오타 아님 -->
                                             <label class="form-check-label" for="gridRadios2">
                                                 지출
                                             </label>

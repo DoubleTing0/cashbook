@@ -21,6 +21,7 @@
 	
 	if(loginMember == null || loginMember.getMemberLevel() < 1 ) {
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
+		return;
 	}
 
 	// request
@@ -110,8 +111,8 @@
 		                        
 		                        <div class="form-floating mb-3">
 		                            <textarea class="form-control" name = "commentMemo" placeholder="답변내용"
-	                                    id="floatingTextarea" style="height: 150px;"></textarea>
-	                                <label for="floatingTextarea">답변내용</label>
+	                                    id="floatingCommentMemo" style="height: 150px;"><%=resultComment.getCommentMemo() %></textarea>
+	                                <label for="floatingCommentMemo">답변내용</label>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">수정</button>
                         	</form>

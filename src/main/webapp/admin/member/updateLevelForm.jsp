@@ -121,15 +121,15 @@
 									<input type = "hidden" name = "memberId" value = "<%=resultMember.getMemberId() %>">
 		                        </div>
 		                        <div class="form-floating mb-3">
-		                            <input type="text" class="form-control bg-dark" value = "<%=resultMember.getMemberId() %>" placeholder="ID" readonly>
-		                            <label for="floatingInput">ID</label>
+		                            <input type="text" class="form-control bg-dark" value = "<%=resultMember.getMemberId() %>" id = "floatingMemberId" placeholder="ID" readonly>
+		                            <label for="floatingMemberId">ID</label>
 		                        </div>
 		                        <div class="form-floating mb-3">
-		                            <input type="text" class="form-control bg-dark" value = "<%=resultMember.getMemberName() %>" placeholder="이름" readonly>
-		                            <label for="floatingInput">이름</label>
+		                            <input type="text" class="form-control bg-dark" value = "<%=resultMember.getMemberName() %>" id = "floatingMemberName" placeholder="이름" readonly>
+		                            <label for="floatingMemberName">이름</label>
 		                        </div>
 		                        <div class="form-floating mb-3">
-		                        	<select class="form-select mb-3" name = "memberLevel">
+		                        	<select class="form-select mb-3" name = "memberLevel" id = "floatingMemberLevel">
 										<option selected>0</option>
 										<option
 										<%
@@ -142,7 +142,7 @@
 										%>
 										>1</option>
 									</select>
-									<label for="floatingInput">레벨</label>
+									<label for="floatingMemberLevel">레벨</label>
 								</div>
 		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">수정</button>
                         	</form>

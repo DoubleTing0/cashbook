@@ -117,7 +117,7 @@
 	            <div class="container-fluid pt-4 px-4">
 	                <div class="bg-secondary text-center rounded p-4">
 	                    <div class="d-flex align-items-center justify-content-center mb-4">
-	                    	<h1 class="text-primary mb-0">
+	                    	<h1 class="text-white mb-0">
 	                        	<span>문의 사항</span>
 	                        </h1>
 	                    </div>

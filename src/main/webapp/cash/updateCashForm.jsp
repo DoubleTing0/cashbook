@@ -40,10 +40,10 @@
 	}
 	
 	// request int 형변환
-	int year = Integer.parseInt(request.getParameter("year"));
-	int month = Integer.parseInt(request.getParameter("month"));
-	int date = Integer.parseInt(request.getParameter("date"));
-	int cashNo = Integer.parseInt(request.getParameter("cashNo"));
+	int year = Integer.parseInt(strYear);
+	int month = Integer.parseInt(strMonth);
+	int date = Integer.parseInt(strDate);
+	int cashNo = Integer.parseInt(strCashNo);
 	
 	// Member 객체 생성
 
@@ -88,18 +88,6 @@
 	    <!-- Template Stylesheet -->
 	    <link href="<%=request.getContextPath() %>/resources/css/style.css" rel="stylesheet">
 	    
-	    <!-- 메세지 출력 스크립트 -->
-	    
-		<script type = "text/javascript">
-			<%
-				if(msg != null) {
-			%>
-						alert("<%=msg %>");
-			<%		
-				}
-			%>
-		</script>
-	    
 	</head>
 
 <body>
@@ -132,7 +120,7 @@
 									<input type = "hidden" name = "cashNo" value = "<%=cashNo %>">
 		                        </div>
 		                        <div class="form-floating mb-3">
-		                        	<select class="form-select mb-3" name = "categoryNo">
+		                        	<select class="form-select mb-3" name = "categoryNo" id = "floatingCategoryNo">
 										<%
 											// category 목록 출력
 											for(Category c : categoryList) {
@@ -153,16 +141,16 @@
 											}
 										%>
 									</select>
-									<label for="floatingInput">카테고리</label>
+									<label for="floatingCategoryNo">카테고리</label>
 								</div>
 		                        <div class="form-floating mb-3">
-		                            <input type="number" class="form-control" name = "cashPrice" value = "<%=cash.getCashPrice() %>" id="floatingInput" placeholder="비용(원)">
-		                            <label for="floatingInput">비용(원)</label>
+		                            <input type="number" class="form-control" name = "cashPrice" value = "<%=cash.getCashPrice() %>" id="floatingCashPrice" placeholder="비용(원)">
+		                            <label for="floatingCashPrice">비용(원)</label>
 		                        </div>
 		                        <div class="form-floating mb-3">
 		                            <textarea class="form-control" name = "cashMemo" placeholder="메모"
-	                                    id="floatingTextarea" style="height: 150px;"><%=cash.getCashMemo() %></textarea>
-	                                <label for="floatingTextarea">메모</label>
+	                                    id="floatingCashMemo" style="height: 150px;"><%=cash.getCashMemo() %></textarea>
+	                                <label for="floatingCashMemo">메모</label>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">수정</button>
                         	</form>

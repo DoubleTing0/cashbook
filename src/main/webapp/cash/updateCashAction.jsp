@@ -54,12 +54,12 @@
 	}
 	
 	// request int 형변환
-	int year = Integer.parseInt(request.getParameter("year"));
-	int month = Integer.parseInt(request.getParameter("month"));
-	int date = Integer.parseInt(request.getParameter("date"));
-	int cashNo = Integer.parseInt(request.getParameter("cashNo"));
-	int categoryNo = Integer.parseInt(request.getParameter("categoryNo"));
-	long cashPrice = Long.parseLong(request.getParameter("cashPrice"));
+	int year = Integer.parseInt(strYear);
+	int month = Integer.parseInt(strMonth);
+	int date = Integer.parseInt(strDate);
+	int cashNo = Integer.parseInt(strCashNo);
+	int categoryNo = Integer.parseInt(strCategoryNo);
+	long cashPrice = Long.parseLong(strCashPrice);
 	
 	// Cash 객체 생성
 	Cash cash = new Cash();

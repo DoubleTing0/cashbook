@@ -117,8 +117,8 @@
 		                        
 		                        <div class="form-floating mb-3">
 		                            <textarea class="form-control" name = "noticeMemo" placeholder="내용"
-	                                    id="floatingTextarea" style="height: 150px;"><%=resultNotice.getNoticeMemo() %></textarea>
-	                                <label for="floatingTextarea">내용</label>
+	                                    id="floatingNoticeMemo" style="height: 150px;"><%=resultNotice.getNoticeMemo() %></textarea>
+	                                <label for="floatingNoticeMemo">내용</label>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">수정</button>
                         	</form>
@@ -127,7 +127,7 @@
                 </div>
             </div>
         </div>
-        <!-- 공지추가 End -->
+        <!-- 공지수정 End -->
     </div>
 
     <!-- JavaScript Libraries -->

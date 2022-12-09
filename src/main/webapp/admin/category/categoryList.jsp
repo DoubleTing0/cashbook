@@ -2,6 +2,7 @@
 <%@ page import = "java.util.*" %>
 <%@ page import = "vo.*" %>
 <%@ page import = "dao.*" %>
+<%@ page import = "util.*" %>
 
 
 <%
@@ -17,6 +18,7 @@
 	
 	if(loginMember == null || loginMember.getMemberLevel() < 1 ) {
 		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
+		return;
 	}
 	
 	
@@ -26,8 +28,29 @@
 	
 	// Model 호출
 
+	// 카테고리 Page 변수 초기화
+	Page categoryPage = new Page();
+	
+	int currentPage = 1;
+	if(request.getParameter("currentPage") != null) {
+		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+	}
+	
+	int pageLength = 10;
+	int rowPerPage = 10;
+	
+	ArrayList<Integer> pageList = categoryPage.getPageList(currentPage, pageLength); 
+	int beginRow = categoryPage.getBeginRow(currentPage, rowPerPage);
+	int previousPage = categoryPage.getPreviousPage(currentPage, pageLength);
+	int nextPage = categoryPage.getNextPage(currentPage, pageLength);
+	
 	CategoryDao categoryDao = new CategoryDao();
-	ArrayList<Category> categoryList = categoryDao.selectCategoryListByAdmin();
+	int count = categoryDao.selectCategoryCount();
+	
+	int lastPage = categoryPage.getLastPage(count, rowPerPage); 
+	
+	
+	ArrayList<Category> categoryList = categoryDao.selectCategoryListByAdmin(beginRow, rowPerPage);
 	
 	// View
 	
@@ -92,9 +115,9 @@
 	
 	
 	        <!-- Sidebar Start -->
-				<div>
-					<jsp:include page = "/inc/adminMenu.jsp"></jsp:include>
-				</div>
+			<div>
+				<jsp:include page = "/inc/adminMenu.jsp"></jsp:include>
+			</div>
 	        <!-- Sidebar End -->
 	
 	
@@ -113,7 +136,7 @@
 	                    <div class="col-sm-12 col-xl-12">
 	                        <div class="bg-secondary text-center rounded p-4">
 	                            <div class="d-flex align-items-center justify-content-center mb-4">
-			                        <h1 class="text-primary mb-0">
+			                        <h1 class="text-white mb-0">
 				                        <span>카테고리</span>
 			                        </h1>
 			                    </div>
@@ -171,6 +194,95 @@
 									</table>
 								</div>
 								<!-- 카테고리 목록 끝 -->
+			                    
+			                    <div>&nbsp;</div>
+									
+								<!-- 카테고리 페이징 처리 시작 -->
+								<div>
+									<ul class="pagination justify-content-center">
+										
+										<!-- 페이지 처음 -->
+										<li class="page-item">
+											<a class="page-link" href="<%=request.getContextPath() %>/admin/category/categoryList.jsp?currentPage=1">
+												<span>처음</span>
+											</a>
+										</li>
+										
+										<!-- 페이지 이전(-10의 1페이지) -->
+										<%
+											
+											if(previousPage > 0) {
+										%>
+												<li class="page-item">
+													<a class="page-link" href="<%=request.getContextPath() %>/admin/category/categoryList.jsp?currentPage=<%=previousPage %>">
+														<span>이전</span>
+													</a>
+												</li>
+										<%
+											}
+										%>		
+									
+									  
+									  	<!-- 페이지 1 ~ 10 -->
+										<%
+									  		for(int i : pageList) {
+									  	%>
+												<!-- 현재페이지만 구분하기 위한 active 속성 조건문-->
+												<li 
+													<%
+														if(currentPage == i) {
+													%>
+															class = "page-item active"
+													<%
+														} else {
+													%>
+															class = "page-item"
+													<%						
+														}
+													%>
+												> <!-- <li> 닫음 오타아님. -->
+												
+												<!-- 마지막 페이지까지만 출력하기 위한 조건문 -->					
+												<%
+													if(i <= lastPage) {
+												%>
+														<a class="page-link" href="<%=request.getContextPath() %>/admin/category/categoryList.jsp?currentPage=<%=i %>">
+															<span><%=i %></span>
+														</a>
+												<%
+													}
+												%>
+												</li>
+										<%  		
+										}
+										%>
+									  
+									  	<!-- 페이지 다음(+10의 1페이지) -->
+										<%
+											if(nextPage <= lastPage) {
+										%>
+												<li class="page-item">
+													<a class="page-link" href="<%=request.getContextPath() %>/admin/category/categoryList.jsp?currentPage=<%=nextPage %>">
+														<span>다음</span>
+													</a>
+												</li>
+										<%
+											}
+										%>
+										
+										<!-- 페이지 마지막 -->
+										<li class="page-item">
+											<a class="page-link" href="<%=request.getContextPath() %>/admin/category/categoryList.jsp?currentPage=<%=lastPage%>">
+												<span>마지막</span>
+											</a>
+										</li>
+									</ul>
+								</div>			
+							
+								<!-- 카테고리 페이징 처리 끝 -->
+			                    
+			                    
+			                    
 			                    
 	                        </div>
 	                    </div>

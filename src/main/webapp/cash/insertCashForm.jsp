@@ -53,9 +53,13 @@
 	
 	// 2. Model 호출
 	
-	CashDao cashDao = new CashDao();
 	
-	ArrayList<HashMap<String, Object>> list = cashDao.selectCashListByDate(loginMember.getMemberId(), year, month + 1, date);
+	
+	
+	CategoryDao categoryDao = new CategoryDao();
+	
+	ArrayList<Category> categoryList = categoryDao.selectCategoryList();
+	
 	
 	
 	
@@ -127,92 +131,62 @@
 	        <!-- Spinner End -->
 	
 	
-	        <!-- cashDateList Start -->
+	        <!-- 가계부 추가 Start -->
 	        <div class="container-fluid">
 	            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
-	                <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-6">
-	                    
-						<!-- cash 목록 출력 -->
-						<div class = "row justify-content-center">
-							<div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
-								
-								<div class="d-flex align-items-center justify-content-between mb-3">
-		                        	<h3 class="text-primary">
-		                            	<a href="<%=request.getContextPath() %>/cash/cashList.jsp">
-		                                	<i class="fa fa-user-edit me-2"></i>가계부
-		                            	</a>
-		                           	</h3>
-		                            <h3><%=year %>년 <%=month + 1 %>월 <%=date %>일</h3>
-		                        </div>
-								
-								<div>
-									<table class="table align-middle table-bordered table-hover text-center mb-3">
-										<tr class = "not-new-line">
-											<th>
-												<h5 class = "text-danger mb-0">카테고리</h5>
-											</th>
-											<th>
-												<h5 class = "text-danger mb-0">항목</h5>
-											</th>
-											<th>
-												<h5 class = "text-danger mb-0">비용</h5>
-											</th>
-											<th>
-												<h5 class = "text-danger mb-0">메모</h5>
-											</th>
-											<th>
-												<h5 class = "text-danger mb-0">수정</h5>
-											</th>
-											<th>
-												<h5 class = "text-danger mb-0">삭제</h5>
-											</th>
-										</tr>
-										
-											
+	                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-5">
+	                    <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+	                        <div class="d-flex align-items-center justify-content-between mb-3">
+	                        	<h3 class="text-primary">
+	                            	<a href="<%=request.getContextPath() %>/cash/cashList.jsp">
+	                                	<i class="fa fa-user-edit me-2"></i>가계부
+	                            	</a>
+	                           	</h3>
+	                            <h3><%=year %>년 <%=month + 1 %>월 <%=date %>일</h3>
+	                        </div>
+	                        <div>
+	                        	<form method = "post" action = "<%=request.getContextPath() %>/cash/insertCashAction.jsp?year=<%=year %>&month=<%=month %>&date=<%=date %>">
+			                        <div>
+				                        <input type = "hidden" name = "memberId" value = "<%=loginMember.getMemberId() %>">
+			                        </div>
+			                        <div class="form-floating mb-3">
+			                        	<select class="form-select mb-3" name = "categoryNo">
 										<%
-											for(HashMap<String, Object> m : list) {
-												
+											// category 목록 출력
+											for(Category c : categoryList) {
 										%>
-												<tr>
-													<td><%=(String) (m.get("categoryKind")) %></td>
-													<td  class = "not-new-line"><%=(String) (m.get("categoryName")) %></td>
-													<td  class = "not-new-line"><%=(Long) (m.get("cashPrice")) %>원</td>
-													<td><%=(String) (m.get("cashMemo")) %></td>
-													<td>
-														<a href = "<%=request.getContextPath() %>/cash/updateCashForm.jsp?
-																year=<%=year %>&month=<%=month %>&date=<%=date %>&cashNo=<%=(Integer) m.get("cashNo")%>">
-															수정
-														</a>
-													</td>
-													<td>
-														<a href = "<%=request.getContextPath() %>/cash/deleteCashAction.jsp?
-																year=<%=year %>&month=<%=month %>&date=<%=date %>&cashNo=<%=(Integer) m.get("cashNo")%>">
-															삭제
-														</a>
-													</td>
-												</tr>
+												<option value = "<%=c.getCategoryNo() %>">
+													[<%=c.getCategoryKind() %>] <%=c.getCategoryName() %>
+												</option>
 										<%
-												
 											}
-										
-										%>	
-									</table>
-									
-									<div>
-										<button type="button" class="btn btn-primary py-3 w-100 mb-4"
-											onclick="location.href='<%=request.getContextPath() %>/cash/insertCashForm.jsp?year=<%=year %>&month=<%=month %>&date=<%=date %>' ">추가</button>
+										%>
+										</select>
+										<label for="floatingInput">카테고리</label>
 									</div>
-									
-									
-								</div>
-							</div>
-						</div>
-			                    
+			                        <div class="form-floating mb-3">
+			                            <input type="hidden" class="form-control bg-dark" name = "cashDate" value = "<%=year %>-<%=month + 1 %>-<%=date %>" 
+			                            	readonly = "readonly" id="floatingCashDate" placeholder="날짜">
+			                            <label for="floatingCashDate">날짜</label>
+			                        </div>
+			                        <div class="form-floating mb-3">
+			                            <input type="number" class="form-control" name = "cashPrice" id="floatingCashPrice" placeholder="비용(원)">
+			                            <label for="floatingCashPrice">비용(원)</label>
+			                        </div>
+			                        <div class="form-floating mb-3">
+			                            <textarea class="form-control" name = "cashMemo" placeholder="메모"
+		                                    id="floatingCashMemo" style="height: 150px;"></textarea>
+		                                <label for="floatingCashMemo">메모</label>
+			                        </div>
+			                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">추가</button>
+	                        	</form>
+	                        </div>
+	                    </div>
 	                </div>
 	            </div>
 			</div>
 		</div>
-        <!-- cashDateList End -->
+        <!-- 가계부 추가 End -->
 	        
 	        
 	        
