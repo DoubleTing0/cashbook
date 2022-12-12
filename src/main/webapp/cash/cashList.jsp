@@ -279,19 +279,35 @@
 										
 													
 													
-													<div class = "text-end text-success">
+													<div class = "text-end">
 														<%
 															for(HashMap<String, Object> m : list) {
 																String cashDate = (String) (m.get("cashDate"));
 																if(Integer.parseInt(cashDate.substring(8)) == date) {
 														%>
-																	
-																	[<%=(String) (m.get("categoryKind")) %>]
-																	<%=(String) (m.get("categoryName")) %>
-																	&nbsp;
-																	<%=(Long) (m.get("cashPrice")) %>원
-																	<br>
-														<%
+																	<%
+																		// 수입 : 노란색 / 지출 : 초록색
+																		if(((String) m.get("categoryKind")).equals("수입")) {
+																			
+																	%>
+																			<div class = "text-warning">
+																			[<%=(String) (m.get("categoryKind")) %>]
+																			<%=(String) (m.get("categoryName")) %>
+																			&nbsp;
+																			<%=(Long) (m.get("cashPrice")) %>원
+																			</div>
+																	<%
+																		} else {
+																	%>
+																			<div class = "text-success">
+																			[<%=(String) (m.get("categoryKind")) %>]
+																			<%=(String) (m.get("categoryName")) %>
+																			&nbsp;
+																			<%=(Long) (m.get("cashPrice")) %>원
+																			</div>
+																	<%																			
+																		}
+														
 																}
 															}
 														

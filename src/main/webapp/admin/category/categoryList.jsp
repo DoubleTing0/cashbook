@@ -137,7 +137,7 @@
 	                        <div class="bg-secondary text-center rounded p-4">
 	                            <div class="d-flex align-items-center justify-content-center mb-4">
 			                        <h1 class="text-white mb-0">
-				                        <span>카테고리</span>
+				                        <span>카테고리 관리</span>
 			                        </h1>
 			                    </div>
 			                    <div class="m-n2 text-end">
