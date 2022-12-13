@@ -22,7 +22,7 @@
 	// Model 호출
 
 	CategoryDao categoryDao = new CategoryDao();
-	ArrayList<Category> categoryList = categoryDao.selectCategoryListByAdmin();
+	ArrayList<Category> categoryList = categoryDao.selectCategoryListByAdmin(0,5);
 	
 	// View
 	
