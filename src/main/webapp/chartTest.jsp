@@ -27,8 +27,8 @@
 	}
 	
 	Page yearPage = new Page();
-	int previousYear = yearPage.getPreviousPage(year, pageLength);
-	int nextYear = yearPage.getNextPage(year, pageLength);
+	int previousYear = yearPage.getPreviousYear(year, pageLength);
+	int nextYear = yearPage.getNextYear(year, pageLength);
 	
 	ArrayList<Integer> pageList = new ArrayList<Integer>();
 	pageList = yearPage.getYearPageList(year, pageLength);
@@ -235,9 +235,11 @@
 	                        </div>
 	                    </div>
 	                    <div class="col-sm-12 col-xl-6">
-	                        <div class="bg-secondary rounded h-100 p-4">
-	                            <h6 class="mb-4">연도별 수입/지출</h6>
-	                            <canvas id="cashYear"></canvas>
+	                        <div class="row align-items-center bg-secondary rounded h-100 p-4">
+	                            <div>
+		                            <h6 class="mb-4">연도별 수입/지출</h6>
+		                            <canvas id="cashYear"></canvas>
+	                            </div>
 	                        </div>
 	                    </div>
 	                    <div class="col-sm-12 col-xl-6">
@@ -275,9 +277,11 @@
 	                        </div>
 	                    </div>
 	                    <div class="col-sm-12 col-xl-6">
-	                        <div class="bg-secondary rounded h-100 p-4">
-	                            <h6 class="mb-4"><%=year %>년 월별 수입/지출</h6>
-	                            <canvas id="worldwide-sales2"></canvas>
+	                        <div class="row align-items-center bg-secondary rounded h-100 p-4">
+	                        	<div>
+		                            <h6 class="mb-4"><%=year %>년 월별 수입/지출</h6>
+		                            <canvas id="worldwide-sales2"></canvas>
+	                        	</div>
 	                        </div>
 	                    </div>
 	                    <div class="col-sm-12 col-xl-6">
@@ -330,10 +334,10 @@
 										<!-- 페이지 이전(-10의 1페이지) -->
 										<%
 											
-											if(previousYear > minYear) {
+											if(previousYear >= minYear) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/chartTest.jsp?year=<%=year - 1 %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/chartTest.jsp?year=<%=previousYear %>">
 														<span>이전</span>
 													</a>
 												</li>
@@ -367,7 +371,7 @@
 													if(i >= minYear && i <= maxYear) {
 												%>
 														<a class="page-link" href="<%=request.getContextPath() %>/chartTest.jsp?year=<%=i %>">
-															<span><%=i %></span>
+															<span><%=i %>년</span>
 														</a>
 												<%
 													}
@@ -382,7 +386,7 @@
 											if(nextYear <= maxYear) {
 										%>
 												<li class="page-item">
-													<a class="page-link" href="<%=request.getContextPath() %>/chartTest.jsp?year=<%=year + 1 %>">
+													<a class="page-link" href="<%=request.getContextPath() %>/chartTest.jsp?year=<%=nextYear %>">
 														<span>다음</span>
 													</a>
 												</li>
@@ -437,208 +441,208 @@
 	
 	    <!-- Template Javascript -->
 	    <script src="<%=request.getContextPath() %>/resources/js/main.js"></script>
+	    
+	    <!-- 차트 Javascript -->
 	    <script>
-
-	    // 수입 파이차트
-	   
-	   
-	    var ctx5 = $("#line-chart1").get(0).getContext("2d");
-	    var myChart5 = new Chart(ctx5, {
-	        type: "pie",
-	        data: {
-	            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-	            datasets: [{
-	                backgroundColor: [
-	                    "rgba(235, 22, 22, .11)",
-	                    "rgba(235, 22, 22, .9)",
-	                    "rgba(235, 22, 22, .7)",
-	                    "rgba(235, 22, 22, .5)",
-	                    "rgba(235, 22, 22, .3)"
-	                ],
-	                data: [30, 49, 44, 24, 15]
-	            }]
-	        },
-	        options: {
-	            responsive: true
-	        }
-	    });
-	    
-	    
-	 // 지출 파이차트		   
-		   
-	    var ctx5 = $("#line-chart2").get(0).getContext("2d");
-	    var myChart5 = new Chart(ctx5, {
-	        type: "pie",
-	        data: {
-	            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-	            datasets: [{
-	                backgroundColor: [
-	                    "rgba(235, 22, 22, .11)",
-	                    "rgba(235, 22, 22, .9)",
-	                    "rgba(235, 22, 22, .7)",
-	                    "rgba(235, 22, 22, .5)",
-	                    "rgba(235, 22, 22, .3)"
-	                ],
-	                data: [30, 49, 44, 24, 15]
-	            }]
-	        },
-	        options: {
-	            responsive: true
-	        }
-	    });
-	    
-	    
-	    
-
-	    // 연도별 수입/지출
-	    var ctx1 = $("#cashYear").get(0).getContext("2d");
-	    var myChart1 = new Chart(ctx1, {
-	        type: "bar",
-	        data: {
-	        	
-	            labels: [
-				        	<%
-				        		// 연도
-				        		for(int i=0; i<listYear.size(); i+=1) {
-				        			
-				        			if(i != listYear.size()-1) {
-				        	%>
-										<%=(String) listYear.get(i).get("year") %> + "년",
-							<%
-				        			} else {
-				        	%>
-										<%=(String) listYear.get(i).get("year") %> + "년"
-							<%
-				        			}
-				        		}
-				        	%>
-			            ],
-	            datasets: [{
-	                    label: "수입",
-	                    data: [
-	                    		<%
-					        		// 수입합계 sumImportCash
-					        		for(int i=0; i<listYear.size(); i+=1) {
-					        			
-					        			if(i != listYear.size()-1) {
-					        	%>
-											<%=(int) listYear.get(i).get("sumImportCash") %>,
-								<%
-					        			} else {
-					        	%>
-											<%=(int) listYear.get(i).get("sumImportCash") %>
-								<%
-					        			}
-					        		}
-					        	%>
-	                    	],
-	                    backgroundColor: "rgba(235, 22, 22, .7)"
-	                },
-	                
-	                {
-	                    label: "지출",
-	                    data: [
-		                    	<%
-					        		// 지출합계 sumExportCash
-					        		for(int i=0; i<listYear.size(); i+=1) {
-					        			
-					        			if(i != listYear.size()-1) {
-					        	%>
-											<%=(int) listYear.get(i).get("sumExportCash") %>,
-								<%
-					        			} else {
-					        	%>
-											<%=(int) listYear.get(i).get("sumExportCash") %>
-								<%
-					        			}
-					        		}
-					        	%>
-	                    	],
-	                    backgroundColor: "rgba(235, 22, 22, .3)"
-	                }
-	            ]
-	            },
-	        options: {
-	            responsive: true
-	        }
-	    });
-
-	    // 월별 수입/지출
-	    var ctx1 = $("#worldwide-sales2").get(0).getContext("2d");
-	    var myChart1 = new Chart(ctx1, {
-	        type: "bar",
-	        data: {
-	        	
-	        	labels: [
-				        	<%
-				        		// 월
-				        		for(int i=0; i<listMonth.size(); i+=1) {
-				        			
-				        			if(i != listMonth.size()-1) {
-				        	%>
-										<%=(String) listMonth.get(i).get("month") %> + "월",
-							<%
-				        			} else {
-				        	%>
-										<%=(String) listMonth.get(i).get("month") %> + "월"
-							<%
-				        			}
-				        		}
-				        	%>
-			            ],
-		        datasets: [{
-		                label: "수입",
-		                data: [
-		                		<%
-					        		// 수입합계 sumImportCash
-					        		for(int i=0; i<listMonth.size(); i+=1) {
-					        			
-					        			if(i != listMonth.size()-1) {
-					        	%>
-											<%=(int) listMonth.get(i).get("sumImportCash") %>,
-								<%
-					        			} else {
-					        	%>
-											<%=(int) listMonth.get(i).get("sumImportCash") %>
-								<%
-					        			}
-					        		}
-					        	%>
-		                	],
-		                backgroundColor: "rgba(235, 22, 22, .7)"
-		            },
-		            
-		            {
-		                label: "지출",
-		                data: [
-		                    	<%
-					        		// 지출합계 sumExportCash
-					        		for(int i=0; i<listMonth.size(); i+=1) {
-					        			
-					        			if(i != listMonth.size()-1) {
-					        	%>
-											<%=(int) listMonth.get(i).get("sumExportCash") %>,
-								<%
-					        			} else {
-					        	%>
-											<%=(int) listMonth.get(i).get("sumExportCash") %>
-								<%
-					        			}
-					        		}
-					        	%>
-		                	],
-		                backgroundColor: "rgba(235, 22, 22, .3)"
-		            }
-		        ]
+		    // Chart Global Color
+		    Chart.defaults.color = "#6C7293";
+		    Chart.defaults.borderColor = "#000000";
+		    
+		    
+		    // 수입 파이차트
+			var ctx5 = $("#line-chart1").get(0).getContext("2d");
+		    var myChart5 = new Chart(ctx5, {
+		        type: "pie",
+		        data: {
+		            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
+		            datasets: [{
+		                backgroundColor: [
+		                    "rgba(235, 22, 22, .11)",
+		                    "rgba(235, 22, 22, .9)",
+		                    "rgba(235, 22, 22, .7)",
+		                    "rgba(235, 22, 22, .5)",
+		                    "rgba(235, 22, 22, .3)"
+		                ],
+		                data: [30, 49, 44, 24, 15]
+		            }]
 		        },
-		    options: {
-		        responsive: true
-		    }
-		});
-	    
-	    
-	    
+		        options: {
+		            responsive: true
+		        }
+		    });
+		    
+		    
+		    // 지출 파이차트		   
+			   
+		    var ctx5 = $("#line-chart2").get(0).getContext("2d");
+		    var myChart5 = new Chart(ctx5, {
+		        type: "pie",
+		        data: {
+		            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
+		            datasets: [{
+		                backgroundColor: [
+		                    "rgba(235, 22, 22, .11)",
+		                    "rgba(235, 22, 22, .9)",
+		                    "rgba(235, 22, 22, .7)",
+		                    "rgba(235, 22, 22, .5)",
+		                    "rgba(235, 22, 22, .3)"
+		                ],
+		                data: [30, 49, 44, 24, 15]
+		            }]
+		        },
+		        options: {
+		            responsive: true
+		        }
+		    });
+		    
+		    
+		    
+	
+		    // 연도별 수입/지출
+		    var ctx1 = $("#cashYear").get(0).getContext("2d");
+		    var myChart1 = new Chart(ctx1, {
+		        type: "bar",
+		        data: {
+		        	
+		            labels: [
+					        	<%
+					        		// 연도
+					        		for(int i=0; i<listYear.size(); i+=1) {
+					        			
+					        			if(i != listYear.size()-1) {
+					        	%>
+											<%=(String) listYear.get(i).get("year") %> + "년",
+								<%
+					        			} else {
+					        	%>
+											<%=(String) listYear.get(i).get("year") %> + "년"
+								<%
+					        			}
+					        		}
+					        	%>
+				            ],
+		            datasets: [{
+		                    label: "수입",
+		                    data: [
+		                    		<%
+						        		// 수입합계 sumImportCash
+						        		for(int i=0; i<listYear.size(); i+=1) {
+						        			
+						        			if(i != listYear.size()-1) {
+						        	%>
+												<%=(int) listYear.get(i).get("sumImportCash") %>,
+									<%
+						        			} else {
+						        	%>
+												<%=(int) listYear.get(i).get("sumImportCash") %>
+									<%
+						        			}
+						        		}
+						        	%>
+		                    	],
+		                    backgroundColor: "rgba(235, 22, 22, .7)"
+		                },
+		                
+		                {
+		                    label: "지출",
+		                    data: [
+			                    	<%
+						        		// 지출합계 sumExportCash
+						        		for(int i=0; i<listYear.size(); i+=1) {
+						        			
+						        			if(i != listYear.size()-1) {
+						        	%>
+												<%=(int) listYear.get(i).get("sumExportCash") %>,
+									<%
+						        			} else {
+						        	%>
+												<%=(int) listYear.get(i).get("sumExportCash") %>
+									<%
+						        			}
+						        		}
+						        	%>
+		                    	],
+		                    backgroundColor: "rgba(235, 22, 22, .3)"
+		                }
+		            ]
+		            },
+		        options: {
+		            responsive: true
+		        }
+		    });
+	
+		    // 월별 수입/지출
+		    var ctx1 = $("#worldwide-sales2").get(0).getContext("2d");
+		    var myChart1 = new Chart(ctx1, {
+		        type: "bar",
+		        data: {
+		        	
+		        	labels: [
+					        	<%
+					        		// 월
+					        		for(int i=0; i<listMonth.size(); i+=1) {
+					        			
+					        			if(i != listMonth.size()-1) {
+					        	%>
+											<%=(String) listMonth.get(i).get("month") %> + "월",
+								<%
+					        			} else {
+					        	%>
+											<%=(String) listMonth.get(i).get("month") %> + "월"
+								<%
+					        			}
+					        		}
+					        	%>
+				            ],
+			        datasets: [{
+			                label: "수입",
+			                data: [
+			                		<%
+						        		// 수입합계 sumImportCash
+						        		for(int i=0; i<listMonth.size(); i+=1) {
+						        			
+						        			if(i != listMonth.size()-1) {
+						        	%>
+												<%=(int) listMonth.get(i).get("sumImportCash") %>,
+									<%
+						        			} else {
+						        	%>
+												<%=(int) listMonth.get(i).get("sumImportCash") %>
+									<%
+						        			}
+						        		}
+						        	%>
+			                	],
+			                backgroundColor: "rgba(235, 22, 22, .7)"
+			            },
+			            
+			            {
+			                label: "지출",
+			                data: [
+			                    	<%
+						        		// 지출합계 sumExportCash
+						        		for(int i=0; i<listMonth.size(); i+=1) {
+						        			
+						        			if(i != listMonth.size()-1) {
+						        	%>
+												<%=(int) listMonth.get(i).get("sumExportCash") %>,
+									<%
+						        			} else {
+						        	%>
+												<%=(int) listMonth.get(i).get("sumExportCash") %>
+									<%
+						        			}
+						        		}
+						        	%>
+			                	],
+			                backgroundColor: "rgba(235, 22, 22, .3)"
+			            }
+			        ]
+			        },
+			    options: {
+			        responsive: true
+			    }
+			});
 	    </script>
 	</body>
-
 </html>

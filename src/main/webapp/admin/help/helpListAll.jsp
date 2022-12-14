@@ -68,8 +68,9 @@
 	    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 	
 	    <!-- Favicon -->
-	    <link href="<%=request.getContextPath() %>/resources/img/favicon.ico" rel="icon">
-	
+	    <link rel="shortcut icon" href="<%=request.getContextPath() %>/resources/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="<%=request.getContextPath() %>/resources/favicon.ico" type="image/x-icon">
+			
 	    <!-- Google Web Fonts -->
 	    <link rel="preconnect" href="https://fonts.googleapis.com">
 	    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

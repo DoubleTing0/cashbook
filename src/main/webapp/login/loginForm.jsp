@@ -40,7 +40,8 @@
 	    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 	
 	    <!-- Favicon -->
-	    <link href="<%=request.getContextPath() %>/resources/img/favicon.ico" rel="icon">
+	    <link rel="shortcut icon" href="<%=request.getContextPath() %>/resources/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="<%=request.getContextPath() %>/resources/favicon.ico" type="image/x-icon">
 	
 	    <!-- Google Web Fonts -->
 	    <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,22 +95,23 @@
 	                        <div class="d-flex align-items-center justify-content-between mb-3">
 	                        	<h3 class="text-primary">
 	                        		<a href = "<%=request.getContextPath() %>/index.jsp">
-		                        		<i class="fa fa-user-edit me-2"></i>가계부</h3>
+		                        		<i class="fa fa-user-edit me-2"></i>가계부
 	                        		</a>
+                        		</h3>
 	                            <h3>로그인</h3>
 	                        </div>
 	                        <div>
-	                        	<form action = "<%=request.getContextPath()%>/login/loginAction.jsp" method = "post">
+	                        	<form action = "<%=request.getContextPath()%>/login/loginAction.jsp" method = "post" id = "loginForm">
 			                        <div class="form-floating mb-3">
-			                            <input type="text" class="form-control" name = "memberId" id="floatingId" placeholder="ID">
-			                            <label for="floatingId">ID</label>
+			                            <input type="text" class="form-control" name = "memberId" id="memberId" placeholder="ID">
+			                            <label for="memberId">ID</label>
 			                        </div>
 			                        <div class="form-floating mb-4">
-			                            <input type="password" class="form-control" name = "memberPw" id="floatingPassword" placeholder="Password">
-			                            <label for="floatingPassword">Password</label>
+			                            <input type="password" class="form-control" name = "memberPw" id="memberPw" placeholder="Password">
+			                            <label for="memberPw">Password</label>
 			                        </div>
 			                        <div>
-				                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">로그인</button>
+				                        <button type="button" id = "loginBtn" class="btn btn-primary py-3 w-100 mb-4">로그인</button>
 			                        </div>
 	                        	</form>
 	                        </div>
@@ -127,8 +129,8 @@
 			</div>
         </div>
         <!-- 로그인 End -->
-	        
-	        
+		
+		
 	        
 	        
 	
@@ -145,6 +147,37 @@
 	
 	    <!-- Template Javascript -->
 	    <script src="<%=request.getContextPath() %>/resources/js/main.js"></script>
+	    
+	    <!-- Javascript Form 공백 검증 -->
+	    <script>
+			let loginBtn = document.querySelector('#loginBtn');
+			loginBtn.addEventListener('click', function() {
+			
+				// 디버깅
+				console.log('loginBtn click!');
+				
+				let memberId = document.querySelector('#memberId');
+				if(memberId.value == '') {
+					alert('[js] 아이디를 입력하세요.');
+					memberId.focus();
+					return;
+				}
+				
+				let memberPw = document.querySelector('#memberPw');
+				if(memberPw.value == '') {
+					alert('[js] 비밀번호를 입력하세요.');
+					memberPw.focus();
+					return;
+				}
+				
+				let loginForm = document.querySelector('#loginForm');
+				loginForm.submit();
+				
+			});
+			
+			
+			
+		</script>       
 	</body>
 
 </html>

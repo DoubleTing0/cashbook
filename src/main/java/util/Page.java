@@ -54,7 +54,7 @@ public class Page {
 		return list;
 	}
 	
-	// 차트 월별 수입/지출의 연도 페이지 리스트
+	// 차트 월별 수입/지출의 연도 pageList
 	public ArrayList<Integer> getYearPageList(int year, int pageLength) {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		
@@ -66,11 +66,45 @@ public class Page {
 		int minYear = (Integer) map.get("minYear");	// 최소년도
 		
 		for(int x=1; x<=pageLength; x+=1) {
-			int page = minYear + (pageLength * ((year - minYear) % pageLength)) + x - 1;
+			int page = minYear + (((year - minYear) / pageLength) * pageLength) + x - 1;
 			list.add(page);
 		}
 		
 		return list;
+	}
+	
+	// previousYear
+	public int getPreviousYear(int year, int pageLength) {
+		
+		int previousYear = 0;
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		CashDao cashDao = new CashDao();
+		
+		map = cashDao.selectMinMaxYear();
+		int minYear = (Integer) map.get("minYear");	// 최소년도
+		
+		previousYear = minYear + (((year - minYear) / pageLength) * pageLength) - pageLength;
+		
+		return previousYear;
+	} 
+	
+	// nextYear
+	public int getNextYear(int year, int pageLength) {
+		
+		int nextYear = 0;
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		CashDao cashDao = new CashDao();
+		
+		map = cashDao.selectMinMaxYear();
+		int minYear = (Integer) map.get("minYear");	// 최소년도
+		
+		nextYear = minYear + (((year - minYear) / pageLength) * pageLength) + pageLength;
+		
+		return nextYear;
 	} 
 	
 	
