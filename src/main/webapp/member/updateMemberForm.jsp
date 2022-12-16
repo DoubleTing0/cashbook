@@ -101,12 +101,12 @@
                             <h3>내 정보 수정</h3>
                         </div>
                         <div>
-                        	<form action = "<%=request.getContextPath() %>/member/updateMemberAction.jsp" method = "post">
+                        	<form action = "<%=request.getContextPath() %>/member/updateMemberAction.jsp" method = "post" id = "updateMemberForm">
 		                        <div class="form-floating mb-3">
-		                            <input type="text" class="form-control" name = "memberName" value = "<%=loginMember.getMemberName() %>" id="floatingName" placeholder="이름">
-		                            <label for="floatingName">이름</label>
+		                            <input type="text" class="form-control" name = "memberName" value = "<%=loginMember.getMemberName() %>" id="memberName" placeholder="이름">
+		                            <label for="memberName">이름</label>
 		                        </div>
-		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">수정</button>
+		                        <button type="button" class="btn btn-primary py-3 w-100 mb-4" id = "updateMemberBtn">수정</button>
                         	</form>
                         </div>
                     </div>
@@ -129,6 +129,29 @@
 
     <!-- Template Javascript -->
     <script src="<%=request.getContextPath() %>/resources/js/main.js"></script>
+    
+    <!-- Javascript Form 공백 검증 -->
+    <script>
+		let updateMemberBtn = document.querySelector('#updateMemberBtn');
+		updateMemberBtn.addEventListener('click', function() {
+		
+			// 디버깅
+			console.log('updateMemberBtn click!');
+			
+			let memberName = document.querySelector('#memberName');
+			if(memberName.value == '') {
+				alert('이름를 입력하세요.');
+				memberName.focus();
+				return;
+			}
+			
+			
+			let updateMemberForm = document.querySelector('#updateMemberForm');
+			updateMemberForm.submit();
+			
+		});
+    </script>
+    
 </body>
 
 </html>

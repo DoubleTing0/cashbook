@@ -152,7 +152,7 @@
 				// ID
 				let memberId = document.querySelector('#memberId');
 				if(memberId.value == '') {
-					alert('[js] 아이디를 입력하세요.');
+					alert('아이디를 입력하세요.');
 					memberId.focus();
 					return;
 				}
@@ -160,7 +160,7 @@
 				// Password
 				let memberPw = document.querySelector('#memberPw');
 				if(memberPw.value == '') {
-					alert('[js] 비밀번호를 입력하세요.');
+					alert('비밀번호를 입력하세요.');
 					memberPw.focus();
 					return;
 				}
@@ -168,7 +168,7 @@
 				// Name
 				let memberName = document.querySelector('#memberName');
 				if(memberName.value == '') {
-					alert('[js] 이름를 입력하세요.');
+					alert('이름를 입력하세요.');
 					memberName.focus();
 					return;
 				}

@@ -94,16 +94,16 @@
                             <h3>비밀번호 변경</h3>
                         </div>
                         <div>
-                        	<form action = "<%=request.getContextPath() %>/member/updatePwAction.jsp" method = "post">
+                        	<form action = "<%=request.getContextPath() %>/member/updatePwAction.jsp" method = "post" id = "updatePwForm">
 		                        <div class="form-floating mb-3">
-		                            <input type="password" class="form-control" name = "memberPw" id="floatingCurrentPw" placeholder="현재 비밀번호">
-		                            <label for="floatingCurrentPw">현재 비밀번호</label>
+		                            <input type="password" class="form-control" name = "memberPw" id="memberPw" placeholder="현재 비밀번호">
+		                            <label for="memberPw">현재 비밀번호</label>
 		                        </div>
 		                        <div class="form-floating mb-3">
-		                            <input type="password" class="form-control" name = "memberNewPw" id="floatingUpdatePw" placeholder="새로운 비밀번호">
-		                            <label for="floatingUpdatePw">새로운 비밀번호</label>
+		                            <input type="password" class="form-control" name = "memberNewPw" id="memberNewPw" placeholder="새로운 비밀번호">
+		                            <label for="memberNewPw">새로운 비밀번호</label>
 		                        </div>
-		                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">변경</button>
+		                        <button type="button" id = "updatePwBtn" class="btn btn-primary py-3 w-100 mb-4">변경</button>
                         	</form>
                         </div>
                     </div>
@@ -126,6 +126,37 @@
 
     <!-- Template Javascript -->
     <script src="<%=request.getContextPath() %>/resources/js/main.js"></script>
+    
+    <!-- Javascript Form 공백 검증 -->
+    <script>
+		let updatePwBtn = document.querySelector('#updatePwBtn');
+		updatePwBtn.addEventListener('click', function() {
+		
+			// 디버깅
+			console.log('updatePwBtn click!');
+			
+			let memberPw = document.querySelector('#memberPw');
+			if(memberPw.value == '') {
+				alert('현재 비밀번호를 입력하세요.');
+				memberPw.focus();
+				return;
+			}
+			
+			let memberNewPw = document.querySelector('#memberNewPw');
+			if(memberNewPw.value == '') {
+				alert('새로운 비밀번호를 입력하세요.');
+				memberNewPw.focus();
+				return;
+			}
+			
+			let updatePwForm = document.querySelector('#updatePwForm');
+			updatePwForm.submit();
+			
+		});
+		
+		
+		
+	</script> 
 </body>
 
 </html>

@@ -129,7 +129,7 @@
 				
 				let memberPw = document.querySelector('#memberPw');
 				if(memberPw.value == '') {
-					alert('[js] 비밀번호를 입력하세요.');
+					alert('비밀번호를 입력하세요.');
 					memberPw.focus();
 					return;
 				}
