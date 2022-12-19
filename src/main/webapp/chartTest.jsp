@@ -146,6 +146,37 @@
 				
 				
 	            <!-- Chart Start -->
+	            
+	            <!-- JavaScript 변수로 사용하기 위한 listYear.size() -->
+				<input type = "hidden" id = "listYearSize" value = "<%=listYear.size() %>">
+	            
+	            <!-- JavaScript 변수로 사용하기 위한 year -->
+	            <%
+	            	for(int i=0; i<listYear.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "listYear<%=i %>" value = "<%=(String) listYear.get(i).get("year") %>년">
+				<%	
+	            	}
+	            %>
+	            
+	            <!-- JavaScript 변수로 사용하기 위한 수입합계 sumImportCash -->
+	            <%
+	            	for(int i=0; i<listYear.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "sumImportCash<%=i %>" value = "<%=(int) listYear.get(i).get("sumImportCash") %>">
+	            <%
+	            	}
+	            %>
+	            
+	            <!-- JavaScript 변수로 사용하기 위한 지출합계 sumExportCash -->
+	            <%
+	            	for(int i=0; i<listYear.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "sumExportCash<%=i %>" value = "<%=(int) listYear.get(i).get("sumExportCash") %>">
+	            <%
+	            	}
+	            %>
+	            
 	            <div class="container-fluid pt-4 px-4">
 	                <div class="row g-4">
 	                    <div class="col-sm-12 col-xl-4">
@@ -450,8 +481,8 @@
 		    
 		    
 		    // 수입 파이차트
-			var ctx5 = $("#line-chart1").get(0).getContext("2d");
-		    var myChart5 = new Chart(ctx5, {
+			var ctx1 = $("#line-chart1").get(0).getContext("2d");
+		    var myChart1 = new Chart(ctx1, {
 		        type: "pie",
 		        data: {
 		            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
@@ -474,8 +505,8 @@
 		    
 		    // 지출 파이차트		   
 			   
-		    var ctx5 = $("#line-chart2").get(0).getContext("2d");
-		    var myChart5 = new Chart(ctx5, {
+		    var ctx2 = $("#line-chart2").get(0).getContext("2d");
+		    var myChart2 = new Chart(ctx2, {
 		        type: "pie",
 		        data: {
 		            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
@@ -499,81 +530,64 @@
 		    
 	
 		    // 연도별 수입/지출
-		    var ctx1 = $("#cashYear").get(0).getContext("2d");
-		    var myChart1 = new Chart(ctx1, {
+		    
+		    // DB를 input hidden 통해 가져온 listYear
+		    let listYear = new Array();
+			for(let i=0; i<$('#listYearSize').val(); i+=1) {
+		    	listYear[i] = $('#listYear' + i).val();
+		    	
+		    	// 디버깅
+		    	console.log(listYear[i] + ' <-- listYear[' + i + ']');
+		    }
+			
+			// DB를 input hidden 통해 가져온 sumImportCash
+		    let sumImportCash = new Array();
+			for(let i=0; i<$('#listYearSize').val(); i+=1) {
+		    	sumImportCash[i] = $('#sumImportCash' + i).val();
+		    	
+		    	// 디버깅
+		    	console.log(sumImportCash[i] + ' <-- sumImportCash[' + i + ']');
+		    }
+			
+			// DB를 input hidden 통해 가져온 sumExportCash
+		    let sumExportCash = new Array();
+			for(let i=0; i<$('#listYearSize').val(); i+=1) {
+		    	sumExportCash[i] = $('#sumExportCash' + i).val();
+		    	
+		    	// 디버깅
+		    	console.log(sumExportCash[i] + ' <-- sumExportCash[' + i + ']');
+		    }
+			
+			
+			
+		    
+		    let ctx3 = $("#cashYear").get(0).getContext("2d");
+		    let myChart3 = new Chart(ctx3, {
 		        type: "bar",
 		        data: {
-		        	
-		            labels: [
-					        	<%
-					        		// 연도
-					        		for(int i=0; i<listYear.size(); i+=1) {
-					        			
-					        			if(i != listYear.size()-1) {
-					        	%>
-											<%=(String) listYear.get(i).get("year") %> + "년",
-								<%
-					        			} else {
-					        	%>
-											<%=(String) listYear.get(i).get("year") %> + "년"
-								<%
-					        			}
-					        		}
-					        	%>
-				            ],
+		            labels: listYear,
 		            datasets: [{
-		                    label: "수입",
-		                    data: [
-		                    		<%
-						        		// 수입합계 sumImportCash
-						        		for(int i=0; i<listYear.size(); i+=1) {
-						        			
-						        			if(i != listYear.size()-1) {
-						        	%>
-												<%=(int) listYear.get(i).get("sumImportCash") %>,
-									<%
-						        			} else {
-						        	%>
-												<%=(int) listYear.get(i).get("sumImportCash") %>
-									<%
-						        			}
-						        		}
-						        	%>
-		                    	],
-		                    backgroundColor: "rgba(235, 22, 22, .7)"
-		                },
-		                
-		                {
-		                    label: "지출",
-		                    data: [
-			                    	<%
-						        		// 지출합계 sumExportCash
-						        		for(int i=0; i<listYear.size(); i+=1) {
-						        			
-						        			if(i != listYear.size()-1) {
-						        	%>
-												<%=(int) listYear.get(i).get("sumExportCash") %>,
-									<%
-						        			} else {
-						        	%>
-												<%=(int) listYear.get(i).get("sumExportCash") %>
-									<%
-						        			}
-						        		}
-						        	%>
-		                    	],
-		                    backgroundColor: "rgba(235, 22, 22, .3)"
-		                }
-		            ]
-		            },
+					    label: "수입",
+					    data: sumImportCash,
+					    backgroundColor: "rgba(235, 22, 22, .7)"
+					}, {
+					    label: "지출",
+					    data: sumExportCash,
+					    backgroundColor: "rgba(235, 22, 22, .3)"
+					}]
+	            },
+	            
 		        options: {
 		            responsive: true
 		        }
 		    });
-	
+
+		    
+		    
+		    
 		    // 월별 수입/지출
-		    var ctx1 = $("#worldwide-sales2").get(0).getContext("2d");
-		    var myChart1 = new Chart(ctx1, {
+		    var ctx4 = $("#worldwide-sales2").get(0).getContext("2d");
+		    var myChart4 = new Chart(ctx4, {
 		        type: "bar",
 		        data: {
 		        	
