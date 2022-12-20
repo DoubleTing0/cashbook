@@ -19,8 +19,12 @@
 	// 연도
 	int year = 0;
 	int pageLength = 5;
+	
+	Calendar c = Calendar.getInstance();
+	
+	int previousMonth = c.get(Calendar.MONTH);
+	
 	if(request.getParameter("year") == null) {
-		Calendar c = Calendar.getInstance();
 		year = c.get(Calendar.YEAR);	// 올해
 	} else {
 		year = Integer.parseInt(request.getParameter("year"));
@@ -86,6 +90,40 @@
 	</head>
 
 	<body>
+		<div>
+            <!-- JavaScript 변수로 사용하기 위한 listYear.size() -->
+			<input type = "hidden" id = "listYearSize" value = "<%=listYear.size() %>">
+            
+            <!-- JavaScript 변수로 사용하기 위한 year -->
+            <%
+            	for(int i=0; i<listYear.size(); i+=1) {
+            %>
+		            <input type = "hidden" id = "listYear<%=i %>" value = "<%=(String) listYear.get(i).get("year") %>년">
+			<%	
+            	}
+            %>
+            
+            <!-- JavaScript 변수로 사용하기 위한 수입합계 sumImportCash -->
+            <%
+            	for(int i=0; i<listYear.size(); i+=1) {
+            %>
+		            <input type = "hidden" id = "sumImportCash<%=i %>" value = "<%=(int) listYear.get(i).get("sumImportCash") %>">
+            <%
+            	}
+            %>
+            
+            <!-- JavaScript 변수로 사용하기 위한 지출합계 sumExportCash -->
+            <%
+            	for(int i=0; i<listYear.size(); i+=1) {
+            %>
+		            <input type = "hidden" id = "sumExportCash<%=i %>" value = "<%=(int) listYear.get(i).get("sumExportCash") %>">
+            <%
+            	}
+            %>
+		</div>
+	
+	
+	
 	    <div class="container-fluid position-relative d-flex p-0">
 	        <!-- Spinner Start -->
 	        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -117,8 +155,8 @@
 	                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
 	                            <i class="fa fa-plus fa-3x text-primary"></i>
 	                            <div class="ms-3">
-	                                <p class="mb-2">총 수입</p>
-	                                <h6 class="mb-0">$1234</h6>
+	                                <p class="mb-2">지난달(<%=previousMonth %>월) 수입</p>
+	                                <h6 class="mb-0">&#8361;</h6>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -126,7 +164,7 @@
 	                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
 	                            <i class="fa fa-minus fa-3x text-primary"></i>
 	                            <div class="ms-3">
-	                                <p class="mb-2">총 지출</p>
+	                                <p class="mb-2">지난달(<%=previousMonth %>월) 지출</p>
 	                                <h6 class="mb-0">$1234</h6>
 	                            </div>
 	                        </div>
@@ -146,37 +184,6 @@
 				
 				
 	            <!-- Chart Start -->
-	            
-	            <!-- JavaScript 변수로 사용하기 위한 listYear.size() -->
-				<input type = "hidden" id = "listYearSize" value = "<%=listYear.size() %>">
-	            
-	            <!-- JavaScript 변수로 사용하기 위한 year -->
-	            <%
-	            	for(int i=0; i<listYear.size(); i+=1) {
-	            %>
-			            <input type = "hidden" id = "listYear<%=i %>" value = "<%=(String) listYear.get(i).get("year") %>년">
-				<%	
-	            	}
-	            %>
-	            
-	            <!-- JavaScript 변수로 사용하기 위한 수입합계 sumImportCash -->
-	            <%
-	            	for(int i=0; i<listYear.size(); i+=1) {
-	            %>
-			            <input type = "hidden" id = "sumImportCash<%=i %>" value = "<%=(int) listYear.get(i).get("sumImportCash") %>">
-	            <%
-	            	}
-	            %>
-	            
-	            <!-- JavaScript 변수로 사용하기 위한 지출합계 sumExportCash -->
-	            <%
-	            	for(int i=0; i<listYear.size(); i+=1) {
-	            %>
-			            <input type = "hidden" id = "sumExportCash<%=i %>" value = "<%=(int) listYear.get(i).get("sumExportCash") %>">
-	            <%
-	            	}
-	            %>
-	            
 	            <div class="container-fluid pt-4 px-4">
 	                <div class="row g-4">
 	                    <div class="col-sm-12 col-xl-4">
