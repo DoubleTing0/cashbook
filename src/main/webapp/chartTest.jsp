@@ -23,6 +23,9 @@
 	Calendar c = Calendar.getInstance();
 	
 	int previousMonth = c.get(Calendar.MONTH);
+	int importCashByPreviousMonth = 0;	// 지난달 총 수입
+	int exportCashByPreviousMonth = 0;	// 지난달 총 지출
+	int balanceByPreviousMonth = 0;	// 지난달 잔액 = 지난달 총 수입 - 지난달 총 지출 
 	
 	if(request.getParameter("year") == null) {
 		year = c.get(Calendar.YEAR);	// 올해
@@ -38,14 +41,35 @@
 	pageList = yearPage.getYearPageList(year, pageLength);
 	
 	// 분리된 Model 호출
+	ArrayList<HashMap<String, Object>> listMonthByThisYear = new ArrayList<HashMap<String, Object>>();
 	ArrayList<HashMap<String, Object>> listYear = new ArrayList<HashMap<String, Object>>();
 	ArrayList<HashMap<String, Object>> listMonth = new ArrayList<HashMap<String, Object>>();
 	HashMap<String, Object> map = new HashMap<String, Object>();
 	
 	CashDao cashDao = new CashDao();	
 	
+	// 지난달 수입/지출
+	listMonthByThisYear = cashDao.selectCashMonth(memberId, c.get(Calendar.YEAR));
+	
+	for(HashMap<String, Object> hm : listMonthByThisYear) {
+		
+		if(Integer.parseInt((String) hm.get("month")) == (c.get(Calendar.MONTH))) {	// 지난달이면
+			
+			importCashByPreviousMonth = (int) hm.get("sumImportCash");
+			exportCashByPreviousMonth = (int) hm.get("sumExportCash");
+			balanceByPreviousMonth = importCashByPreviousMonth - exportCashByPreviousMonth;  
+		}
+		
+	}
+	
+	
+	// 연도별 수입/지출
 	listYear = cashDao.selectCashYear(memberId);
+	
+	// 월별 수입/지출
 	listMonth = cashDao.selectCashMonth(memberId, year);
+	
+	
 	
 	map = cashDao.selectMinMaxYear();
 
@@ -91,35 +115,92 @@
 
 	<body>
 		<div>
-            <!-- JavaScript 변수로 사용하기 위한 listYear.size() -->
-			<input type = "hidden" id = "listYearSize" value = "<%=listYear.size() %>">
+			<!-- 연도별 수입/지출 시작 -->
+			<div>
+	            <!-- JavaScript 변수로 사용하기 위한 listYear.size() -->
+				<input type = "hidden" id = "listYearSize" value = "<%=listYear.size() %>">
+	            
+	            <!-- JavaScript 변수로 사용하기 위한 year -->
+	            <%
+	            	for(int i=0; i<listYear.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "listYear<%=i %>" value = "<%=(String) listYear.get(i).get("year") %>년">
+				<%	
+	            	}
+	            %>
+	            
+	            <!-- JavaScript 변수로 사용하기 위한 연도별 수입합계 sumImportCashByYear -->
+	            <%
+	            	for(int i=0; i<listYear.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "sumImportCashByYear<%=i %>" value = "<%=(int) listYear.get(i).get("sumImportCash") %>">
+	            <%
+	            	}
+	            %>
+	            
+	            <!-- JavaScript 변수로 사용하기 위한 연도별 지출합계 sumExportCashByYear -->
+	            <%
+	            	for(int i=0; i<listYear.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "sumExportCashByYear<%=i %>" value = "<%=(int) listYear.get(i).get("sumExportCash") %>">
+	            <%
+	            	}
+	            %>
+			</div>
+			<!-- 연도별 수입/지출 끝 -->
+			
+			
+			
+			<!-- 월별 수입/지출 시작 -->
+			<div>
+				<!-- JavaScript 변수로 사용하기 위한 listMonth.size() -->
+				<input type = "hidden" id = "listMonthSize" value = "<%=listMonth.size() %>">
+				
+				<!-- JavaScript 변수로 사용하기 위한 month -->
+	            <%
+	            	for(int i=0; i<listMonth.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "listMonth<%=i %>" value = "<%=(String) listMonth.get(i).get("month") %>월">
+				<%	
+	            	}
+	            %>
+				
+				<!-- JavaScript 변수로 사용하기 위한 월별 수입합계 sumImportCashByMonth -->
+	            <%
+	            	for(int i=0; i<listMonth.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "sumImportCashByMonth<%=i %>" value = "<%=(int) listMonth.get(i).get("sumImportCash") %>">
+	            <%
+	            	}
+	            %>
+				
+				<!-- JavaScript 변수로 사용하기 위한 월별 지출합계 sumExportCashByMonth -->
+	            <%
+	            	for(int i=0; i<listMonth.size(); i+=1) {
+	            %>
+			            <input type = "hidden" id = "sumExportCashByMonth<%=i %>" value = "<%=(int) listMonth.get(i).get("sumExportCash") %>">
+	            <%
+	            	}
+	            %>
+			</div>
+			<!-- 월별 수입/지출 끝 -->
             
-            <!-- JavaScript 변수로 사용하기 위한 year -->
-            <%
-            	for(int i=0; i<listYear.size(); i+=1) {
-            %>
-		            <input type = "hidden" id = "listYear<%=i %>" value = "<%=(String) listYear.get(i).get("year") %>년">
-			<%	
-            	}
-            %>
+            <!-- 지난달 총 수입/지출/잔액 시작 -->
+            <div>
+            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 수입 -->
+            	<input type = "hidden" id = "importCashByPreviousMonth" value = "<%=importCashByPreviousMonth %>">
+            	
+            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 지출 -->
+            	<input type = "hidden" id = "exportCashByPreviousMonth" value = "<%=exportCashByPreviousMonth %>">
+            	
+            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 수입 -->
+            	<input type = "hidden" id = "balanceByPreviousMonth" value = "<%=balanceByPreviousMonth %>">
+            </div>
+            <!-- 지난달 총 수입/지출/잔액 끝 -->
             
-            <!-- JavaScript 변수로 사용하기 위한 수입합계 sumImportCash -->
-            <%
-            	for(int i=0; i<listYear.size(); i+=1) {
-            %>
-		            <input type = "hidden" id = "sumImportCash<%=i %>" value = "<%=(int) listYear.get(i).get("sumImportCash") %>">
-            <%
-            	}
-            %>
             
-            <!-- JavaScript 변수로 사용하기 위한 지출합계 sumExportCash -->
-            <%
-            	for(int i=0; i<listYear.size(); i+=1) {
-            %>
-		            <input type = "hidden" id = "sumExportCash<%=i %>" value = "<%=(int) listYear.get(i).get("sumExportCash") %>">
-            <%
-            	}
-            %>
+            
+            
 		</div>
 	
 	
@@ -156,7 +237,7 @@
 	                            <i class="fa fa-plus fa-3x text-primary"></i>
 	                            <div class="ms-3">
 	                                <p class="mb-2">지난달(<%=previousMonth %>월) 수입</p>
-	                                <h6 class="mb-0">&#8361;</h6>
+	                                <h6 class="mb-0">&#8361;<%=importCashByPreviousMonth %></h6>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -165,7 +246,7 @@
 	                            <i class="fa fa-minus fa-3x text-primary"></i>
 	                            <div class="ms-3">
 	                                <p class="mb-2">지난달(<%=previousMonth %>월) 지출</p>
-	                                <h6 class="mb-0">$1234</h6>
+	                                <h6 class="mb-0">&#8361;<%=exportCashByPreviousMonth %></h6>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -173,8 +254,8 @@
 	                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
 	                            <i class="fa fa-won-sign fa-3x text-primary"></i>
 	                            <div class="ms-3">
-	                                <p class="mb-2">총 잔액</p>
-	                                <h6 class="mb-0">$1234</h6>
+	                                <p class="mb-2">지난달(<%=previousMonth %>월) 잔액</p>
+	                                <h6 class="mb-0">&#8361;<%=balanceByPreviousMonth %></h6>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -318,7 +399,7 @@
 	                        <div class="row align-items-center bg-secondary rounded h-100 p-4">
 	                        	<div>
 		                            <h6 class="mb-4"><%=year %>년 월별 수입/지출</h6>
-		                            <canvas id="worldwide-sales2"></canvas>
+		                            <canvas id="cashMonth"></canvas>
 	                        	</div>
 	                        </div>
 	                    </div>
@@ -536,9 +617,9 @@
 		    
 		    
 	
-		    // 연도별 수입/지출
+		    // 연도별 수입/지출 지표들
 		    
-		    // DB를 input hidden 통해 가져온 listYear
+		    // DB에서 input hidden 통해 가져온 listYear
 		    let listYear = new Array();
 			for(let i=0; i<$('#listYearSize').val(); i+=1) {
 		    	listYear[i] = $('#listYear' + i).val();
@@ -547,27 +628,27 @@
 		    	console.log(listYear[i] + ' <-- listYear[' + i + ']');
 		    }
 			
-			// DB를 input hidden 통해 가져온 sumImportCash
-		    let sumImportCash = new Array();
+			// DB에서 input hidden 통해 가져온 sumImportCashByYear
+		    let sumImportCashByYear = new Array();
 			for(let i=0; i<$('#listYearSize').val(); i+=1) {
-		    	sumImportCash[i] = $('#sumImportCash' + i).val();
+		    	sumImportCashByYear[i] = $('#sumImportCashByYear' + i).val();
 		    	
 		    	// 디버깅
-		    	console.log(sumImportCash[i] + ' <-- sumImportCash[' + i + ']');
+		    	console.log(sumImportCashByYear[i] + ' <-- sumImportCashByYear[' + i + ']');
 		    }
 			
-			// DB를 input hidden 통해 가져온 sumExportCash
-		    let sumExportCash = new Array();
+			// DB에서 input hidden 통해 가져온 sumExportCashByYear
+		    let sumExportCashByYear = new Array();
 			for(let i=0; i<$('#listYearSize').val(); i+=1) {
-		    	sumExportCash[i] = $('#sumExportCash' + i).val();
+		    	sumExportCashByYear[i] = $('#sumExportCashByYear' + i).val();
 		    	
 		    	// 디버깅
-		    	console.log(sumExportCash[i] + ' <-- sumExportCash[' + i + ']');
+		    	console.log(sumExportCashByYear[i] + ' <-- sumExportCashByYear[' + i + ']');
 		    }
 			
 			
 			
-		    
+		    // 연도별 수입/지출 차트
 		    let ctx3 = $("#cashYear").get(0).getContext("2d");
 		    let myChart3 = new Chart(ctx3, {
 		        type: "bar",
@@ -575,11 +656,11 @@
 		            labels: listYear,
 		            datasets: [{
 					    label: "수입",
-					    data: sumImportCash,
+					    data: sumImportCashByYear,
 					    backgroundColor: "rgba(235, 22, 22, .7)"
 					}, {
 					    label: "지출",
-					    data: sumExportCash,
+					    data: sumExportCashByYear,
 					    backgroundColor: "rgba(235, 22, 22, .3)"
 					}]
 	            },
@@ -592,70 +673,52 @@
 		    
 		    
 		    
-		    // 월별 수입/지출
-		    var ctx4 = $("#worldwide-sales2").get(0).getContext("2d");
-		    var myChart4 = new Chart(ctx4, {
+		    // 월별 수입/지출 지표들
+		    
+		     // DB에서 input hidden 통해 가져온 listMonth
+		    let listMonth = new Array();
+			for(let i=0; i<$('#listMonthSize').val(); i+=1) {
+		    	listMonth[i] = $('#listMonth' + i).val();
+		    	
+		    	// 디버깅
+		    	console.log(listMonth[i] + ' <-- listMonth[' + i + ']');
+		    }
+			
+			// DB에서 input hidden 통해 가져온 sumImportCashByMonth
+		    let sumImportCashByMonth = new Array();
+			for(let i=0; i<$('#listMonthSize').val(); i+=1) {
+		    	sumImportCashByMonth[i] = $('#sumImportCashByMonth' + i).val();
+		    	
+		    	// 디버깅
+		    	console.log(sumImportCashByMonth[i] + ' <-- sumImportCashByMonth[' + i + ']');
+		    }
+			
+			// DB에서 input hidden 통해 가져온 sumExportCashByMonth
+		    let sumExportCashByMonth = new Array();
+			for(let i=0; i<$('#listMonthSize').val(); i+=1) {
+		    	sumExportCashByMonth[i] = $('#sumExportCashByMonth' + i).val();
+		    	
+		    	// 디버깅
+		    	console.log(sumExportCashByMonth[i] + ' <-- sumExportCashByMonth[' + i + ']');
+		    }
+		    
+		    
+		    // 월별 수입/지출 차트
+		    let ctx4 = $("#cashMonth").get(0).getContext("2d");
+		    let myChart4 = new Chart(ctx4, {
 		        type: "bar",
 		        data: {
 		        	
-		        	labels: [
-					        	<%
-					        		// 월
-					        		for(int i=0; i<listMonth.size(); i+=1) {
-					        			
-					        			if(i != listMonth.size()-1) {
-					        	%>
-											<%=(String) listMonth.get(i).get("month") %> + "월",
-								<%
-					        			} else {
-					        	%>
-											<%=(String) listMonth.get(i).get("month") %> + "월"
-								<%
-					        			}
-					        		}
-					        	%>
-				            ],
+		        	labels: listMonth,
 			        datasets: [{
 			                label: "수입",
-			                data: [
-			                		<%
-						        		// 수입합계 sumImportCash
-						        		for(int i=0; i<listMonth.size(); i+=1) {
-						        			
-						        			if(i != listMonth.size()-1) {
-						        	%>
-												<%=(int) listMonth.get(i).get("sumImportCash") %>,
-									<%
-						        			} else {
-						        	%>
-												<%=(int) listMonth.get(i).get("sumImportCash") %>
-									<%
-						        			}
-						        		}
-						        	%>
-			                	],
+			                data: sumImportCashByMonth,
 			                backgroundColor: "rgba(235, 22, 22, .7)"
 			            },
 			            
 			            {
 			                label: "지출",
-			                data: [
-			                    	<%
-						        		// 지출합계 sumExportCash
-						        		for(int i=0; i<listMonth.size(); i+=1) {
-						        			
-						        			if(i != listMonth.size()-1) {
-						        	%>
-												<%=(int) listMonth.get(i).get("sumExportCash") %>,
-									<%
-						        			} else {
-						        	%>
-												<%=(int) listMonth.get(i).get("sumExportCash") %>
-									<%
-						        			}
-						        		}
-						        	%>
-			                	],
+			                data: sumExportCashByMonth,
 			                backgroundColor: "rgba(235, 22, 22, .3)"
 			            }
 			        ]
