@@ -7,6 +7,37 @@ import vo.*;
 
 public class CashDao {
 	
+	// 지난 달 수입/지출 항목 내역
+	/*
+			 * SELECT t2.*
+		FROM (SELECT cashNo
+				, memberId
+				, cashDate
+				, categoryNo
+				, categoryKind
+				, categoryName
+				, if(categoryKind = '수입', cashPrice, NULL) importCash
+				, if(categoryKind = '지출', cashPrice, NULL) exportCash
+			FROM (SELECT cs.cash_no cashNo
+						, cs.member_id memberId
+						, cs.cash_date cashDate
+						, cs.cash_price cashPrice
+						, cs.cash_memo cashMemo
+						, cg.category_no categoryNo
+						, cg.category_kind categoryKind
+						, cg.category_name categoryName
+					FROM cash cs
+						INNER JOIN category cg
+						ON cs.category_no = cg.category_no) t) t2
+		WHERE t2.memberId = 'goodee'
+		GROUP BY t2.categoryName, MONTH(t2.cashDate)
+		ORDER BY t2.categoryNO ASC, t2.cashDate ASC;
+		 
+	 */
+	
+	
+	
+	
 	// 연도별 수입/지출
 	public ArrayList<HashMap<String, Object>> selectCashYear(String memberId) {
 		ArrayList<HashMap<String, Object>> list = null;

@@ -57,7 +57,7 @@
 			
 			importCashByPreviousMonth = (int) hm.get("sumImportCash");
 			exportCashByPreviousMonth = (int) hm.get("sumExportCash");
-			balanceByPreviousMonth = importCashByPreviousMonth - exportCashByPreviousMonth;  
+			balanceByPreviousMonth = importCashByPreviousMonth - exportCashByPreviousMonth;
 		}
 		
 	}
@@ -115,6 +115,29 @@
 
 	<body>
 		<div>
+            <!-- 지난달 총 수입/지출/잔액 시작 -->
+            <div>
+            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 수입 -->
+            	<input type = "hidden" id = "importCashByPreviousMonth" value = "<%=importCashByPreviousMonth %>">
+            	
+            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 지출 -->
+            	<input type = "hidden" id = "exportCashByPreviousMonth" value = "<%=exportCashByPreviousMonth %>">
+            	
+            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 수입 -->
+            	<input type = "hidden" id = "balanceByPreviousMonth" value = "<%=balanceByPreviousMonth %>">
+            </div>
+            <!-- 지난달 총 수입/지출/잔액 끝 -->
+            
+            
+            
+            <!-- 지난달 수입/지출 파이차트 및 항목 시작 -->
+            <div>
+            
+            </div>
+            <!-- 지난달 수입/지출 파이차트 및 항목 끝 -->
+            
+            
+            
 			<!-- 연도별 수입/지출 시작 -->
 			<div>
 	            <!-- JavaScript 변수로 사용하기 위한 listYear.size() -->
@@ -185,18 +208,6 @@
 			</div>
 			<!-- 월별 수입/지출 끝 -->
             
-            <!-- 지난달 총 수입/지출/잔액 시작 -->
-            <div>
-            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 수입 -->
-            	<input type = "hidden" id = "importCashByPreviousMonth" value = "<%=importCashByPreviousMonth %>">
-            	
-            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 지출 -->
-            	<input type = "hidden" id = "exportCashByPreviousMonth" value = "<%=exportCashByPreviousMonth %>">
-            	
-            	<!-- JavaScript 변수로 사용하기 위한 지난달 총 수입 -->
-            	<input type = "hidden" id = "balanceByPreviousMonth" value = "<%=balanceByPreviousMonth %>">
-            </div>
-            <!-- 지난달 총 수입/지출/잔액 끝 -->
             
             
             
