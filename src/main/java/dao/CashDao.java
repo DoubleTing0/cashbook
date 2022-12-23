@@ -9,32 +9,122 @@ public class CashDao {
 	
 	// 지난 달 수입/지출 항목 내역
 	/*
-			 * SELECT t2.*
-		FROM (SELECT cashNo
-				, memberId
-				, cashDate
-				, categoryNo
-				, categoryKind
-				, categoryName
-				, if(categoryKind = '수입', cashPrice, NULL) importCash
-				, if(categoryKind = '지출', cashPrice, NULL) exportCash
-			FROM (SELECT cs.cash_no cashNo
-						, cs.member_id memberId
-						, cs.cash_date cashDate
-						, cs.cash_price cashPrice
-						, cs.cash_memo cashMemo
-						, cg.category_no categoryNo
-						, cg.category_kind categoryKind
-						, cg.category_name categoryName
-					FROM cash cs
-						INNER JOIN category cg
-						ON cs.category_no = cg.category_no) t) t2
-		WHERE t2.memberId = 'goodee'
-		GROUP BY t2.categoryName, MONTH(t2.cashDate)
-		ORDER BY t2.categoryNO ASC, t2.cashDate ASC;
-		 
+		SELECT t2.memberId memberId
+				, t2.cashDate cashDate
+				, IFNULL(t2.importCategoryName, 0) importCategoryName
+				, IFNULL(SUM(t2.importCategoryCash),0) importCategoryCash
+				, IFNULL(t2.exportCategoryName, 0) exportCategoryName
+				, IFNULL(SUM(t2.exportCategoryCash),0) exportCategoryCash
+		FROM (SELECT t.memberId memberId
+						, t.cashDate cashDate
+						, IF(t.categoryKind = '수입', t.categoryName, NULL) importCategoryName 
+						, IF(t.categoryKind = '수입', t.cashPrice, NULL) importCategoryCash
+						, IF(t.categoryKind = '지출', t.categoryName, NULL) exportCategoryName 
+						, IF(t.categoryKind = '지출', t.cashPrice, NULL) exportCategoryCash
+				FROM (SELECT cs.member_id memberId
+								, cs.cash_date cashDate
+								, cs.cash_price cashPrice
+								, cg.category_no categoryNo
+								, cg.category_kind categoryKind
+								, cg.category_name categoryName
+						FROM cash cs
+							INNER JOIN category cg
+							ON cs.category_no = cg.category_no) t) t2
+		WHERE t2.memberId = 'goodee' AND YEAR(t2.cashDate) = 2022 AND MONTH(t2.cashDate) = 11
+		GROUP BY t2.importCategoryName, t2.exportCategoryName, MONTH(t2.cashDate)
+	  
+	 		 
 	 */
-	
+	public ArrayList<HashMap<String, Object>> selectItemPreviousMonth(String memberId, int year, int month) {
+		
+		ArrayList<HashMap<String, Object>> list = null;
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		DBUtil dbUtil = null;
+		
+		try {
+			
+			list =new ArrayList<HashMap<String, Object>>();
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			
+			String sql = "SELECT YEAR(t2.cashDate) year"
+					+ "			, MONTH(t2.cashDate) month"
+					+ "			, IFNULL(t2.importCategoryName, 0) importCategoryName"
+					+ "			, IFNULL(SUM(t2.importCategoryCash),0) sumImportCategoryCash"
+					+ "			, IFNULL(t2.exportCategoryName, 0) exportCategoryName"
+					+ "			, IFNULL(SUM(t2.exportCategoryCash),0) sumExportCategoryCash"
+					+ " FROM (SELECT t.memberId memberId"
+					+ "				, t.cashDate cashDate"
+					+ "				, IF(t.categoryKind = '수입', t.categoryName, NULL) importCategoryName "
+					+ "				, IF(t.categoryKind = '수입', t.cashPrice, NULL) importCategoryCash"
+					+ "				, IF(t.categoryKind = '지출', t.categoryName, NULL) exportCategoryName "
+					+ "				, IF(t.categoryKind = '지출', t.cashPrice, NULL) exportCategoryCash"
+					+ " 	FROM (SELECT cs.member_id memberId"
+					+ "					, cs.cash_date cashDate"
+					+ "					, cs.cash_price cashPrice"
+					+ "					, cg.category_no categoryNo"
+					+ "					, cg.category_kind categoryKind"
+					+ "					, cg.category_name categoryName"
+					+ " 		FROM cash cs"
+					+ " 			INNER JOIN category cg"
+					+ " 			ON cs.category_no = cg.category_no) t) t2"
+					+ " WHERE t2.memberId = ? AND YEAR(t2.cashDate) = ? AND MONTH(t2.cashDate) = ?"
+					+ " GROUP BY t2.importCategoryName, t2.exportCategoryName, MONTH(t2.cashDate)";
+			
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, memberId);
+			stmt.setInt(2, year);
+			stmt.setInt(3, month);
+			
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				HashMap<String, Object> hm = new HashMap<String, Object>();
+				hm.put("year", rs.getInt("year"));
+				hm.put("month", rs.getInt("month"));
+				
+				if(!(((String) rs.getString("importCategoryName")).equals("0"))) {
+					// Data가 "0"이 아니면 hm에 저장
+					hm.put("importCategoryName", (String) rs.getString("importCategoryName"));
+				}
+				
+				if((int) rs.getInt("sumImportCategoryCash") != 0) {
+					// Data가 0이 아니면 hm에 저장
+					hm.put("sumImportCategoryCash", (int) rs.getInt("sumImportCategoryCash"));
+				}
+				
+				if(!(((String) rs.getString("exportCategoryName")).equals("0"))) {
+					// Data가 "0"이 아니면 hm에 저장
+					hm.put("exportCategoryName", (String) rs.getString("exportCategoryName"));
+				}
+				
+				if((int) rs.getInt("sumExportCategoryCash") != 0) {
+					// Data가 0이 아니면 hm에 저장
+					hm.put("sumExportCategoryCash", (int) rs.getInt("sumExportCategoryCash"));
+				}
+				
+				
+				list.add(hm);
+				
+				
+			}
+			
+			
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbUtil.close(rs, stmt, conn);
+		}
+		
+		
+		
+		return list;
+	}
 	
 	
 	

@@ -49,11 +49,24 @@
 	CashDao cashDao = new CashDao();	
 	
 	// 지난달 수입/지출
-	listMonthByThisYear = cashDao.selectCashMonth(memberId, c.get(Calendar.YEAR));
+	
+	// 지난달의 연도와 달 초기화
+	int tempYear = c.get(Calendar.YEAR);	// 올해
+	int tempMonth = c.get(Calendar.MONTH);	// 해가 안바뀌는 지난달
+	
+	// 1월의 지난달은 지난해 12월
+	if((c.get(Calendar.MONTH) + 1) == 1) {
+		// 오늘이 1월이라면
+		tempYear = c.get(Calendar.YEAR) - 1;	// 지난해
+		tempMonth = 12;	// 12월
+	}
+	
+	// 제일 위 지표 3개
+	listMonthByThisYear = cashDao.selectCashMonth(memberId, tempYear);
 	
 	for(HashMap<String, Object> hm : listMonthByThisYear) {
 		
-		if(Integer.parseInt((String) hm.get("month")) == (c.get(Calendar.MONTH))) {	// 지난달이면
+		if(Integer.parseInt((String) hm.get("month")) == tempMonth) {	// 지난달이면
 			
 			importCashByPreviousMonth = (int) hm.get("sumImportCash");
 			exportCashByPreviousMonth = (int) hm.get("sumExportCash");
@@ -61,6 +74,11 @@
 		}
 		
 	}
+	
+	// 파이차트 : 지난 달 항목별 현황
+	ArrayList<HashMap<String, Object>> listCategoryCashPreviousMonth = new ArrayList<HashMap<String, Object>>();
+	
+	listCategoryCashPreviousMonth = cashDao.selectItemPreviousMonth(memberId, tempYear, tempMonth);
 	
 	
 	// 연도별 수입/지출
@@ -248,7 +266,7 @@
 	                            <i class="fa fa-plus fa-3x text-primary"></i>
 	                            <div class="ms-3">
 	                                <p class="mb-2">지난달(<%=previousMonth %>월) 수입</p>
-	                                <h6 class="mb-0">&#8361;<%=importCashByPreviousMonth %></h6>
+	                                <h6 class="mb-0">&#8361; <%=importCashByPreviousMonth %></h6>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -257,7 +275,7 @@
 	                            <i class="fa fa-minus fa-3x text-primary"></i>
 	                            <div class="ms-3">
 	                                <p class="mb-2">지난달(<%=previousMonth %>월) 지출</p>
-	                                <h6 class="mb-0">&#8361;<%=exportCashByPreviousMonth %></h6>
+	                                <h6 class="mb-0">&#8361; <%=exportCashByPreviousMonth %></h6>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -266,7 +284,7 @@
 	                            <i class="fa fa-won-sign fa-3x text-primary"></i>
 	                            <div class="ms-3">
 	                                <p class="mb-2">지난달(<%=previousMonth %>월) 잔액</p>
-	                                <h6 class="mb-0">&#8361;<%=balanceByPreviousMonth %></h6>
+	                                <h6 class="mb-0">&#8361; <%=balanceByPreviousMonth %></h6>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -293,30 +311,17 @@
 		                        			<th>항목</th>
 		                        			<th>금액</th>
 		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
+		                        		<%
+		                        			for(HashMap<String, Object> hm : listCategoryCashPreviousMonth) {
+		                        		%>		
+		                        				<tr>
+			                        				<td><%=(String) hm.get("importCategoryName") %></td>
+			                        				<td><%=(int) hm.get("sumImportCategoryCash") %></td>
+			                        			</tr>
+		                        				
+		                        		<%
+		                        			}
+		                        		%>
 		                        	</table>
 		                        </div>
 	                        </div>
