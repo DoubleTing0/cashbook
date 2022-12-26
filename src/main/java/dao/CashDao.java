@@ -9,18 +9,17 @@ public class CashDao {
 	
 	// 지난 달 수입/지출 항목 내역
 	/*
-		SELECT t2.memberId memberId
-				, t2.cashDate cashDate
-				, IFNULL(t2.importCategoryName, 0) importCategoryName
-				, IFNULL(SUM(t2.importCategoryCash),0) importCategoryCash
-				, IFNULL(t2.exportCategoryName, 0) exportCategoryName
-				, IFNULL(SUM(t2.exportCategoryCash),0) exportCategoryCash
+
+		SELECT YEAR(t2.cashDate) year
+				, MONTH(t2.cashDate) month
+				, t2.categoryKind categoryKind
+				, t2.categoryName categoryName
+				, SUM(t2.cashPrice) cashPrice
 		FROM (SELECT t.memberId memberId
 						, t.cashDate cashDate
-						, IF(t.categoryKind = '수입', t.categoryName, NULL) importCategoryName 
-						, IF(t.categoryKind = '수입', t.cashPrice, NULL) importCategoryCash
-						, IF(t.categoryKind = '지출', t.categoryName, NULL) exportCategoryName 
-						, IF(t.categoryKind = '지출', t.cashPrice, NULL) exportCategoryCash
+						, t.categoryKind categoryKind
+						, t.categoryName categoryName
+						, t.cashPrice cashPrice
 				FROM (SELECT cs.member_id memberId
 								, cs.cash_date cashDate
 								, cs.cash_price cashPrice
@@ -30,9 +29,8 @@ public class CashDao {
 						FROM cash cs
 							INNER JOIN category cg
 							ON cs.category_no = cg.category_no) t) t2
-		WHERE t2.memberId = 'goodee' AND YEAR(t2.cashDate) = 2022 AND MONTH(t2.cashDate) = 11
-		GROUP BY t2.importCategoryName, t2.exportCategoryName, MONTH(t2.cashDate)
-	  
+		WHERE t2.memberId = 'goodee' AND YEAR(t2.cashDate) = 2022 AND MONTH(t2.cashDate) = 11 AND t2.categoryKind = '지출'/////////////////////////////// 이부분 물음표로
+		GROUP BY t2.categoryKind, t2.categoryName
 	 		 
 	 */
 	public ArrayList<HashMap<String, Object>> selectItemPreviousMonth(String memberId, int year, int month) {
@@ -52,27 +50,25 @@ public class CashDao {
 			
 			String sql = "SELECT YEAR(t2.cashDate) year"
 					+ "			, MONTH(t2.cashDate) month"
-					+ "			, IFNULL(t2.importCategoryName, 0) importCategoryName"
-					+ "			, IFNULL(SUM(t2.importCategoryCash),0) sumImportCategoryCash"
-					+ "			, IFNULL(t2.exportCategoryName, 0) exportCategoryName"
-					+ "			, IFNULL(SUM(t2.exportCategoryCash),0) sumExportCategoryCash"
-					+ " FROM (SELECT t.memberId memberId"
+					+ "			, t2.categoryKind categoryKind"
+					+ "			, t2.categoryName categoryName"
+					+ "			, SUM(t2.cashPrice) sumCashPrice"
+					+ "	 FROM (SELECT t.memberId memberId"
 					+ "				, t.cashDate cashDate"
-					+ "				, IF(t.categoryKind = '수입', t.categoryName, NULL) importCategoryName "
-					+ "				, IF(t.categoryKind = '수입', t.cashPrice, NULL) importCategoryCash"
-					+ "				, IF(t.categoryKind = '지출', t.categoryName, NULL) exportCategoryName "
-					+ "				, IF(t.categoryKind = '지출', t.cashPrice, NULL) exportCategoryCash"
-					+ " 	FROM (SELECT cs.member_id memberId"
+					+ "				, t.categoryKind categoryKind"
+					+ "				, t.categoryName categoryName"
+					+ "				, t.cashPrice cashPrice"
+					+ "		 FROM (SELECT cs.member_id memberId"
 					+ "					, cs.cash_date cashDate"
 					+ "					, cs.cash_price cashPrice"
 					+ "					, cg.category_no categoryNo"
 					+ "					, cg.category_kind categoryKind"
 					+ "					, cg.category_name categoryName"
-					+ " 		FROM cash cs"
-					+ " 			INNER JOIN category cg"
-					+ " 			ON cs.category_no = cg.category_no) t) t2"
-					+ " WHERE t2.memberId = ? AND YEAR(t2.cashDate) = ? AND MONTH(t2.cashDate) = ?"
-					+ " GROUP BY t2.importCategoryName, t2.exportCategoryName, MONTH(t2.cashDate)";
+					+ "			 FROM cash cs"
+					+ "				 INNER JOIN category cg"
+					+ "				 ON cs.category_no = cg.category_no) t) t2"
+					+ "	 WHERE t2.memberId = ? AND YEAR(t2.cashDate) = ? AND MONTH(t2.cashDate) = ?"
+					+ "	 GROUP BY t2.categoryKind, t2.categoryName";
 			
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
@@ -85,27 +81,9 @@ public class CashDao {
 				HashMap<String, Object> hm = new HashMap<String, Object>();
 				hm.put("year", rs.getInt("year"));
 				hm.put("month", rs.getInt("month"));
-				
-				if(!(((String) rs.getString("importCategoryName")).equals("0"))) {
-					// Data가 "0"이 아니면 hm에 저장
-					hm.put("importCategoryName", (String) rs.getString("importCategoryName"));
-				}
-				
-				if((int) rs.getInt("sumImportCategoryCash") != 0) {
-					// Data가 0이 아니면 hm에 저장
-					hm.put("sumImportCategoryCash", (int) rs.getInt("sumImportCategoryCash"));
-				}
-				
-				if(!(((String) rs.getString("exportCategoryName")).equals("0"))) {
-					// Data가 "0"이 아니면 hm에 저장
-					hm.put("exportCategoryName", (String) rs.getString("exportCategoryName"));
-				}
-				
-				if((int) rs.getInt("sumExportCategoryCash") != 0) {
-					// Data가 0이 아니면 hm에 저장
-					hm.put("sumExportCategoryCash", (int) rs.getInt("sumExportCategoryCash"));
-				}
-				
+				hm.put("categoryKind", (String) rs.getString("categoryKind"));
+				hm.put("categoryName", (String) rs.getString("categoryName"));
+				hm.put("sumCashPrice", (int) rs.getInt("sumCashPrice"));
 				
 				list.add(hm);
 				

@@ -151,6 +151,9 @@
             <!-- 지난달 수입/지출 파이차트 및 항목 시작 -->
             <div>
             
+            
+            
+            
             </div>
             <!-- 지난달 수입/지출 파이차트 및 항목 끝 -->
             
@@ -159,7 +162,7 @@
 			<!-- 연도별 수입/지출 시작 -->
 			<div>
 	            <!-- JavaScript 변수로 사용하기 위한 listYear.size() -->
-				<input type = "hidden" id = "listYearSize" value = "<%=listYear.size() %>">
+				<input type = "hidden" id = "listCategoryCash" value = "<%=listYear.size() %>">
 	            
 	            <!-- JavaScript 변수로 사용하기 위한 year -->
 	            <%
@@ -313,13 +316,15 @@
 		                        		</tr>
 		                        		<%
 		                        			for(HashMap<String, Object> hm : listCategoryCashPreviousMonth) {
-		                        		%>		
-		                        				<tr>
-			                        				<td><%=(String) hm.get("importCategoryName") %></td>
-			                        				<td><%=(int) hm.get("sumImportCategoryCash") %></td>
-			                        			</tr>
 		                        				
+		                        				if(((String) hm.get("categoryKind")).equals("수입")) {
+		                        		%>
+			                        				<tr>
+				                        				<td><%=(String) hm.get("categoryName") %></td>
+				                        				<td><%=(Integer) hm.get("sumCashPrice") %></td>
+				                        			</tr>
 		                        		<%
+		                        				}
 		                        			}
 		                        		%>
 		                        	</table>
@@ -328,7 +333,7 @@
 	                    </div>
 	                    <div class="col-sm-12 col-xl-4">
 	                        <div class="bg-secondary rounded h-100 p-4">
-	                            <h6 class="mb-4">수입</h6>
+	                            <h6 class="mb-4">지출</h6>
 	                            <canvas id="line-chart2"></canvas>
 	                        </div>
 	                    </div>
@@ -341,30 +346,19 @@
 		                        			<th>항목</th>
 		                        			<th>금액</th>
 		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
-		                        		<tr>
-		                        			<td>가나다</td>
-		                        			<td>12345</td>
-		                        		</tr>
+		                        		<%
+		                        			for(HashMap<String, Object> hm : listCategoryCashPreviousMonth) {
+		                        				
+		                        				if(((String) hm.get("categoryKind")).equals("지출")) {
+		                        		%>
+			                        				<tr>
+				                        				<td><%=(String) hm.get("categoryName") %></td>
+				                        				<td><%=(Integer) hm.get("sumCashPrice") %></td>
+				                        			</tr>
+		                        		<%
+		                        				}
+		                        			}
+		                        		%>
 		                        	</table>
 		                        </div>
 	                        </div>
