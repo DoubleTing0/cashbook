@@ -33,7 +33,7 @@ public class CashDao {
 		GROUP BY t2.categoryKind, t2.categoryName
 	 		 
 	 */
-	public ArrayList<HashMap<String, Object>> selectItemPreviousMonth(String memberId, int year, int month) {
+	public ArrayList<HashMap<String, Object>> selectItemPreviousMonth(String memberId, int year, int month, String category) {
 		
 		ArrayList<HashMap<String, Object>> list = null;
 		
@@ -49,31 +49,32 @@ public class CashDao {
 			conn = dbUtil.getConnection();
 			
 			String sql = "SELECT YEAR(t2.cashDate) year"
-					+ "			, MONTH(t2.cashDate) month"
-					+ "			, t2.categoryKind categoryKind"
-					+ "			, t2.categoryName categoryName"
-					+ "			, SUM(t2.cashPrice) sumCashPrice"
-					+ "	 FROM (SELECT t.memberId memberId"
-					+ "				, t.cashDate cashDate"
-					+ "				, t.categoryKind categoryKind"
-					+ "				, t.categoryName categoryName"
-					+ "				, t.cashPrice cashPrice"
-					+ "		 FROM (SELECT cs.member_id memberId"
-					+ "					, cs.cash_date cashDate"
-					+ "					, cs.cash_price cashPrice"
-					+ "					, cg.category_no categoryNo"
-					+ "					, cg.category_kind categoryKind"
-					+ "					, cg.category_name categoryName"
-					+ "			 FROM cash cs"
-					+ "				 INNER JOIN category cg"
-					+ "				 ON cs.category_no = cg.category_no) t) t2"
-					+ "	 WHERE t2.memberId = ? AND YEAR(t2.cashDate) = ? AND MONTH(t2.cashDate) = ?"
-					+ "	 GROUP BY t2.categoryKind, t2.categoryName";
+					+ "				, MONTH(t2.cashDate) month"
+					+ "				, t2.categoryKind categoryKind"
+					+ "				, t2.categoryName categoryName"
+					+ "				, SUM(t2.cashPrice) cashPrice"
+					+ "		FROM (SELECT t.memberId memberId"
+					+ "						, t.cashDate cashDate"
+					+ "						, t.categoryKind categoryKind"
+					+ "						, t.categoryName categoryName"
+					+ "						, t.cashPrice cashPrice"
+					+ "				FROM (SELECT cs.member_id memberId"
+					+ "								, cs.cash_date cashDate"
+					+ "								, cs.cash_price cashPrice"
+					+ "								, cg.category_no categoryNo"
+					+ "								, cg.category_kind categoryKind"
+					+ "								, cg.category_name categoryName"
+					+ "						FROM cash cs"
+					+ "							INNER JOIN category cg"
+					+ "							ON cs.category_no = cg.category_no) t) t2"
+					+ "		WHERE t2.memberId = ? AND YEAR(t2.cashDate) = ? AND MONTH(t2.cashDate) = ? AND t2.categoryKind = ?"
+					+ "		GROUP BY t2.categoryKind, t2.categoryName";
 			
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setInt(2, year);
 			stmt.setInt(3, month);
+			stmt.setString(4, category);
 			
 			rs = stmt.executeQuery();
 			

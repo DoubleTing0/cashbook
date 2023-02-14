@@ -103,11 +103,11 @@
 	                        <div>
 	                        	<form action = "<%=request.getContextPath()%>/login/loginAction.jsp" method = "post" id = "loginForm">
 			                        <div class="form-floating mb-3">
-			                            <input type="text" class="form-control" name = "memberId" id="memberId" placeholder="ID">
+			                            <input type="text" class="form-control" name = "memberId" id="memberId" placeholder="ID" value = "test">
 			                            <label for="memberId">ID</label>
 			                        </div>
 			                        <div class="form-floating mb-4">
-			                            <input type="password" class="form-control" name = "memberPw" id="memberPw" placeholder="Password">
+			                            <input type="password" class="form-control" name = "memberPw" id="memberPw" placeholder="Password" value = "1234">
 			                            <label for="memberPw">Password</label>
 			                        </div>
 			                        <div>

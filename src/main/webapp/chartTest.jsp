@@ -12,8 +12,21 @@
 <%
 
 	//Controller
-	String memberId = "goodee";		// 다른 프로젝트라 임의 지정
-
+	// 로그인 세션 검사
+	if(session.getAttribute("loginMember") == null) {
+		
+		// 세션의 loginMember가 null이면 loginForm.jsp redirect
+		response.sendRedirect(request.getContextPath() + "/login/loginForm.jsp");
+		return;
+		
+	}
+	
+	// 메세지 출력 변수
+	String msg = request.getParameter("msg");
+	
+	// session에 저장된 멤버(현재 로그인 사용자)
+	Member loginMember = (Member) (session.getAttribute("loginMember"));
+	String memberId = loginMember.getMemberId();
 	// 페이징 변수 초기화
 	
 	// 연도
@@ -69,6 +82,7 @@
 		if(Integer.parseInt((String) hm.get("month")) == tempMonth) {	// 지난달이면
 			
 			importCashByPreviousMonth = (int) hm.get("sumImportCash");
+			System.out.println(importCashByPreviousMonth + "<-- importCashByPreviousMonth");
 			exportCashByPreviousMonth = (int) hm.get("sumExportCash");
 			balanceByPreviousMonth = importCashByPreviousMonth - exportCashByPreviousMonth;
 		}
@@ -78,7 +92,9 @@
 	// 파이차트 : 지난 달 항목별 현황
 	ArrayList<HashMap<String, Object>> listCategoryCashPreviousMonth = new ArrayList<HashMap<String, Object>>();
 	
-	listCategoryCashPreviousMonth = cashDao.selectItemPreviousMonth(memberId, tempYear, tempMonth);
+	//=========================================================================여기 해야함 월별 파이차트=======================
+	// 월별 지출
+	listCategoryCashPreviousMonth = cashDao.selectItemPreviousMonth(memberId, tempYear, tempMonth, "지출");
 	
 	
 	// 연도별 수입/지출
@@ -128,6 +144,10 @@
 	    <!-- Template Stylesheet -->
 	    <link href="<%=request.getContextPath() %>/resources/css/style.css" rel="stylesheet">
 	    
+   		<!-- jQuery -->
+		<!-- CDN 주소 추가 방식 -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	    
 	    
 	</head>
 
@@ -150,7 +170,7 @@
             
             <!-- 지난달 수입/지출 파이차트 및 항목 시작 -->
             <div>
-            
+      
             
             
             
@@ -162,7 +182,7 @@
 			<!-- 연도별 수입/지출 시작 -->
 			<div>
 	            <!-- JavaScript 변수로 사용하기 위한 listYear.size() -->
-				<input type = "hidden" id = "listCategoryCash" value = "<%=listYear.size() %>">
+				<input type = "hidden" id = "listYearSize" value = "<%=listYear.size() %>">
 	            
 	            <!-- JavaScript 변수로 사용하기 위한 year -->
 	            <%
@@ -655,7 +675,6 @@
 		    	// 디버깅
 		    	console.log(sumExportCashByYear[i] + ' <-- sumExportCashByYear[' + i + ']');
 		    }
-			
 			
 			
 		    // 연도별 수입/지출 차트
